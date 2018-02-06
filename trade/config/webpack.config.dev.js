@@ -10,6 +10,11 @@ module.exports = {
 		filename: '[name].[hash].js',
 		path: path.resolve(__dirname, '../dist')
 	},
+	devServer: {
+    contentBase: path.join(__dirname, '../dist'),
+    compress: true,
+    port: 9101
+  },
 	module: {
 		rules: [
 			{
@@ -27,16 +32,29 @@ module.exports = {
         loader: 'vue-loader'
       },
 			{
-				test: /\.(png|jpg|gif)$/,
-				use: [
-					{
-						loader: 'url-loader',
-						options: {
-							limit: 8192
-						}
-					}
-				]
-			},
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/img/[name].[hash:7].[ext]'
+        }
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/media/[name].[hash:7].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/fonts/[name].[hash:7].[ext]'
+        }
+      },
 			{
 				test: /\.html$/,
 				use: {
