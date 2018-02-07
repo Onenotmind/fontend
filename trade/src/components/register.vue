@@ -1,6 +1,6 @@
 <template>
-	<div id="login">
-	<Card :bordered="false">
+	<div id="register">
+	<Card :bordered="false" style="height: 400px;">
 		<p slot="title" class="text-center login-header">
 			<img src="">
 			<span>EthLand</span>
@@ -9,13 +9,12 @@
 			<Input v-model="email" icon="email" type="email" placeholder="账号" style="width: 300px;"></Input>
 			<br>
 			<Input v-model="pass" icon="android-lock" type="password" placeholder="密码" style="width: 300px;margin-top: 20px;"></Input>
-			<br><br>
-			<Button type="success" style="width: 300px;">登陆</Button>
+			<br>
+			<Input v-model="repass" icon="android-lock" type="password" placeholder="密码" style="width: 300px;margin-top: 20px;"></Input><br>
+			<Input v-model="code"  type="password" placeholder="验证码" style="width: 150px;margin-top: 20px;"></Input>
+			<Button type="info" style="width: 150px;margin-top: 20px;">获取验证码</Button><br><br>
+			<Button type="success" style="width: 300px;">注册</Button>
 		</p>
-		<div class="register">
-			<span style="float:left;">注册</span>
-			<span style="float:right;">忘记密码</span>
-		</div>
 		</Card>
 	</div>
 </template>
@@ -23,8 +22,7 @@
 .text-center {
 	text-align: center;
 }
-#login {
-	height: 400px;
+#register {
 	width: 556px;
 	margin-top: 80px;
 	background-color: #fff;
@@ -33,14 +31,13 @@
 	left: 50%;
 }
 .login-header {
-	height: 80px;
+	height: 40px;
 	font-size: 26px;
 	line-height: 26px;
-	padding-top: 25px;
+	padding-top: 5px;
 }
 .login-content {
 	height: 200px;
-	padding-top: 60px;
 }
 .register {
 	font-size: 15px;

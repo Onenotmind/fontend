@@ -1,5 +1,5 @@
 <template>
-<div id="layout">
+<div id="tradeContainer">
 	<layout>
 		<Header>
 			<Menu mode="horizontal" theme="dark" active-name="1">
@@ -57,6 +57,9 @@
 [v-cloak] {
   display: none;
 }
+#tradeContainer {
+	font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
 .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -86,10 +89,12 @@
 
 <script>
 import login from './components/login.vue'
+import register from './components/register.vue'
+import resetPass from './components/resetPass.vue'
 export default {
 	data () {
 		return {
-			currentView: login
+			currentView: resetPass
 		}
 	}
 }
