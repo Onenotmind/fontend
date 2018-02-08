@@ -35,6 +35,7 @@
 			</Menu>
 		</Header>
 		<Content :style="{ padding: '0 50px' }">
+			<!-- <p>{{ $t("message.hello") }}</p> -->
 			<!-- <Breadcrumb :style="{ margin: '20px 0'}">
 				<BreadcrumbItem>Home</BreadcrumbItem>
 				<BreadcrumbItem>Components</BreadcrumbItem>
@@ -94,7 +95,7 @@ import resetPass from './components/resetPass.vue'
 export default {
 	data () {
 		return {
-			currentView: resetPass
+			currentView: login
 		}
 	}
 }

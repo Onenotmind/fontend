@@ -1,3 +1,14 @@
+<!-- <i18n src='./common/locales.json'></i18n> -->
+<i18n>
+{
+  "en": {
+    "hello": "hello world!"
+  },
+  "ja": {
+    "hello": "こんにちは、世界！"
+  }
+}
+</i18n>
 <template>
 	<div id="login">
 	<Card :bordered="false">
@@ -5,6 +16,7 @@
 			<img src="">
 			<span>EthLand</span>
 		</p>
+		<p>message: {{ $t("message.hello") }}</p>
 		<p class="text-center login-content">
 			<Input v-model="email" icon="email" type="email" placeholder="账号" style="width: 300px;"></Input>
 			<br>
@@ -57,7 +69,8 @@ export default {
 	data () {
 		return {
 			email: '',
-			pass: ''
+			pass: '',
+			locale: 'en'
 		}
 	}
 }
