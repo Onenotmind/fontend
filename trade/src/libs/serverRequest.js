@@ -7,9 +7,9 @@ const ssapiAxios = axios.create({
 })
 
 const ssapiPath = {
-  userLogin: 'user/login',
-  userRegister: 'user/register',
-  userGeneCode: 'user/geneCode'
+  userLogin: 'userLogin',
+  userRegister: 'userRegister',
+  userGeneCode: 'userGeneCode'
 }
 
 function intercept () {
@@ -43,4 +43,10 @@ function userGeneCode (email) {
 // 用户注册
 function userRegister (email, pwd, code) {
   return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ email, pwd, code }))
+}
+
+export default {
+  userGeneCode,
+  userLogin,
+  userRegister
 }

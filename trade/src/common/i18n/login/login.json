@@ -1,0 +1,16 @@
+{
+  "en": {
+    "login": "Log in",
+    "register": "Register",
+    "forgot_pass": "Forgot Account",
+    "placeholder_email": "email",
+    "placeholder_pass": "password"
+  },
+  "cn": {
+    "login": "登录",
+    "register": "注册",
+    "forgot_pass": "忘记密码",
+    "placeholder_email": "邮件",
+    "placeholder_pass": "密码"
+  }
+}

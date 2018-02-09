@@ -1,0 +1,24 @@
+{
+  "en": {
+    "login": "Log in",
+    "register": "Register",
+    "placeholder_email": "email",
+    "placeholder_pass": "password",
+    "check_email": "Check Email",
+    "get_code": "Get Code",
+    "resetPass": "Reset Password",
+    "resetPassSucc": "Successful!",
+    "next_step": "Next Step"
+  },
+  "cn": {
+    "login": "登录",
+    "register": "注册",
+    "placeholder_email": "请输入你的邮箱",
+    "placeholder_pass": "密码",
+    "check_email": "验证邮箱",
+    "get_code": "获取验证码",
+    "resetPass": "重置密码",
+    "resetPassSucc": "重置密码成功",
+    "next_step": "下一步"
+  }
+}

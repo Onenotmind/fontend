@@ -89,13 +89,11 @@
 </style>
 
 <script>
-import login from './components/login.vue'
-import register from './components/register.vue'
-import resetPass from './components/resetPass.vue'
+import loginService from './components/loginService.vue'
 export default {
 	data () {
 		return {
-			currentView: login
+			currentView: loginService
 		}
 	}
 }
