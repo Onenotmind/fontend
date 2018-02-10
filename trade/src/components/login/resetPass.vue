@@ -7,25 +7,25 @@
 			<span>EthLand</span>
 		</p>
 		<p>
-		<Steps :current="1" style="margin-left: 80px;">
+		<Steps :current="stepNum" style="margin-left: 80px;">
         <Step :title='$t("check_email")' icon="email"></Step>
         <Step :title='$t("resetPass")' icon="android-lock"></Step>
         <Step :title='$t("resetPassSucc")' icon="person-add"></Step>
     	</Steps>
     </p>
-    <p class="text-center section-margin" v-show="false">
+    <p class="text-center section-margin" v-show="stepNum === 0">
     	<Input v-model="email" icon="email" type="email" :placeholder='$t("placeholder_email")' style="width: 300px;"></Input><br>
     	<Input v-model="code"  type="password" style="width: 150px;margin-top: 20px;"></Input>
 			<Button type="info" style="width: 150px;margin-top: 20px;">{{ $t("get_code") }}</Button><br><br>
-			<Button type="success" style="width: 300px;">{{ $t("next_step") }}</Button>
+			<Button type="success" style="width: 300px;" @click="toNextStep">{{ $t("next_step") }}</Button>
     </p>
-    <p class="text-center section-margin" v-show="false">
+    <p class="text-center section-margin" v-show="stepNum === 1">
     	<Input v-model="pass" icon="android-lock" type="password" :placeholder='$t("placeholder_pass")' style="width: 300px;margin-top: 20px;"></Input>
 			<br>
 			<Input v-model="repass" icon="android-lock" type="password" :placeholder='$t("placeholder_pass")' style="width: 300px;margin-top: 20px;"></Input><br><br>
-			<Button type="success" style="width: 300px;">{{ $t("resetPass") }}</Button>
+			<Button type="success" style="width: 300px;" @click="resetPass">{{ $t("resetPass") }}</Button>
     </p>
-    <p class="text-center section-margin">
+    <p class="text-center section-margin" v-show="stepNum === 2">
      <Alert type="success" show-icon style="width:400px;margin-left: 200px;">{{ $t("resetPassSucc") }}</Alert>
     </p>
 		</Card>
@@ -55,7 +55,16 @@ export default {
 			email: '',
 			pass: '',
 			repass: '',
-			code: ''
+			code: '',
+			stepNum: 0
+		}
+	},
+	methods: {
+		toNextStep () {
+			this.stepNum = 1
+		},
+		resetPass () {
+			this.stepNum = 2
 		}
 	}
 }

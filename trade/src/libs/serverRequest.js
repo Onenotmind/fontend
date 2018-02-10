@@ -30,6 +30,24 @@ function intercept () {
   })
 }
 
+function handleRequestRes (data, succCb, errCb) { // trade项目数据回调函数封装
+  if (data.status === 0) {
+    if (data.res.status === 0) {
+      if (succCb) {
+        succCb(data.res.data)
+      }
+    } else {
+      if (errCb) {
+        errCb()
+      }
+    }
+  } else {
+    if (errCb) {
+      errCb()
+    }
+  }
+}
+
 // 用户登录
 function userLogin (email, pwd) {
   return ssapiAxios.get(ssapiPath.userLogin, { params: { email, pwd } })
@@ -48,5 +66,6 @@ function userRegister (email, pwd, code) {
 export default {
   userGeneCode,
   userLogin,
-  userRegister
+  userRegister,
+  handleRequestRes
 }

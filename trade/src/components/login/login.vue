@@ -15,8 +15,8 @@
 			<Button type="success" style="width: 300px;" @click="handleLogin">{{ $t("login") }}</Button>
 		</p>
 		<div class="register">
-			<span style="float:left;">{{ $t("register") }}</span>
-			<span style="float:right;">{{ $t("forgot_pass") }}</span>
+			<span style="float:left;cursor: pointer;" @click="toRigister">{{ $t("register") }}</span>
+			<span style="float:right;cursor: pointer;" @click="toResetPass">{{ $t("forgot_pass") }}</span>
 		</div>
 		</Card>
 	</div>
@@ -55,6 +55,7 @@
 </style>
 <script>
 import serverRequest from '../../libs/serverRequest.js'
+import { LoginCodes, CommonCodes } from '../../libs/MsgCodes/LoginCodes.js'
 export default {
 	data () {
 		return {
@@ -65,22 +66,48 @@ export default {
 	methods: {
 		handleLogin () {
 			if (this.email !== '' && this.pass !== '') {
-				serverRequest.userLogin(this.email, this.pass).then((response) => {
-					let info = ''
-					if (response.status === 0) { // 正常返回
-						if (response.res.status === 0) {
-							info = '登录成功'
-							console.log('登录成功')
-							this.$Message.success({
-								top: 200,
-								content: info
-							})
-						} else {
-
-						}
+				serverRequest.userLogin(this.email, this.pass)
+				.then(v => {
+					let succCb = () => {
 					}
+					let errCb = () => {}
+					this.handleRequestRes(v.data, succCb, errCb)
 				})
+				.catch (e => {
+					console.log(e)
+				})
+			} else {
+				this.$Message.error(CommonCodes.Register_Data_Null)
 			}
+		},
+		toRigister () {
+			this.$emit('show-register')
+		},
+		toResetPass () {
+			this.$emit('show-resetPass')
+		},
+		handleRequestRes (data, succCb, errCb) {
+			let succ = () => {
+				this.$Message.success({
+	        top: 200,
+	        content: data.res.msg
+	      })
+	      succCb()
+			}
+			let err = () => {
+				let errMsg = ''
+				if (data.msg) {
+					errMsg = data.msg
+				} else if (data.res && data.res.msg) {
+					errMsg = data.res.msg
+				} else {}
+				this.$Message.error({
+	        top: 200,
+	        content: errMsg
+	      })
+	      errCb()
+			}
+			serverRequest.handleRequestRes(data, succ, err)
 		}
 	}
 }
