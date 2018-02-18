@@ -1,0 +1,22 @@
+{
+  "en": {
+    "app_announce": "Announcement",
+    "app_guide": "Guide",
+    "app_activity": "Activity",
+    "app_login": "Login",
+    "app_person": "Account",
+    "app_assets": "Balance",
+    "app_Account_Safe": "Security",
+    "app_Log_Out": "Log Out"
+  },
+  "cn": {
+    "app_announce": "公告列表",
+    "app_guide": "新手引导",
+    "app_activity": "活动中心",
+    "app_login": "登陆",
+    "app_person": "个人中心",
+    "app_assets": "我的资产",
+    "app_Account_Safe": "账户安全",
+    "app_Log_Out": "退出账户"
+  }
+}

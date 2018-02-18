@@ -16,7 +16,7 @@
     <p class="text-center section-margin" v-show="stepNum === 0">
     	<Input v-model="email" icon="email" type="email" :placeholder='$t("placeholder_email")' style="width: 300px;"></Input><br>
     	<Input v-model="code"  type="password" style="width: 150px;margin-top: 20px;"></Input>
-			<Button type="info" style="width: 150px;margin-top: 20px;">{{ $t("get_code") }}</Button><br><br>
+			<Button type="info" style="width: 150px;margin-top: 20px;" @click="getCode">{{ $t("get_code") }}</Button><br><br>
 			<Button type="success" style="width: 300px;" @click="toNextStep">{{ $t("next_step") }}</Button>
     </p>
     <p class="text-center section-margin" v-show="stepNum === 1">
@@ -48,7 +48,8 @@
 }
 </style>
 <script>
-
+import serverRequest from '../../libs/serverRequest.js'
+import { LoginCodes, CommonCodes } from '../../libs/MsgCodes/LoginCodes.js'
 export default {
 	data () {
 		return {
@@ -60,11 +61,61 @@ export default {
 		}
 	},
 	methods: {
+		getCode () {
+			if (this.email !== '') {
+				serverRequest.userGeneCode(this.email).then((v) => {
+					console.log(v)
+					let succCb = () => {}
+					let errCb = () => {}
+					this.handleRequestRes(v.data, succCb, errCb)
+				}).catch ((e) => {
+					console.log(e)
+					// this.$Message.error(CommonCodes.Net_Wrong)
+				})
+			}
+		},
 		toNextStep () {
-			this.stepNum = 1
+			serverRequest.userCheckCode(this.email, this.code).then(v => {
+				let succCb = () => {
+					this.stepNum = 1
+				}
+				let errCb = () => {}
+				this.handleRequestRes(v.data, succCb, errCb)
+			})
 		},
 		resetPass () {
-			this.stepNum = 2
+			if (this.pass !== '' && this.pass === this.repass) {
+				serverRequest.userChangeLoginPass(this.email, this.pass).then(v => {
+					let succCb = () => {
+						this.stepNum = 2
+					}
+					let errCb = () => {}
+					this.handleRequestRes(v.data, succCb, errCb)
+				})
+			}
+		},
+		handleRequestRes (data, succCb, errCb) {
+			let succ = () => {
+				this.$Message.success({
+	        top: 200,
+	        content: data.res.msg
+	      })
+	      succCb()
+			}
+			let err = () => {
+				let errMsg = ''
+				if (data.msg) {
+					errMsg = data.msg
+				} else if (data.res && data.res.msg) {
+					errMsg = data.res.msg
+				} else {}
+				this.$Message.error({
+	        top: 200,
+	        content: errMsg
+	      })
+	      errCb()
+			}
+			serverRequest.handleRequestRes(data, succ, err)
 		}
 	}
 }

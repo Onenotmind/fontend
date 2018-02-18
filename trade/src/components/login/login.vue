@@ -2,9 +2,9 @@
 <template>
 	<div id="login">
 	<Card :bordered="false">
-		<p slot="title" class="text-center login-header">
-			<img src="">
-			<span>EthLand</span>
+		<p  class="text-center login-header">
+			<img src="../../images/ethereum.png" style="vertical-align:middle;">
+			<span class="login-word">EthLand</span>
 		</p>
 		<!-- <p>message: {{ $t("message.hello") }}</p> -->
 		<p class="text-center login-content">
@@ -40,6 +40,12 @@
 	line-height: 26px;
 	padding-top: 25px;
 }
+.login-word {
+	font-family: FZCuYuan-M03S;
+	font-size: 35px;
+	line-height: 35px;
+	vertical-align: middle;
+}
 .login-content {
 	height: 200px;
 	padding-top: 60px;
@@ -51,6 +57,10 @@
 	position: relative;
 	left: 50%;
 	margin-left: -150px;
+}
+@font-face {
+  font-family: FZCuYuan-M03S;
+  src: url(../../images/font/FZCuYuan-M03S.ttf);
 }
 </style>
 <script>
@@ -69,6 +79,7 @@ export default {
 				serverRequest.userLogin(this.email, this.pass)
 				.then(v => {
 					let succCb = () => {
+						this.$emit('login-succ')
 					}
 					let errCb = () => {}
 					this.handleRequestRes(v.data, succCb, errCb)

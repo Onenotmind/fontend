@@ -1,7 +1,7 @@
 <template>
 	<div id="loginService">
 		<!-- <component :is="currentView" /> -->
-		<login v-show="currentView === 'login'" @show-register="showRegister" @show-resetPass="showResetPass" />
+		<login v-show="currentView === 'login'" @login-succ="loginSucc" @show-register="showRegister" @show-resetPass="showResetPass" />
 		<register v-show="currentView === 'register'" @show-login="showLogin" />
 		<resetPass v-show="currentView === 'resetPass'" @show-login="showLogin" />
 	</div>
@@ -28,6 +28,9 @@ export default {
 		},
 		showResetPass () {
 			this.currentView = 'resetPass'
+		},
+		loginSucc () {
+			this.$emit('login-succ')
 		}
 	},
 	components: {

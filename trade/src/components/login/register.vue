@@ -63,7 +63,6 @@ export default {
 	},
 	methods: {
 		getCode () {
-			console.log('1')
 			if (this.email !== '') {
 				serverRequest.userGeneCode(this.email).then((v) => {
 					console.log(v)

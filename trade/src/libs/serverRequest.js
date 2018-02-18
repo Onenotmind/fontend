@@ -1,6 +1,6 @@
 const axios = require('axios')
 const qs = require('qs')
-
+axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
   baseURL: 'http://localhost:7007/',
   timeout: 10000
@@ -9,7 +9,13 @@ const ssapiAxios = axios.create({
 const ssapiPath = {
   userLogin: 'userLogin',
   userRegister: 'userRegister',
-  userGeneCode: 'userGeneCode'
+  userGeneCode: 'userGeneCode',
+  userCheckCode: 'userCheckCode',
+  userChangeLoginPass: 'userChangeLoginPass',
+  queryAllAssets: 'queryAllAssets',
+  queryAllRollInAssets: 'queryAllRollInAssets',
+  queryRollInAssetsByAddr: 'queryRollInAssetsByAddr',
+  checkOverRollInOrder: 'checkOverRollInOrder'
 }
 
 function intercept () {
@@ -63,9 +69,45 @@ function userRegister (email, pwd, code) {
   return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ email, pwd, code }))
 }
 
+// 检测验证码
+function userCheckCode (email, code) {
+  return ssapiAxios.get(ssapiPath.userCheckCode, { params: { email, code }})
+}
+
+// 重置密码
+function userChangeLoginPass (email, pwd) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ email, pwd }))
+}
+
+// 查询未确定资产
+function queryAllAssets () {
+  return ssapiAxios.get(ssapiPath.queryAllAssets, { params: {}})
+}
+
+// 查询转入的订单
+function queryAllRollInAssets () {
+  return ssapiAxios.get(ssapiPath.queryAllRollInAssets, { params: {}})
+}
+
+// 查询某一特定用户的转入资产
+function queryRollInAssetsByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.queryRollInAssetsByAddr, { params: { addr }})
+}
+
+// 转入订单确认
+function checkOverRollInOrder (assetsData) {
+  return ssapiAxios.post(ssapiPath.checkOverRollInOrder, qs.stringify({ assetsData }))
+}
+
 export default {
   userGeneCode,
   userLogin,
   userRegister,
-  handleRequestRes
+  handleRequestRes,
+  userCheckCode,
+  userChangeLoginPass,
+  queryAllAssets,
+  queryAllRollInAssets,
+  queryRollInAssetsByAddr,
+  checkOverRollInOrder
 }

@@ -3,7 +3,8 @@ let CommonCodes = {
 }
 let LoginCodes = {
   'Register_Data_Null': '账号密码不为空！', // 账号密码错误
-  'Code_Error': '验证码错误！'
+  'Code_Error': '验证码错误！',
+  'Code_Not_Null': '验证码不为空！'
 }
 
 module.exports = {
