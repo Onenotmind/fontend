@@ -38,6 +38,7 @@
       <!-- <Table stripe :columns="titles" :data="assetsData"></Table> -->
       <assets v-if="assetsFlag === 'assets'" />
       <assetsRollIn v-if="assetsFlag === 'assetsRollIn'" />
+      <assetsRollOut v-if="assetsFlag === 'assetsRollOut'" />
     </Content>
   </Layout>
 </div>
@@ -88,11 +89,12 @@
 <script>
 import assets from './assets.vue'
 import assetsRollIn from './assetsRollIn.vue'
+import assetsRollOut from './assetsRollOut.vue'
 
 export default {
 	data () {
 		return {
-			assetsFlag: 'assetsRollIn'
+			assetsFlag: 'assetsRollOut'
 		}
 	},
 	methods: {
@@ -102,12 +104,15 @@ export default {
 				this.assetsFlag = 'assets'
 			} else if (name === 'transation_in') {
 				this.assetsFlag = 'assetsRollIn'
+			} else if (name === 'transation_out') {
+				this.assetsFlag = 'assetsRollOut'
 			} else {}
 		}
 	},
 	components: {
 		assets,
-		assetsRollIn
+		assetsRollIn,
+		assetsRollOut
 	}
 }
 

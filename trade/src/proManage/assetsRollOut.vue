@@ -140,7 +140,7 @@ import serverRequest from '../libs/serverRequest.js'
           type: item.assetsType,
           state: 'fail'
         }
-        serverRequest.deleteRollInOrder(assetsData)
+        serverRequest.deleteRollOutOrder(assetsData)
         .then(v => {
           let succCb = () => {}
           let errCb = () => {
@@ -162,7 +162,7 @@ import serverRequest from '../libs/serverRequest.js'
           type: item.assetsType,
           state: 'done'
         }
-        serverRequest.checkOverRollInOrder(assetsData)
+        serverRequest.checkOverRollOutOrder(assetsData)
         .then(v => {
           let succCb = () => {}
           let errCb = () => {
@@ -175,7 +175,8 @@ import serverRequest from '../libs/serverRequest.js'
         })
       },
       queryAllRollInData () {
-        serverRequest.queryAllRollInAssets()
+        console.log('queryAllRollInData')
+        serverRequest.queryAllRollOutAssets()
         .then(v => {
           let succCb = () => {
             this.assetsRollInData = this.formatAssetsRes(v.data.res.data)
@@ -191,7 +192,7 @@ import serverRequest from '../libs/serverRequest.js'
       },
       addrSearch () {
         if (this.addr !== '') {
-          serverRequest.queryRollInAssetsByAddr(this.addr)
+          serverRequest.queryRollOutAssetsByAddr(this.addr)
           .then(v => {
             let succCb = () => {
               this.assetsRollInData = this.formatAssetsRes(v.data.res.data)

@@ -15,7 +15,12 @@ const ssapiPath = {
   queryAllAssets: 'queryAllAssets',
   queryAllRollInAssets: 'queryAllRollInAssets',
   queryRollInAssetsByAddr: 'queryRollInAssetsByAddr',
-  checkOverRollInOrder: 'checkOverRollInOrder'
+  checkOverRollInOrder: 'checkOverRollInOrder',
+  deleteRollInOrder: 'deleteRollInOrder',
+  queryAllRollOutAssets: 'queryAllRollOutAssets',
+  queryRollOutAssetsByAddr: 'queryRollOutAssetsByAddr',
+  checkOverRollOutOrder: 'checkOverRollOutOrder',
+  deleteRollOutOrder: 'deleteRollOutOrder'
 }
 
 function intercept () {
@@ -99,6 +104,30 @@ function checkOverRollInOrder (assetsData) {
   return ssapiAxios.post(ssapiPath.checkOverRollInOrder, qs.stringify({ assetsData }))
 }
 
+// 转入订单取消
+function deleteRollInOrder (assetsData) {
+  return ssapiAxios.post(ssapiPath.deleteRollInOrder, qs.stringify({ assetsData }))
+}
+
+// 查询提现的订单
+function queryAllRollOutAssets () {
+  return ssapiAxios.get(ssapiPath.queryAllRollOutAssets, { params: {}})
+}
+
+// 查询某一特定用户的提现订单
+function queryRollOutAssetsByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.queryRollOutAssetsByAddr, { params: { addr }})
+}
+
+// 提现订单确认
+function checkOverRollOutOrder (assetsData) {
+  return ssapiAxios.post(ssapiPath.checkOverRollOutOrder, qs.stringify({ assetsData }))
+}
+
+// 提现订单取消
+function deleteRollOutOrder (assetsData) {
+  return ssapiAxios.post(ssapiPath.deleteRollOutOrder, qs.stringify({ assetsData }))
+}
 export default {
   userGeneCode,
   userLogin,
@@ -109,5 +138,10 @@ export default {
   queryAllAssets,
   queryAllRollInAssets,
   queryRollInAssetsByAddr,
-  checkOverRollInOrder
+  checkOverRollInOrder,
+  deleteRollInOrder,
+  queryAllRollOutAssets,
+  queryRollOutAssetsByAddr,
+  checkOverRollOutOrder,
+  deleteRollOutOrder
 }

@@ -66,8 +66,10 @@ export default {
 				serverRequest.userGeneCode(this.email).then((v) => {
 					console.log(v)
 					let succCb = () => {}
-					let errCb = () => {}
-					this.handleRequestRes(v.data, succCb, errCb)
+					let errCb = () => {
+						this.alertErrInfo(v.data)
+					}
+					serverRequest.handleRequestRes(v.data, succCb, errCb)
 				}).catch ((e) => {
 					console.log(e)
 					// this.$Message.error(CommonCodes.Net_Wrong)
@@ -79,8 +81,10 @@ export default {
 				let succCb = () => {
 					this.stepNum = 1
 				}
-				let errCb = () => {}
-				this.handleRequestRes(v.data, succCb, errCb)
+				let errCb = () => {
+					this.alertErrInfo(v.data)
+				}
+				serverRequest.handleRequestRes(v.data, succCb, errCb)
 			})
 		},
 		resetPass () {
@@ -89,34 +93,32 @@ export default {
 					let succCb = () => {
 						this.stepNum = 2
 					}
-					let errCb = () => {}
-					this.handleRequestRes(v.data, succCb, errCb)
+					let errCb = () => {
+						this.alertErrInfo(v.data)
+					}
+					serverRequest.handleRequestRes(v.data, succCb, errCb)
 				})
 			}
 		},
-		handleRequestRes (data, succCb, errCb) {
-			let succ = () => {
-				this.$Message.success({
-	        top: 200,
-	        content: data.res.msg
-	      })
-	      succCb()
-			}
-			let err = () => {
-				let errMsg = ''
-				if (data.msg) {
-					errMsg = data.msg
-				} else if (data.res && data.res.msg) {
-					errMsg = data.res.msg
-				} else {}
-				this.$Message.error({
-	        top: 200,
-	        content: errMsg
-	      })
-	      errCb()
-			}
-			serverRequest.handleRequestRes(data, succ, err)
-		}
+		alertSuccInfo (msg) {
+      this.$Message.success({
+        top: 200,
+        content: msg
+        // content: data.res.msg
+      })
+    },
+    alertErrInfo (data) {
+      let errMsg = ''
+      if (data.msg) {
+        errMsg = data.msg
+      } else if (data.res && data.res.msg) {
+        errMsg = data.res.msg
+      } else {}
+      this.$Message.error({
+        top: 200,
+        content: errMsg
+      })
+    }
 	}
 }
 </script>
