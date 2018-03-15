@@ -12,9 +12,19 @@
 </template>
 <script>
 import serverRequest from '../libs/serverRequest.js'
+var Web3 = require('web3')
+// var web3 = new Web3()
+
+// if (typeof web3 !== 'undefined') {
+//   web3 = new Web3(web3.currentProvider)
+// } else {
+  // set the provider you want from Web3.providers
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+// }
   export default {
     created () {
-      this.queryAllRollInData()
+      // this.queryAllRollInData()
+      this.queryEthAccount()  
     },
     data () {
       return {
@@ -123,6 +133,37 @@ import serverRequest from '../libs/serverRequest.js'
         this.currentSelectData.forEach(item => {
           this.delete(item)
         })
+      },
+      queryEthAccount () {
+
+        // 查询eth上的账户
+        // web3.eth.defaultAccount = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
+        // web3.eth.coinbase = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
+        // web3.eth.getBalance('0x627306090abaB3A6e1400e9345bC60c78a8BEf57', function (error, result) {
+        //   if (!error) {
+        //     console.log(error + ': ' + result)
+        //   }
+        //   console.log('result: ',result)
+        // })
+
+        // 转账
+        // web3.eth.sendTransaction({from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', to: '0xf17f52151EbEF6C7334FAD080c5704D77216b732', value: '9995799999999999999'})
+
+        // 获取本机的账户列表
+        // web3.eth.getAccounts(function(err, acc) { 
+        //   acc.forEach((item, e) => {
+        //     console.log('item:',item)
+        //     web3.eth.getBalance(item, function (error, result) {
+        //       if (!error) {
+        //         console.log(e + ': ' + result)
+        //       }
+        //       console.log('result: ',result)
+        //     })
+        //   })
+        // })
+        // web3.fromWei(web3.eth.getBalance('0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef'))
+
+        console.log(web3.isConnected())
       },
       refreshData () {
         this.queryAllRollInData()
