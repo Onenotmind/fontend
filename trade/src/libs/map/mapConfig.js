@@ -1,150 +1,97 @@
-function randomData() {
-    return Math.round(Math.random()*1000);
-}
-
-let mapConfig = {
+let testFinalData = [
+  { value : [42.5, 1.5, 20] },
+  { value : [-21.2333, 41.5, 40] },
+  { value : [-92.5, 132.5, 30] },
+  { value : [-142.5, 21.5, 60] },
+  { value : [242.5, -41.5, 70] }
+]
+let mapConfig  = {
+  backgroundColor: '#003',
     title: {
-        text: 'iphone销量',
-        subtext: '纯属虚构',
-        left: 'center'
+        // text: 'The World',
+        // subtext: 'from United Nations, Total population, both sexes combined, as of 1 July (thousands)',
+        // sublink: 'http://esa.un.org/wpp/Excel-Data/population.htm',
+        left: 'center',
+        top: 'top'
     },
     tooltip: {
-        trigger: 'item'
-    },
-    legend: {
-        orient: 'vertical',
-        left: 'left',
-        data:['iphone3','iphone4','iphone5']
-    },
-    visualMap: {
-        min: 0,
-        max: 2500,
-        left: 'left',
-        top: 'bottom',
-        text: ['高','低'],           // 文本，默认为数值文本
-        calculable: true
-    },
-    toolbox: {
-        show: true,
-        orient: 'vertical',
-        left: 'right',
-        top: 'center',
-        feature: {
-            dataView: {readOnly: false},
-            restore: {},
-            saveAsImage: {}
+        trigger: 'item',
+        formatter: function (params) {
+            var value = (params.value + '').split('.');
+            value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
+                    + '.' + value[1];
+            return params.seriesName + '<br/>' + params.name + ' : ' + value;
         }
     },
-    series: [
-        {
-            name: 'iphone3',
-            type: 'map',
-            mapType: 'china',
-            roam: false,
-            label: {
-                normal: {
-                    show: true
-                },
-                emphasis: {
-                    show: true
-                }
-            },
-            data:[
-                {name: '北京',value: randomData() },
-                {name: '天津',value: randomData() },
-                {name: '上海',value: randomData() },
-                {name: '重庆',value: randomData() },
-                {name: '河北',value: randomData() },
-                {name: '河南',value: randomData() },
-                {name: '云南',value: randomData() },
-                {name: '辽宁',value: randomData() },
-                {name: '黑龙江',value: randomData() },
-                {name: '湖南',value: randomData() },
-                {name: '安徽',value: randomData() },
-                {name: '山东',value: randomData() },
-                {name: '新疆',value: randomData() },
-                {name: '江苏',value: randomData() },
-                {name: '浙江',value: randomData() },
-                {name: '江西',value: randomData() },
-                {name: '湖北',value: randomData() },
-                {name: '广西',value: randomData() },
-                {name: '甘肃',value: randomData() },
-                {name: '山西',value: randomData() },
-                {name: '内蒙古',value: randomData() },
-                {name: '陕西',value: randomData() },
-                {name: '吉林',value: randomData() },
-                {name: '福建',value: randomData() },
-                {name: '贵州',value: randomData() },
-                {name: '广东',value: randomData() },
-                {name: '青海',value: randomData() },
-                {name: '西藏',value: randomData() },
-                {name: '四川',value: randomData() },
-                {name: '宁夏',value: randomData() },
-                {name: '海南',value: randomData() },
-                {name: '台湾',value: randomData() },
-                {name: '香港',value: randomData() },
-                {name: '澳门',value: randomData() }
-            ]
+    // toolbox: {
+  //     show: true,
+  //     orient: 'vertical',
+  //     left: 'right',
+  //     top: 'center',
+  //     feature: {
+  //         dataView: {readOnly: false},
+  //         restore: {},
+  //         saveAsImage: {}
+  //     }
+  // },
+    // visualMap: {
+    //     min: 0,
+    //     max: 1000000,
+    //     text:['High','Low'],
+    //     realtime: false,
+    //     calculable: true,
+    //     inRange: {
+    //         color: ['lightskyblue','yellow', 'orangered']
+    //     }
+    // },
+    geo: {
+        name: 'World Population (2010)',
+        type: 'map',
+        map: 'world',
+        roam: true,
+        label: {
+            emphasis: {
+                show: false
+            }
         },
-        {
-            name: 'iphone4',
-            type: 'map',
-            mapType: 'china',
-            label: {
+        itemStyle: {
                 normal: {
-                    show: true
-                },
-                emphasis: {
-                    show: true
+                    borderColor: '#003',
+                    color: '#005'
                 }
-            },
-            data:[
-                {name: '北京',value: randomData() },
-                {name: '天津',value: randomData() },
-                {name: '上海',value: randomData() },
-                {name: '重庆',value: randomData() },
-                {name: '河北',value: randomData() },
-                {name: '安徽',value: randomData() },
-                {name: '新疆',value: randomData() },
-                {name: '浙江',value: randomData() },
-                {name: '江西',value: randomData() },
-                {name: '山西',value: randomData() },
-                {name: '内蒙古',value: randomData() },
-                {name: '吉林',value: randomData() },
-                {name: '福建',value: randomData() },
-                {name: '广东',value: randomData() },
-                {name: '西藏',value: randomData() },
-                {name: '四川',value: randomData() },
-                {name: '宁夏',value: randomData() },
-                {name: '香港',value: randomData() },
-                {name: '澳门',value: randomData() }
-            ]
-        },
+            }
+    },
+     series : [
         {
-            name: 'iphone5',
-            type: 'map',
-            mapType: 'china',
-            label: {
-                normal: {
-                    show: true
-                },
-                emphasis: {
-                    show: true
-                }
-            },
-            data:[
-                {name: '北京',value: randomData() },
-                {name: '天津',value: randomData() },
-                {name: '上海',value: randomData() },
-                {name: '广东',value: randomData() },
-                {name: '台湾',value: randomData() },
-                {name: '香港',value: randomData() },
-                {name: '澳门',value: randomData() }
-            ]
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: testFinalData,
+            large: true,
+            // largeThreshold: 100,
+            symbolSize: 20,
+            showEffectOn: 'render',
+    rippleEffect: {
+      brushType: 'stroke'
+    },
+    hoverAnimation: true,
+    label: {
+      normal: {
+        formatter: '{b}',
+        position: 'right',
+        show: true
+      }
+    },
+    itemStyle: {
+      normal: {
+        color: 'purple',
+        shadowBlur: 100,
+        shadowColor: 'white'
+      }
+    },
+    zlevel: 1
         }
     ]
 };
-
 
 module.exports = {
 	mapConfig: mapConfig

@@ -61,7 +61,7 @@
 		</Header>
   </Layout>
   <!--  面包屑提示 -->
-	<Layout :style="{padding: '0 100px 100px'}">
+	<Layout :style="{padding: '0 100px 100px'}" v-if="false">
     <Breadcrumb :style="{margin: '24px 0'}">
         <BreadcrumbItem>Home</BreadcrumbItem>
         <BreadcrumbItem>{{ $t(menu) }}</BreadcrumbItem>
@@ -74,8 +74,10 @@
   </Layout>
   <!--  登陆模块 -->
   <layout>
-		<Content :style="{ padding: '0 50px' }" v-if="false">
-			<loginService  @login-succ="loginSucc" />
+		<Content :style="{ padding: '0 50px' }" v-if="true">
+			<loginService  v-if="currentView === 'loginService'" @login-succ="loginSucc" />
+			<comboService v-if="currentView === 'comboService'" />
+			<landService v-if="currentView === 'landService'" />
 		</Content>
 		<Footer class="layout-footer-center" :style="{position: 'fixed', width: '100%', bottom: '0'}">ethLand.best@2017-2018 All Right Resolved.</Footer>
 </layout>
@@ -85,6 +87,9 @@
 <style scoped>
 [v-cloak] {
   display: none;
+}
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
 }
 #tradeContainer {
 	font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
@@ -129,11 +134,13 @@
 
 <script>
 import loginService from './components/loginService.vue'
+import comboService from './components/comboService.vue'
+import landService from './components/landService.vue'
 import i18n from "./index.js"
 export default {
 	data () {
 		return {
-			currentView: loginService,
+			currentView: 'landService',
 			menu: 'app_person',
 			submenu: 'app_assets'
 		}
@@ -152,7 +159,9 @@ export default {
 		}
 	},
 	components: {
-		loginService
+		loginService,
+		comboService,
+		landService
 	}
 }
 
