@@ -1,3 +1,4 @@
+// import ethSymbol from '../../images/ethereum.png' 
 let testFinalData = [
   { value : [42.5, 1.5, 20] },
   { value : [-21.2333, 41.5, 40] },
@@ -93,6 +94,75 @@ let mapConfig  = {
     ]
 };
 
+function getMapConfig (val) {
+  return {
+    backgroundColor: '#003',
+    title: {},
+    tooltip: {},
+    geo: {
+      name: '',
+      type: 'map',
+      map: 'world',
+      roam: true,
+      label: {
+        emphasis: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderColor: '#003',
+          color: '#005'
+        }
+      }
+    },
+    series: [{
+      type: 'effectScatter',
+      coordinateSystem: 'geo',
+      data: val,
+      large: true,
+      // largeThreshold: 100,
+      symbolSize: 20,
+      // symbol: 'image://(./static/img/ethereum.png)',
+      showEffectOn: 'render',
+      rippleEffect: {
+        brushType: 'stroke'
+      },
+      hoverAnimation: true,
+      label: {
+        normal: {
+          formatter: '{b}',
+          position: 'right',
+          show: true
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: 'purple',
+          shadowBlur: 100,
+          shadowColor: 'white'
+        }
+      },
+      zlevel: 1
+    },
+    {
+      type: 'scatter',
+      coordinateSystem: 'geo',
+      data: [{ value : [142.5, 1.5, 20] }],
+      large: true,
+      // largeThreshold: 100,
+      symbolSize: 25,
+      // symbol: 'arrow',
+      symbol: 'image://https://image.ibb.co/iLmapc/aui_icon_location_1.png',
+      itemStyle: {
+        normal: {
+          color: 'white'
+        }
+      }
+    }]
+  }
+}
+
 module.exports = {
-	mapConfig: mapConfig
+	getMapConfig: getMapConfig
 }

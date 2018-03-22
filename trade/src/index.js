@@ -23,7 +23,9 @@ const i18n = new VueI18n({
   locale: 'cn', // set locale
 })
 
-Vue.use(iView)
+Vue.use(iView, {
+    i18n: (key, value) => i18n.t(key, value)
+})
 
 new Vue({
   el: '#app',
