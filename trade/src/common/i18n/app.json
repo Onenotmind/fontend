@@ -7,7 +7,10 @@
     "app_person": "Account",
     "app_assets": "Balance",
     "app_Account_Safe": "Security",
-    "app_Log_Out": "Log Out"
+    "app_Log_Out": "Log Out",
+    "app_bamboo_catch": "catchBamboo",
+    "app_panda_home": "pandaHome",
+    "app_market": "market"
   },
   "cn": {
     "app_announce": "公告列表",
@@ -17,6 +20,9 @@
     "app_person": "个人中心",
     "app_assets": "我的资产",
     "app_Account_Safe": "账户安全",
-    "app_Log_Out": "退出账户"
+    "app_Log_Out": "退出账户",
+    "app_bamboo_catch": "获取竹子",
+    "app_panda_home": "熊猫家园",
+    "app_market": "市场"
   }
 }

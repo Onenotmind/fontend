@@ -1,6 +1,9 @@
 <i18n src='../../common/i18n/ethcombo/combo.json'></i18n>
 <template>
 	<div id="baseLand">
+		<div class="baseLand-bg">
+			
+		</div>
 		<div id="container" :class="{ 'landScaleLarger': scale==='larger', 'landScaleSmall': scale==='small'}" @click="changeScale" @blur="mapBlur" tabindex="0"></div>
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasImgArr" :key="index" :span="24 / pandasImgArr.length" align="center">
@@ -127,6 +130,15 @@
   z-index: 5000;
   border: 1px solid #999;
 }
+.baseLand-bg {
+	position: absolute;
+	left: 0;
+	top: 64px;
+	width: 100%;
+	height: 100%;
+	background: url(../../images/webbg/home-bg.jpg) no-repeat;
+	background-size: 100% 100%;
+}
 .landScaleLarger {
 	height: 600px;
   width: 1080px;
@@ -171,7 +183,7 @@
 <script>
 import EchartHandle from '../../libs/map/EchartHandle.js'
 import {getMapConfig} from '../../libs/map/mapConfig.js'
-import testPandaImg from '../../images/charactor/body/dogbody.png'
+import testPandaImg from '../../images/charactor/figure/testdog1.png'
 let testFinalData = [
   { value : [42.5, 1.5, 20] },
   { value : [-21.2333, 41.5, 40] },

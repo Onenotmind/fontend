@@ -2,25 +2,29 @@
 <template>
 <div id="tradeContainer">
 <!--  头部导航栏 -->
-	<layout>
+	<layout v-if="currentView !== 'enterPage'">
 		<Header>
 			<Menu mode="horizontal" theme="dark" active-name="1" @on-select="selectMenu">
 				<div class="layout-logo" style="background: #495060;top:5px;width:150px;">
 					<img src="./images/ethland.png" style="vertical-align:middle;">
 					<span class="logo-word">EthLand.pro</span>
 				</div>
-				<div class="layout-nav" style="width: 650px;">
-					<MenuItem name="app_announce">
+				<div class="layout-nav" style="width: 750px;">
+					<MenuItem name="app_bamboo_catch">
 						<Icon type="ios-keypad"></Icon>
-						{{ $t("app_announce") }}
+						{{ $t("app_bamboo_catch") }}
+					</MenuItem>
+					<MenuItem name="app_panda_home">
+						<Icon type="home"></Icon>
+						{{ $t("app_panda_home") }}
 					</MenuItem>
 					<MenuItem name="app_guide">
 						<Icon type="ios-navigate"></Icon>
 						{{ $t("app_guide") }}
 					</MenuItem>
-					<MenuItem name="app_activity">
+					<MenuItem name="app_market">
 					<Icon type="fireball"></Icon>
-						{{ $t("app_activity") }}
+						{{ $t("app_market") }}
 					</MenuItem>
 					<MenuItem name="menu_person" v-show="false">
 						<Icon type="person"></Icon>
@@ -73,7 +77,7 @@
     </Content>
   </Layout>
   <!--  登陆模块 -->
-  <layout>
+  <layout v-if="currentView !== 'enterPage'">
 		<Content :style="{ padding: '0 50px' }" v-if="true">
 			<loginService  v-if="currentView === 'loginService'" @login-succ="loginSucc" />
 			<comboService v-if="currentView === 'comboService'" />
@@ -81,6 +85,18 @@
 		</Content>
 		<Footer class="layout-footer-center" :style="{position: 'fixed', width: '100%', bottom: '0'}">ethLand.best@2017-2018 All Right Resolved.</Footer>
 </layout>
+<Layout v-if="currentView === 'enterPage'">
+	<Content>
+		<div class="fontPage">
+			<div class="eth-logo">
+				欢迎来到 EthLand.pro！
+			</div>
+			<Input v-modal="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址">
+				<Button slot="append" icon="ios-search" @click="checkAddr"></Button>
+			</Input>
+		</div>
+	</Content>
+</Layout>
 </div>
 </template>
 
@@ -130,6 +146,34 @@
 .layout-footer-center{
     text-align: center;
 }
+.fontPage {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:0;
+	left: 0;
+	background: url(./images/webbg/home-bg.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+.enter-btn {
+	width: 460px;
+	position: absolute;
+	top:48%;
+	left: 50%;
+	margin-left: -230px;
+}
+.eth-logo{
+	width: 600px;
+	position: absolute;
+	font-size: 30px;
+	line-height: 30px;
+	top: 35%;
+	left: 50%;
+	margin-left: -300px;
+	text-align: center;
+	font-family: FZCuYuan-M03S;
+	color: #fff;
+}
 </style>
 
 <script>
@@ -142,7 +186,8 @@ export default {
 		return {
 			currentView: 'landService',
 			menu: 'app_person',
-			submenu: 'app_assets'
+			submenu: 'app_assets',
+			ethAddr: ''
 		}
 	},
 	methods: {
@@ -153,9 +198,21 @@ export default {
 		},
 		selectMenu (name) {
 			this.menu = name
+			if (this.menu === 'app_bamboo_catch') {
+				this.currentView = 'comboService'
+			}
+			if (this.menu === 'app_panda_home') {
+				this.currentView = 'landService'
+			}
+			if (this.menu === 'app_market') {
+				this.currentView = ''
+			}
 		},
 		loginSucc () {
 
+		},
+		checkAddr () {
+			this.currentView = 'landService'
 		}
 	},
 	components: {
