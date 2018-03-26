@@ -82,8 +82,9 @@
 			<loginService  v-if="currentView === 'loginService'" @login-succ="loginSucc" />
 			<comboService v-if="currentView === 'comboService'" />
 			<landService v-if="currentView === 'landService'" />
+			<marketService v-if="currentView === 'marketService'" />
 		</Content>
-		<Footer class="layout-footer-center" :style="{position: 'fixed', width: '100%', bottom: '0'}">ethLand.best@2017-2018 All Right Resolved.</Footer>
+		<Footer class="layout-footer-center">ethLand.best@2017-2018 All Right Resolved.</Footer>
 </layout>
 <Layout v-if="currentView === 'enterPage'">
 	<Content>
@@ -180,11 +181,12 @@
 import loginService from './components/loginService.vue'
 import comboService from './components/comboService.vue'
 import landService from './components/landService.vue'
+import marketService from './components/marketService.vue'
 import i18n from "./index.js"
 export default {
 	data () {
 		return {
-			currentView: 'landService',
+			currentView: 'marketService',
 			menu: 'app_person',
 			submenu: 'app_assets',
 			ethAddr: ''
@@ -218,7 +220,8 @@ export default {
 	components: {
 		loginService,
 		comboService,
-		landService
+		landService,
+		marketService
 	}
 }
 
