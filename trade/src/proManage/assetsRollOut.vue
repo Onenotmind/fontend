@@ -12,14 +12,14 @@
 </template>
 <script>
 import serverRequest from '../libs/serverRequest.js'
-var Web3 = require('web3')
+// var Web3 = require('web3')
 // var web3 = new Web3()
 
 // if (typeof web3 !== 'undefined') {
 //   web3 = new Web3(web3.currentProvider)
 // } else {
   // set the provider you want from Web3.providers
-var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+// var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
 // }
   export default {
     created () {
@@ -163,7 +163,7 @@ var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
         // })
         // web3.fromWei(web3.eth.getBalance('0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef'))
 
-        console.log(web3.isConnected())
+        // console.log(web3.isConnected())
       },
       refreshData () {
         this.queryAllRollInData()

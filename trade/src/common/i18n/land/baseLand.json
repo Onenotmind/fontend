@@ -1,8 +1,38 @@
 {
   "en": {
-    
+    "feed": "feed",
+    "out": "out",
+    "drop": "drop",
+    "carry": "carry",
+    "director": "director",
+    "east": "east",
+    "north": "north",
+    "south": "south",
+    "west": "west",
+    "southeast": "southeast",
+    "southwest": "southwest",
+    "northeast": "northeast",
+    "northwest": "northwest",
+    "carry_back_treasure": "carryBack",
+    "drop_treasure": "drop",
+    "far_treasure": "faraway"
   },
   "cn": {
-    
+    "feed": "喂养",
+    "out": "外出寻宝",
+    "drop": "丢弃",
+    "carry": "携带物品",
+    "director": "方向",
+    "east": "东",
+    "north": "北",
+    "south": "南",
+    "west": "西",
+    "southeast": "东南",
+    "southwest": "西南",
+    "northeast": "东北",
+    "northwest": "西北",
+    "carry_back_treasure": "带回来的宝贝",
+    "drop_treasure": "扔掉的宝贝",
+    "far_treasure": "远方的宝贝"
   }
 }

@@ -20,7 +20,17 @@ const ssapiPath = {
   queryAllRollOutAssets: 'queryAllRollOutAssets',
   queryRollOutAssetsByAddr: 'queryRollOutAssetsByAddr',
   checkOverRollOutOrder: 'checkOverRollOutOrder',
-  deleteRollOutOrder: 'deleteRollOutOrder'
+  deleteRollOutOrder: 'deleteRollOutOrder',
+  queryAllPandaByAddr: 'queryAllPandaByAddr',
+  queryPandaInfo: 'queryPandaInfo',
+  genePandaRandom: 'genePandaRandom',
+  getEthlandProduct: 'getEthlandProduct',
+  serverTime: 'serverTime',
+  getPandaBackAssets: 'getPandaBackAssets',
+  queryAllPandaSold: 'queryAllPandaSold',
+  buyPanda: 'buyPanda',
+  sellPanda: 'sellPanda',
+  delPandaByGen: 'delPandaByGen'
 }
 
 function intercept () {
@@ -128,6 +138,56 @@ function checkOverRollOutOrder (assetsData) {
 function deleteRollOutOrder (assetsData) {
   return ssapiAxios.post(ssapiPath.deleteRollOutOrder, qs.stringify({ assetsData }))
 }
+
+// 查询某地址下所有熊猫
+function queryAllPandaByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.queryAllPandaByAddr, { params: { addr }})
+}
+
+// 查询某只熊猫的详细信息
+function queryPandaInfo (gen) {
+  return ssapiAxios.get(ssapiPath.queryPandaInfo, { params: { gen }})
+}
+
+// 随机产生一只g10熊猫
+function genePandaRandom (addr) {
+  return ssapiAxios.get(ssapiPath.genePandaRandom, { params: { addr }})
+}
+
+// 熊猫外出获取宝物
+function getEthlandProduct (pandaGen, bamboo, direction) {
+  return ssapiAxios.get(ssapiPath.getEthlandProduct, { params: { pandaGen, bamboo, direction }})
+}
+
+// 获取服务器当前时间
+function serverTime () {
+  return ssapiAxios.get(ssapiPath.serverTime, { params: {}})
+}
+
+// 获取熊猫外出回归的商品
+function getPandaBackAssets (pandaGen) {
+  return ssapiAxios.get(ssapiPath.getPandaBackAssets, { params: {pandaGen}})
+}
+
+// 查询所有售卖中的熊猫
+function queryAllPandaSold () {
+  return ssapiAxios.get(ssapiPath.queryAllPandaSold, { params: {}})
+}
+
+// 购买熊猫
+function buyPanda (addr, pandaGen, price) {
+  return ssapiAxios.post(ssapiPath.buyPanda, qs.stringify({ addr, pandaGen, price }))
+}
+
+// 出售熊猫
+function sellPanda (pandaGen, price) {
+  return ssapiAxios.get(ssapiPath.sellPanda, { params: { pandaGen, price }})
+}
+
+// 丢弃熊猫
+function delPandaByGen (pandaGen) {
+  return ssapiAxios.get(ssapiPath.delPandaByGen, { params: { pandaGen }})
+}
 export default {
   userGeneCode,
   userLogin,
@@ -143,5 +203,15 @@ export default {
   queryAllRollOutAssets,
   queryRollOutAssetsByAddr,
   checkOverRollOutOrder,
-  deleteRollOutOrder
+  deleteRollOutOrder,
+  queryAllPandaByAddr,
+  queryPandaInfo,
+  genePandaRandom,
+  getEthlandProduct,
+  serverTime,
+  getPandaBackAssets,
+  queryAllPandaSold,
+  buyPanda,
+  sellPanda,
+  delPandaByGen
 }

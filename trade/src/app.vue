@@ -83,6 +83,7 @@
 			<comboService v-if="currentView === 'comboService'" />
 			<landService v-if="currentView === 'landService'" />
 			<marketService v-if="currentView === 'marketService'" />
+			<myAssetsService v-if="currentView === 'myAssetsService'" />
 		</Content>
 		<Footer class="layout-footer-center">ethLand.best@2017-2018 All Right Resolved.</Footer>
 </layout>
@@ -93,7 +94,9 @@
 				欢迎来到 EthLand.pro！
 			</div>
 			<Input v-modal="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址">
-				<Button slot="append" icon="ios-search" @click="checkAddr"></Button>
+				<Button slot="append" @click="checkAddr">
+					<Icon type="android-more-horizontal" size="14"></Icon>
+				</Button>
 			</Input>
 		</div>
 	</Content>
@@ -182,11 +185,13 @@ import loginService from './components/loginService.vue'
 import comboService from './components/comboService.vue'
 import landService from './components/landService.vue'
 import marketService from './components/marketService.vue'
+import myAssetsService from './components/myAssetsService.vue'
+import serverRequest from './libs/serverRequest.js'
 import i18n from "./index.js"
 export default {
 	data () {
 		return {
-			currentView: 'marketService',
+			currentView: 'myAssetsService',
 			menu: 'app_person',
 			submenu: 'app_assets',
 			ethAddr: ''
@@ -200,15 +205,22 @@ export default {
 		},
 		selectMenu (name) {
 			this.menu = name
-			if (this.menu === 'app_bamboo_catch') {
-				this.currentView = 'comboService'
-			}
-			if (this.menu === 'app_panda_home') {
-				this.currentView = 'landService'
-			}
-			if (this.menu === 'app_market') {
-				this.currentView = ''
-			}
+			switch(name) {
+        case 'app_bamboo_catch': 
+          this.currentView = 'comboService'
+          break
+        case 'app_panda_home':
+          this.currentView = 'landService'
+          break
+        case 'app_market':
+          this.currentView = 'marketService'
+          break
+        case 'app_person':
+        	this.currentView = 'myAssetsService'
+        	break
+        default:
+          break
+      }
 		},
 		loginSucc () {
 
@@ -221,7 +233,8 @@ export default {
 		loginService,
 		comboService,
 		landService,
-		marketService
+		marketService,
+		myAssetsService
 	}
 }
 
