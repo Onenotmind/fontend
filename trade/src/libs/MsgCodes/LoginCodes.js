@@ -7,7 +7,16 @@ let LoginCodes = {
   'Code_Not_Null': '验证码不为空！'
 }
 
+function alertSuccInfo (msg) {
+  this.$Message.success({
+    top: 200,
+    content: msg
+    // content: data.res.msg
+  })
+}
+
 module.exports = {
   CommonCodes: CommonCodes,
-  LoginCodes: LoginCodes
+  LoginCodes: LoginCodes,
+  alertSuccInfo: alertSuccInfo
 }

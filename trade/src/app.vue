@@ -89,16 +89,7 @@
 </layout>
 <Layout v-if="currentView === 'enterPage'">
 	<Content>
-		<div class="fontPage">
-			<div class="eth-logo">
-				欢迎来到 EthLand.pro！
-			</div>
-			<Input v-modal="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址">
-				<Button slot="append" @click="checkAddr">
-					<Icon type="android-more-horizontal" size="14"></Icon>
-				</Button>
-			</Input>
-		</div>
+		<enterPage  @switch-land="switchLand" />
 	</Content>
 </Layout>
 </div>
@@ -150,34 +141,7 @@
 .layout-footer-center{
     text-align: center;
 }
-.fontPage {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top:0;
-	left: 0;
-	background: url(./images/webbg/home-bg.jpg) no-repeat;
-	background-size: 100% 100%;
-}
-.enter-btn {
-	width: 460px;
-	position: absolute;
-	top:48%;
-	left: 50%;
-	margin-left: -230px;
-}
-.eth-logo{
-	width: 600px;
-	position: absolute;
-	font-size: 30px;
-	line-height: 30px;
-	top: 35%;
-	left: 50%;
-	margin-left: -300px;
-	text-align: center;
-	font-family: FZCuYuan-M03S;
-	color: #fff;
-}
+
 </style>
 
 <script>
@@ -187,14 +151,14 @@ import landService from './components/landService.vue'
 import marketService from './components/marketService.vue'
 import myAssetsService from './components/myAssetsService.vue'
 import serverRequest from './libs/serverRequest.js'
+import enterPage from './components/enterPage.vue'
 import i18n from "./index.js"
 export default {
 	data () {
 		return {
-			currentView: 'myAssetsService',
+			currentView: 'enterPage',
 			menu: 'app_person',
-			submenu: 'app_assets',
-			ethAddr: ''
+			submenu: 'app_assets'
 		}
 	},
 	methods: {
@@ -225,8 +189,9 @@ export default {
 		loginSucc () {
 
 		},
-		checkAddr () {
-			this.currentView = 'landService'
+		switchLand () {
+			console.log('switchLand')
+			this.currentView = 'myAssetsService'
 		}
 	},
 	components: {
@@ -234,7 +199,8 @@ export default {
 		comboService,
 		landService,
 		marketService,
-		myAssetsService
+		myAssetsService,
+		enterPage
 	}
 }
 

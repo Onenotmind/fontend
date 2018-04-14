@@ -5,13 +5,14 @@ const ssapiAxios = axios.create({
   baseURL: 'http://localhost:7007/',
   timeout: 10000
 })
-
+// axios.defaults.headers.common['token'] = '123'
 const ssapiPath = {
   userLogin: 'userLogin',
   userRegister: 'userRegister',
   userGeneCode: 'userGeneCode',
   userCheckCode: 'userCheckCode',
   userChangeLoginPass: 'userChangeLoginPass',
+  userChangeTradePass: 'userChangeTradePass',
   queryAllAssets: 'queryAllAssets',
   queryAllRollInAssets: 'queryAllRollInAssets',
   queryRollInAssetsByAddr: 'queryRollInAssetsByAddr',
@@ -30,7 +31,8 @@ const ssapiPath = {
   queryAllPandaSold: 'queryAllPandaSold',
   buyPanda: 'buyPanda',
   sellPanda: 'sellPanda',
-  delPandaByGen: 'delPandaByGen'
+  delPandaByGen: 'delPandaByGen',
+  getUserInfoAndAssetsByAddr: 'getUserInfoAndAssetsByAddr'
 }
 
 function intercept () {
@@ -52,26 +54,31 @@ function intercept () {
 }
 
 function handleRequestRes (data, succCb, errCb) { // trade项目数据回调函数封装
-  if (data.status === 0) {
-    if (data.res.status === 0) {
+  if (data.status === 1) {
+    if (data.res.status === 1) {
       if (succCb) {
         succCb(data.res.data)
       }
     } else {
       if (errCb) {
-        errCb()
+        errCb(data.res.msg)
       }
     }
   } else {
     if (errCb) {
-      errCb()
+      errCb(data.msg)
     }
   }
 }
 
+// 更改axios headers
+function setHeader (type, val) {
+  axios.defaults.headers.common[type] = val
+}
+
 // 用户登录
-function userLogin (email, pwd) {
-  return ssapiAxios.get(ssapiPath.userLogin, { params: { email, pwd } })
+function userLogin (addr, pwd) {
+  return ssapiAxios.get(ssapiPath.userLogin, { params: { addr, pwd } })
 }
 
 // 生成验证码
@@ -80,8 +87,8 @@ function userGeneCode (email) {
 }
 
 // 用户注册
-function userRegister (email, pwd, code) {
-  return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ email, pwd, code }))
+function userRegister (addr, email, pwd, code) {
+  return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ addr, email, pwd, code }))
 }
 
 // 检测验证码
@@ -90,10 +97,14 @@ function userCheckCode (email, code) {
 }
 
 // 重置密码
-function userChangeLoginPass (email, pwd) {
-  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ email, pwd }))
+function userChangeLoginPass (addr, pwd) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, pwd }))
 }
 
+// 重置交易密码
+function userChangeTradePass (addr, tradePwd) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, tradePwd }))
+}
 // 查询未确定资产
 function queryAllAssets () {
   return ssapiAxios.get(ssapiPath.queryAllAssets, { params: {}})
@@ -188,6 +199,11 @@ function sellPanda (pandaGen, price) {
 function delPandaByGen (pandaGen) {
   return ssapiAxios.get(ssapiPath.delPandaByGen, { params: { pandaGen }})
 }
+
+// 获取用户详细信息和资产
+function getUserInfoAndAssetsByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.getUserInfoAndAssetsByAddr, { params: { addr }})
+}
 export default {
   userGeneCode,
   userLogin,
@@ -213,5 +229,8 @@ export default {
   queryAllPandaSold,
   buyPanda,
   sellPanda,
-  delPandaByGen
+  delPandaByGen,
+  getUserInfoAndAssetsByAddr,
+  setHeader,
+  userChangeTradePass
 }

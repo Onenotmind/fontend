@@ -42,19 +42,21 @@
             <img src="https://best.bi/assets/xx/avatars/avatar.png" class="avatar">
           </Col>
           <Col span="10" style="border-right: 1px solid #E1E2EA">
-            <p> 我的地址：0xF455C2dae83e65F67E7938B1aFAE6A269455B194</p>
+            <p> 我的地址：{{ userInfo.uaddr || ''}}</p>
             <br>
-            <p> 我的邮箱：1343566210@qq.com</p>
+            <p> 我的邮箱：{{ userInfo.uemail || ''}}</p>
           </Col>
           <Col span="11" style="padding-left: 100px;">
             <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">身份验证：</span>
             <br>
             <br>
-            <Icon type="checkmark-circled" color="green" size="25" class="vertical"></Icon>
+            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.uemail !==''"></Icon>
+            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.uemail ===''"></Icon>
             <span style="margin-left: 20px;">邮箱认证</span>
             <br>
             <br>
-            <Icon type="checkmark-circled" color="green" size="25" class="vertical"></Icon>
+            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.utradePass !==''"></Icon>
+            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.utradePass ===''"></Icon>
             <span style="margin-left: 20px;">交易密码设置</span>
           </Col>
         </Row>
@@ -349,10 +351,17 @@
 <script>
 import lineImg from '../../images/line.png'
 import getaddrqrImg from '../../images/webbg/getaddrqr.png'
+import serverRequest from '../../libs/serverRequest.js'
+import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 export default {
 	data () {
 		return {
       assetState: 'modify-login-pass',
+      userAddr: '',
+      userInfo: {
+        uemail: '',
+        utradePass: ''
+      },
       myTotalAssets: [],
       assetsTypeArr: ['ETH', 'EOS', 'BAMBOO'],
       assetsRollOutType: 'ETH',
@@ -399,7 +408,9 @@ export default {
     }
 	},
   mounted () {
-
+    // this.userAddr = localStorage.getItem('EthlandAddr')
+    this.userAddr = '123'
+    this.getUserInfo()
   },
 	methods: {
     selectMenu (name) {
@@ -424,17 +435,72 @@ export default {
           break
       }
     },
+    async getUserInfo() {
+      const userInfo = await serverRequest.getUserInfoAndAssetsByAddr(this.userAddr)
+      console.log('userInfo', userInfo)
+      if (!userInfo) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Register_Succ)
+        this.userInfo = data
+        this.myTotalAssets = data
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(userInfo.data, succCb, errCb)
+    },
     getCode () {
 
     },
     AssetsRollOut () {
 
     },
-    resetLoginPass () {
-
+    async resetLoginPass () {
+      if (this.oldLoginPass !== '' || this.newLoginPass !== '') {
+        alertErrInfo(this, LoginCodes.Password_Not_Null)
+        return
+      }
+      if (this.newLoginPass !== this.newLoginPassRepeat) {
+        alertErrInfo(this, LoginCodes.Password_Not_Repeat)
+        return
+      }
+      const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.newLoginPass)
+      if (!loginPassChange) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
     },
     resetTradePass () {
-
+      if (this.oldTradePass !== '' || this.newTradePass !== '') {
+        alertErrInfo(this, LoginCodes.Password_Not_Null)
+        return
+      }
+      if (this.newTradePass !== this.newTradePassRepeat) {
+        alertErrInfo(this, LoginCodes.Password_Not_Repeat)
+        return
+      }
+      const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.newTradePass)
+      if (!loginPassChange) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
     },
     getTradeCode () {
 
