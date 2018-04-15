@@ -3,12 +3,23 @@
 		<div class="eth-logo">
 			欢迎来到 EthLand.pro！
 		</div>
-		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="ethAddrModal">
+		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="enterPageState === 'addrSet'">
 			<Button slot="append" @click="checkAddr">
 				<Icon type="android-more-horizontal" size="14"></Icon>
 			</Button>
 		</Input>
-		<div class="info-set" v-show="!ethAddrModal">
+		<div class="login-enter" v-show="enterPageState === 'addrLog'|| enterPageState === 'pwdLog' ">
+			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的EthLand地址">
+			</Input>
+			<br>
+			<br v-show="enterPageState === 'addrLog' ">
+			<Input v-model="loginPwd" style="width:400px;" placeholder="请输入您的EthLand密码">
+			</Input>
+			<br>
+			<br>
+			<Button type="success" style="width: 400px" @click="userLogin">进入Ethland</Button>
+		</div>
+		<div class="info-set" v-show="enterPageState === 'reg' || enterPageState === 'emailReg'">
 			<Input v-model="ethPwd" class="pwd-btn" placeholder="请输入您的EthLand密码">
 			</Input>
 			<br>
@@ -16,15 +27,15 @@
 				<Icon type="arrow-down-b" size="18" color="#fff" style="cursor: pointer;" ></Icon>
 			</a>
 			<br>
-			<Input v-model="ethEmail" class="pwd-btn" placeholder="请输入您的email地址" v-show="emailModal">
+			<Input v-model="ethEmail" class="pwd-btn" placeholder="请输入您的email地址" v-show="enterPageState === 'emailReg'">
 			</Input>
 			<br>
-			<br v-show="emailModal">
-			<Input v-model="ethCode" class="code-input" placeholder="验证码" v-show="emailModal">
+			<br v-show="enterPageState === 'emailReg'">
+			<Input v-model="ethCode" class="code-input" placeholder="验证码" v-show="enterPageState === 'emailReg'">
 			</Input>
-			<Button type="info" style="width: 176px" v-show="emailModal">获取验证码</Button>
-			<br v-show="emailModal">
-			<br v-show="emailModal">
+			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode">获取验证码</Button>
+			<br v-show="enterPageState === 'emailReg'">
+			<br v-show="enterPageState === 'emailReg'">
 			<Button type="success" style="width: 400px" @click="landRegister">进入Ethland</Button>
 		</div>
 	</div>
@@ -47,6 +58,14 @@
 	margin-left: -230px;
 }
 .info-set {
+	width: 460px;
+	position: absolute;
+	top:48%;
+	left: 50%;
+	margin-left: -230px;
+	text-align: center;
+}
+.login-enter {
 	width: 460px;
 	position: absolute;
 	top:48%;
@@ -87,24 +106,29 @@ export default {
 			ethPwd:'',
 			ethEmail: '',
 			ethCode: '',
-			emailModal: false,
 			ethAddrModal: true,
-			userAddr: ''
+			userAddr: '',
+			loginModal: false,
+			loginPwd: '',
+			loginAddr: '',
+			enterPageState: 'addrSet' // { 'addrSet', 'reg', 'emailReg', 'addrLog', 'pwdLog'}
 		}
 	},
 	mounted () {
 		this.userAddr = '123'
-		this.userLogin()
-		.then(v => {
-
-		})
+		this.enterPageState = 'pwdLog'
+		// this.userLogin()
 	},
 	methods: {
 		checkAddr () {
-			this.ethAddrModal = false
+			this.enterPageState = 'reg'
 		},
 		showEmailModal () {
-			this.emailModal = !this.emailModal
+			if (this.enterPageState === 'reg') {
+				this.enterPageState = 'emailReg'
+			} else if (this.enterPageState === 'emailReg') {
+				this.enterPageState = 'reg'
+			} else {}
 		},
 		async landRegister () {
 			if (this.ethAddr === '' || this.ethPwd === '') {
@@ -132,7 +156,16 @@ export default {
 			serverRequest.handleRequestRes(registerData.data, succCb, errCb)
 		},
 		async userLogin () {
-			const login = await serverRequest.userLogin(this.userAddr, '1234')
+			if (this.userAddr === '') {
+				alertErrInfo(this, CommonCodes.Login_Addr_Fail)
+				this.enterPageState = 'addrLog'
+				return
+			}
+			if (this.loginPwd === '') {
+				alertErrInfo(this, CommonCodes.Password_Not_Null)
+				return
+			}
+			const login = await serverRequest.userLogin(this.userAddr, this.loginPwd)
 			if (!login) {
 				alertErrInfo(this, CommonCodes.Service_Wrong)
 				return
@@ -146,6 +179,23 @@ export default {
 				alertErrInfo(this, msg)
 			}
 			serverRequest.handleRequestRes(login.data, succCb, errCb)
+		},
+		async getCode () {
+			const sendEmail = await serverRequest.userGeneCode(this.ethEmail)
+			if (!sendEmail) {
+				alertErrInfo(this, CommonCodes.Service_Wrong)
+				return
+			}
+			let succCb = (data) => {
+				alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, msg)
+			}
+			serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
+		},
+		changeEnterState (state) {
+			this.enterPageState = state
 		}
 	}
 }

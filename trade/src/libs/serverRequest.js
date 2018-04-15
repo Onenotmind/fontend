@@ -32,7 +32,8 @@ const ssapiPath = {
   buyPanda: 'buyPanda',
   sellPanda: 'sellPanda',
   delPandaByGen: 'delPandaByGen',
-  getUserInfoAndAssetsByAddr: 'getUserInfoAndAssetsByAddr'
+  getUserInfoAndAssetsByAddr: 'getUserInfoAndAssetsByAddr',
+  sirePanda: 'sirePanda'
 }
 
 function intercept () {
@@ -97,13 +98,13 @@ function userCheckCode (email, code) {
 }
 
 // 重置密码
-function userChangeLoginPass (addr, pwd) {
-  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, pwd }))
+function userChangeLoginPass (addr, oldPwd, newPwd) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, oldPwd, newPwd }))
 }
 
 // 重置交易密码
-function userChangeTradePass (addr, tradePwd) {
-  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, tradePwd }))
+function userChangeTradePass (addr, oldPwd, newPwd, code, email) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, oldPwd, newPwd, code, email }))
 }
 // 查询未确定资产
 function queryAllAssets () {
@@ -163,6 +164,11 @@ function queryPandaInfo (gen) {
 // 随机产生一只g10熊猫
 function genePandaRandom (addr) {
   return ssapiAxios.get(ssapiPath.genePandaRandom, { params: { addr }})
+}
+
+// 孵化熊猫
+function sirePanda (pandaGen) {
+  return ssapiAxios.get(ssapiPath.sirePanda, { params: { pandaGen }})
 }
 
 // 熊猫外出获取宝物
@@ -232,5 +238,6 @@ export default {
   delPandaByGen,
   getUserInfoAndAssetsByAddr,
   setHeader,
-  userChangeTradePass
+  userChangeTradePass,
+  sirePanda
 }

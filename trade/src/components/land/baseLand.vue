@@ -125,7 +125,7 @@
             <Icon type="ios-film-outline"></Icon>
             <Icon type="ios-film-outline"></Icon>
           </Col>
-          <Col span="12" offset="12" align="center">
+          <Col span="12" align="center">
           <a href="#">
               <Icon type="ios-loop-strong"></Icon>
               {{sellPandaInfo.price}}
@@ -151,7 +151,7 @@
           <Button offset="2" @click="onCancelSold">取消</Button>
       </div>
   </Modal>
-  <Modal v-model="dropPanda">
+  <Modal v-model="dropPandaModal">
       <p align="center" style="margin-top: 15px;">
         确定要丢弃萌萌哒的熊猫吗？
       </p>
@@ -180,6 +180,9 @@
 	height: 100%;
 	background: url(../../images/webbg/home-bg.jpg) no-repeat;
 	background-size: 100% 100%;
+}
+.img-vertical {
+	vertical-align: middle;
 }
 .landScaleLarger {
 	height: 600px;
@@ -245,6 +248,7 @@ import testPandaImg from '../../images/charactor/figure/testdog1.png'
 import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import eggImg from '../../images/charactor/figure/egg.png'
+import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 
 export default {
 	data () {
@@ -271,53 +275,59 @@ export default {
 				'drop': []
 			},
 			sellPanda: false,
-			dropPanda: true, 
+			dropPandaModal: false, 
 			toAnimate: [] // 熊猫孵化动画
 		}
 	},
-	mounted () {
+	async mounted () {
 		this.backAssetsType = {
 			WATER: this.waterImg,
 			ETH: this.ethIconImg
 		}
-		serverRequest.queryAllPandaByAddr(this.ownerAddr)
-		.then(v => {
-			let succCb = async (data) => {
-				for (let panda of data) {
-					this.pandaIndex = 0
-					if (panda.state === 'out') { // 判断当前在家熊猫数量
-						const t = await serverRequest.serverTime()
-						if (t.data.res.data > panda.price) {
-							this.outBackPandas.push(panda)
-							this.pandasArr.push(panda)
-						} else {}
-					} else {
+		// 查询当前地址下所有熊猫
+		const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
+		if (!allPanda) {
+			alertErrInfo(this, CommonCodes.Service_Wrong)
+			return
+		}
+		let succCb = async (data) => {
+			for (let panda of data) {
+				this.pandaIndex = 0
+				if (panda.state === 'out') { // 判断当前在家熊猫数量
+					const t = await serverRequest.serverTime()
+					if (t.data.res.data > panda.price) {
+						this.outBackPandas.push(panda)
 						this.pandasArr.push(panda)
-					}
-				}
-				if (this.outBackPandas.length > 0) {
-					for (let backPanda of this.outBackPandas) {
-						let assets = await serverRequest.getPandaBackAssets(backPanda.pandaGen)
-						console.log('assets', assets)
-						if (assets.data && assets.data.res && assets.data.res.data) {
-							let pandaAssets = assets.data.res.data[0].backAssets.split('|')
-							for (let asset of pandaAssets) {
-								this.backAssets['carry'].push(asset)
-							}
-							let pandaDropAsets = assets.data.res.data[0].dropAssets.split('|')
-							for (let dropasset of pandaDropAsets) {
-								this.backAssets['drop'].push(dropasset)
-							}
-						}
-					}
-					console.log(this.backAssets)
-					this.backModel = true
+					} else {}
+				} else {
+					this.pandasArr.push(panda)
 				}
 			}
-			let errCb = () => {}
-			serverRequest.handleRequestRes(v.data, succCb, errCb)
-		})
-		.catch(e => {})
+			console.log('outBackPandas', this.outBackPandas)
+			// 查询熊猫是否外出且带回物品
+			if (this.outBackPandas.length > 0) {
+				for (let backPanda of this.outBackPandas) {
+					let assets = await serverRequest.getPandaBackAssets(backPanda.pandaGen)
+					console.log('assets', assets)
+					if (assets.data && assets.data.res && assets.data.res.data) {
+						let pandaAssets = assets.data.res.data[0].backAssets.split('|')
+						for (let asset of pandaAssets) {
+							this.backAssets['carry'].push(asset)
+						}
+						let pandaDropAsets = assets.data.res.data[0].dropAssets.split('|')
+						for (let dropasset of pandaDropAsets) {
+							this.backAssets['drop'].push(dropasset)
+						}
+					}
+				}
+				console.log(this.backAssets)
+				this.backModel = true
+			}
+		}
+		let errCb = (msg) => {
+			alertErrInfo(this, msg)
+		}
+		serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
 	},
 	methods: {
 
@@ -343,10 +353,17 @@ export default {
 		},
 
 		// 熊猫操作 点击熊猫
-		showPandaPanel (e) {
+		async showPandaPanel (e) {
 			this.pandaIndex = parseInt(e.target.getAttribute('pandaIndex'))
 			if (this.pandasArr[this.pandaIndex].state === 'egg') { // 熊猫蛋点击
 				this.hatchPanda('.pandaImg' + this.pandaIndex)
+				const sirePanda = await serverRequest.sirePanda(this.pandasArr[this.pandaIndex].pandaGen)
+				let succCb = (data) => {
+				}
+				let errCb = (msg) => {
+					alertErrInfo(this, msg)
+				}
+				serverRequest.handleRequestRes(sirePanda.data, succCb, errCb)
 				return
 			}
 			// 点击熊猫
@@ -532,7 +549,7 @@ export default {
 		},
 		// 丢弃熊猫
 		dropPanda () {
-			this.dropPanda = true
+			this.dropPandaModal = true
 
 		},
 

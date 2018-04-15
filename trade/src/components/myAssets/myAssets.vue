@@ -19,6 +19,10 @@
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="安全中心">
+          <MenuItem name="modify-bind-email">
+                <Icon type="heart"></Icon>
+                绑定邮箱
+            </MenuItem>
             <MenuItem name="modify-login-pass">
                 <Icon type="heart"></Icon>
                 更改密码
@@ -194,6 +198,46 @@
         </Col>
         <Col span="24" class="rollout-card-margin">
           <Table :columns="rollOutColumns" :data="rollOutData"></Table>
+        </Col>
+      </Row>
+    </p>
+  </Card>
+</Col>
+
+
+  <!-- 绑定邮箱 -->
+  <Col span="20">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'modify-bind-email'">
+    <p>
+      <Row span="24">
+        <Col span="24" align="left" class="nomal-padding">
+          <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
+          <span class="my-assets-title">绑定邮箱</span>
+        </Col>
+        <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
+        <Col span="24" class="rollout-card-margin" align="center">
+        <Row>
+          <Col span="6"  align="right">
+            <span class="rollout-card-word">邮箱地址：</span>
+          </Col>
+          <Col span="18" align="left">
+            <Input v-model="emailBind" placeholder="" style="width: 300px"></Input>
+          </Col>
+        </Row>
+        </Col>
+        <Col span="24" class="rollout-card-margin" align="center">
+        <Row>
+          <Col span="6"  align="right">
+            <span class="rollout-card-word">验证码：</span>
+          </Col>
+          <Col span="18" align="left">
+            <Input v-model="emailBindCode" placeholder="" style="width: 150px"></Input>
+            <Button type="info" style="width: 150px;" @click="getEmailCode">获取验证码</Button>
+          </Col>
+        </Row>
+        </Col>
+        <Col span="20" class="rollout-card-margin" offset="4">
+          <Button type="success" style="width: 400px;" @click="bindEmail">提交</Button>
         </Col>
       </Row>
     </p>
@@ -404,7 +448,9 @@ export default {
       oldTradePass: '', // 旧交易密码
       newTradePass: '', // 新交易密码
       newTradePassRepeat: '', // 新交易密码重复
-      modifyTradePassCode: '' // 修改交易密码时验证码
+      modifyTradePassCode: '', // 修改交易密码时验证码
+      emailBind: '', //邮箱绑定模块邮箱
+      emailBindCode: '' // 邮箱绑定模块验证码
     }
 	},
   mounted () {
@@ -424,6 +470,9 @@ export default {
           break
         case 'assets-recharge':
           this.assetState = 'assets-rollin'
+          break
+        case 'modify-bind-email':
+          this.assetState = 'modify-bind-email'
           break
         case 'modify-login-pass':
           this.assetState = 'modify-login-pass'
@@ -459,7 +508,7 @@ export default {
 
     },
     async resetLoginPass () {
-      if (this.oldLoginPass !== '' || this.newLoginPass !== '') {
+      if (this.oldLoginPass === '' || this.newLoginPass === '') {
         alertErrInfo(this, LoginCodes.Password_Not_Null)
         return
       }
@@ -467,7 +516,7 @@ export default {
         alertErrInfo(this, LoginCodes.Password_Not_Repeat)
         return
       }
-      const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.newLoginPass)
+      const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.oldLoginPass, this.newLoginPass)
       if (!loginPassChange) {
         alertErrInfo(this, CommonCodes.Service_Wrong)
         return
@@ -480,8 +529,8 @@ export default {
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
     },
-    resetTradePass () {
-      if (this.oldTradePass !== '' || this.newTradePass !== '') {
+    async resetTradePass () {
+      if (this.oldTradePass === '' || this.newTradePass === '') {
         alertErrInfo(this, LoginCodes.Password_Not_Null)
         return
       }
@@ -502,7 +551,57 @@ export default {
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
     },
-    getTradeCode () {
+    async getTradeCode () {
+      if (!this.userInfo || this.userInfo.uemail === '') {
+        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+        return
+      } 
+      const sendEmail = await serverRequest.userGeneCode(this.userInfo.uemail)
+      if (!sendEmail) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
+    },
+    async getEmailCode () {
+      if (this.emailBind === '') {
+        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+        return
+      } 
+      const sendEmail = await serverRequest.userGeneCode(this.emailBind)
+      if (!sendEmail) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
+    },
+    async bindEmail () {
+      const checkEmail = await serverRequest.userCheckCode(this.userInfo.uemail, this.emailBindCode)
+      if (!checkEmail) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Set_Email_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(checkEmail.data, succCb, errCb)
+    },
+    copyAddr () {
 
     }
 	},

@@ -10,7 +10,11 @@ let LoginCodes = {
   'Login_Succ': '登陆成功',
   'Password_Not_Null': '密码不为空！',
   'Password_Not_Repeat': '新密码设置应该一样！',
-  'Set_New_Pwd_Succ': '新密码设置成功！'
+  'Set_New_Pwd_Succ': '新密码设置成功！',
+  'Send_Email_Succ': '发送验证码成功！',
+  'Login_Addr_Fail': '地址本地储存过期, 请重新输入',
+  'Please_Bind_Email_First': '请先绑定邮箱!',
+  'Set_Email_Succ': '绑定邮箱成功！'
 }
 function alertSuccInfo (self, msg) {
   self.$Message.success({

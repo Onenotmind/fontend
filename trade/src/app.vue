@@ -43,7 +43,7 @@
             <Icon type="cloud"></Icon>
             	{{ $t("app_Account_Safe") }}
             </DropdownItem>
-            <DropdownItem>
+            <DropdownItem name="app_log_out">
             <Icon type="log-out"></Icon>
             {{ $t("app_Log_Out") }}
             </DropdownItem>
@@ -89,7 +89,7 @@
 </layout>
 <Layout v-if="currentView === 'enterPage'">
 	<Content>
-		<enterPage  @switch-land="switchLand" />
+		<enterPage ref="loginPage" @switch-land="switchLand" />
 	</Content>
 </Layout>
 </div>
@@ -166,6 +166,26 @@ export default {
 			console.log('menuAccontClick:', name)
 			// i18n.locale = 'en'
 			this.submenu = name
+			let self = this
+			switch(name) {
+				case 'app_assets':
+					this.$nextTick(() => {
+						this.currentView = 'myAssetsService'
+					})
+					break
+				case 'app_Account_Safe':
+					break
+				case 'app_log_out':
+					this.$nextTick(() => {
+						this.currentView = 'enterPage'
+						this.$nextTick(() => {
+							this.$refs.loginPage.changeEnterState('addrLog')
+						})
+					})
+					break
+				default:
+					break
+			}
 		},
 		selectMenu (name) {
 			this.menu = name
