@@ -16,6 +16,12 @@ let LoginCodes = {
   'Please_Bind_Email_First': '请先绑定邮箱!',
   'Set_Email_Succ': '绑定邮箱成功！'
 }
+
+let LandProductCodes = {
+  'Get_Star_Point_Succ': '获取商品生成中心',
+  'Get_Star_Point_Fail': '商品中心生成失败'
+}
+
 function alertSuccInfo (self, msg) {
   self.$Message.success({
     top: 200,
@@ -34,5 +40,6 @@ module.exports = {
   CommonCodes: CommonCodes,
   LoginCodes: LoginCodes,
   alertSuccInfo: alertSuccInfo,
-  alertErrInfo: alertErrInfo
+  alertErrInfo: alertErrInfo,
+  LandProductCodes: LandProductCodes
 }

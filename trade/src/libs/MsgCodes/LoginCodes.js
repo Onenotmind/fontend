@@ -7,6 +7,10 @@ let LoginCodes = {
   'Code_Not_Null': '验证码不为空！'
 }
 
+let LandProductCodes = {
+  'Get_Star_Point_Succ': '获取商品生成中心'
+}
+
 function alertSuccInfo (msg) {
   this.$Message.success({
     top: 200,
@@ -18,5 +22,6 @@ function alertSuccInfo (msg) {
 module.exports = {
   CommonCodes: CommonCodes,
   LoginCodes: LoginCodes,
-  alertSuccInfo: alertSuccInfo
+  alertSuccInfo: alertSuccInfo,
+  LandProductCodes: LandProductCodes
 }

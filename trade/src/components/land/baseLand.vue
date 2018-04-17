@@ -145,9 +145,13 @@
           <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.special}} </Col>
       </Row>
        <br>
+       <Row type="flex" justify="center">
+       	<Col span="12" align="right" style="font-size: 16px;">售价：</Col>
+       	<Col span="12" align="left"> <Input v-model="sellPandaPrice" placeholder="" style="width: 50px;height: 20px;"></Input></Col>
+       </Row>
       </p>
       <div slot="footer" align="center">
-          <Button type="success" @click="onSureSold">购买</Button>
+          <Button type="success" @click="onSureSold">出售</Button>
           <Button offset="2" @click="onCancelSold">取消</Button>
       </div>
   </Modal>
@@ -156,7 +160,7 @@
         确定要丢弃萌萌哒的熊猫吗？
       </p>
       <div slot="footer" align="center">
-          <Button type="success" @click="onSureDrop">购买</Button>
+          <Button type="success" @click="onSureDrop">确认丢弃</Button>
           <Button offset="2" @click="onCancelDrop">取消</Button>
       </div>
   </Modal>
@@ -248,7 +252,22 @@ import testPandaImg from '../../images/charactor/figure/testdog1.png'
 import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import eggImg from '../../images/charactor/figure/egg.png'
-import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
+import { alertSuccInfo, alertErrInfo, LandProductCodes, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
+
+let testFinalData = [
+  { value : [42.5, 1.5, 20] },
+  { value : [-21.2333, 41.5, 40] },
+  { value : [-92.5, 132.5, 30] },
+  { value : [-142.5, 21.5, 60] },
+  { value : [242.5, -41.5, 70] }
+]
+let testFinalData1 = [
+  { value : [42.5, 13.5, 20] },
+  { value : [21.2333, 141.5, 40] },
+  { value : [-92.5, 12.5, 30] },
+  { value : [-142.5, 1.5, 60] },
+  { value : [22.5, -41.5, 70] }
+]
 
 export default {
 	data () {
@@ -276,7 +295,10 @@ export default {
 			},
 			sellPanda: false,
 			dropPandaModal: false, 
-			toAnimate: [] // 熊猫孵化动画
+			toAnimate: [], // 熊猫孵化动画
+			starPointArr: [], // 商品产生点数组
+			starPointGeneTime: 1000 * 1000 * 24,
+			sellPandaPrice: ''
 		}
 	},
 	async mounted () {
@@ -328,6 +350,11 @@ export default {
 			alertErrInfo(this, msg)
 		}
 		serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
+		this.echartHandle = new EchartHandle('container')
+		this.geneStarPoint()
+		setInterval(() => {
+			this.geneStarPoint()
+		}, this.starPointGeneTime)
 	},
 	methods: {
 
@@ -350,6 +377,26 @@ export default {
 		// 地图操作 改变地图尺寸
 		resize(width, height, silent) {
 			this.echartHandle.resize(width, height, silent)
+		},
+
+		// 更新商品中心
+		async geneStarPoint () {
+			const starPoint = await serverRequest.getCurrentStarPoint()
+			console.log('starPoint', starPoint)
+			if (!starPoint) {
+				alertErrInfo(this, LandProductCodes.Get_Star_Point_Fail)
+				return
+			}
+			let starSuccCb = (data) => {
+				this.starPointArr = []
+				for (let item of data) {
+					this.starPointArr.push({ value: item })
+				}
+				this.echartHandle.setOption(getMapConfig(this.starPointArr))
+			}
+			let starErrCb = () => {
+			}
+			serverRequest.handleRequestRes(starPoint.data, starSuccCb, starErrCb)
 		},
 
 		// 熊猫操作 点击熊猫
@@ -495,17 +542,19 @@ export default {
 		},
 
 		// 确认出售熊猫
-		onSureSold () {
-			serverRequest.sellPanda(this.pandaGen, 123)
-			.then(v => {
-				let succCb = (data) => {
-				}
-				let errCb = () => {}
-				serverRequest.handleRequestRes(v.data, succCb, errCb)
-			})
-			.catch(e => {
-
-			})
+		async onSureSold () {
+			if (parseInt(this.sellPandaPrice) <= 0) return
+			console.log('onSureSold')
+			const sellPanda = await serverRequest.sellPanda(this.pandaGen, parseInt(this.sellPandaPrice))
+			console.log('sellPanda', sellPanda)
+			if (!sellPanda) {
+				alertErrInfo(CommonCodes.Net_Wrong)
+			}
+			let succCb = (data) => {
+				this.sellPanda = false
+			}
+			let errCb = () => { this.sellPanda = false }
+			serverRequest.handleRequestRes(sellPanda.data, succCb, errCb)
 		},
 
 		// 取消售卖熊猫
@@ -554,22 +603,21 @@ export default {
 		},
 
 		// 确认丢弃熊猫
-		onSureDrop () {
-			serverRequest.delPandaByGen(this.pandaGen)
-			.then(v => {
-				let succCb = (data) => {
-				}
-				let errCb = () => {}
-				serverRequest.handleRequestRes(v.data, succCb, errCb)
-			})
-			.catch(e => {
-
-			})
+		async onSureDrop () {
+			const dropPanda = await serverRequest.delPandaByGen(this.pandaGen)
+			if (!dropPanda) {
+				alertErrInfo(CommonCodes.Net_Wrong)
+			}
+			let succCb = (data) => {
+				this.dropPandaModal = false
+			}
+			let errCb = () => { this.dropPandaModal = false }
+			serverRequest.handleRequestRes(dropPanda.data, succCb, errCb)
 		},
 
 		// 取消丢弃熊猫
 		onCancelDrop () {
-
+			this.dropPandaModal = false
 		}
 	},
 	computed: {
