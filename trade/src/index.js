@@ -4,6 +4,7 @@ import proManage from './proManage/proManage.vue'
 // import router from './router'
 import iView from 'iView'
 import VueI18n from 'vue-i18n'
+import store from './store'
 import en from 'iview/dist/locale/en-US'
 import zh from 'iview/dist/locale/zh-CN'
 import 'iview/dist/styles/iview.css'
@@ -30,6 +31,7 @@ Vue.use(iView, {
 new Vue({
   el: '#app',
   // router,
+  store,
   i18n: i18n,
   template: '<App/>',
   components: { App }

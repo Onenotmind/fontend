@@ -10,7 +10,8 @@
     "app_Log_Out": "Log Out",
     "app_bamboo_catch": "catchBamboo",
     "app_panda_home": "pandaHome",
-    "app_market": "market"
+    "app_market": "market",
+    "app_discover": "discover"
   },
   "cn": {
     "app_announce": "公告列表",
@@ -23,6 +24,7 @@
     "app_Log_Out": "退出账户",
     "app_bamboo_catch": "获取竹子",
     "app_panda_home": "熊猫家园",
-    "app_market": "市场"
+    "app_market": "市场",
+    "app_discover": "发现"
   }
 }

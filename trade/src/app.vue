@@ -9,7 +9,7 @@
 					<img src="./images/ethland.png" style="vertical-align:middle;">
 					<span class="logo-word">EthLand.pro</span>
 				</div>
-				<div class="layout-nav" style="width: 750px;">
+				<div class="layout-nav" style="width: 800px;">
 					<MenuItem name="app_bamboo_catch">
 						<Icon type="ios-keypad"></Icon>
 						{{ $t("app_bamboo_catch") }}
@@ -21,6 +21,10 @@
 					<MenuItem name="app_guide">
 						<Icon type="ios-navigate"></Icon>
 						{{ $t("app_guide") }}
+					</MenuItem>
+					<MenuItem name="app_discover">
+						<Icon type="lightbulb"></Icon>
+						{{ $t("app_discover") }}
 					</MenuItem>
 					<MenuItem name="app_market">
 					<Icon type="fireball"></Icon>
@@ -150,6 +154,7 @@ import comboService from './components/comboService.vue'
 import landService from './components/landService.vue'
 import marketService from './components/marketService.vue'
 import myAssetsService from './components/myAssetsService.vue'
+import discoverService from './components/discoverService.vue'
 import serverRequest from './libs/serverRequest.js'
 import enterPage from './components/enterPage.vue'
 import i18n from "./index.js"
@@ -201,6 +206,9 @@ export default {
           break
         case 'app_person':
         	this.currentView = 'myAssetsService'
+        	break
+        case 'app_discover':
+        	this.currentView = 'discoverService'
         	break
         default:
           break

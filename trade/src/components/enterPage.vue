@@ -97,6 +97,7 @@
 }
 </style>
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import serverRequest from '../libs/serverRequest.js'
 import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/statusHandle.js'
 export default {
@@ -115,11 +116,14 @@ export default {
 		}
 	},
 	mounted () {
-		this.userAddr = '123'
-		this.enterPageState = 'pwdLog'
+		// this.userAddr = '123'
+		this.enterPageState = 'addrSet'
 		// this.userLogin()
 	},
 	methods: {
+		...mapActions([
+			'changeUserAddr'
+		]),
 		checkAddr () {
 			this.enterPageState = 'reg'
 		},
@@ -147,7 +151,9 @@ export default {
 			}
 			let succCb = (data) => {
 				alertSuccInfo(this, LoginCodes.Register_Succ)
-				localStorage.setItem('EthlandAddr', data)
+				localStorage.setItem('EthlandAddr', this.ethAddr)
+				this.changeUserAddr({ addr: this.ethAddr })
+				serverRequest.setHeader('token', data)
 				this.$emit('switch-land')
 			}
 			let errCb = (msg) => {

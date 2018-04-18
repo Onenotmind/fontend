@@ -244,6 +244,7 @@ img {
 }
 </style>
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import anime from 'animejs'
 import serverRequest from '../../libs/serverRequest.js'
 import EchartHandle from '../../libs/map/EchartHandle.js'
@@ -305,6 +306,15 @@ export default {
 		this.backAssetsType = {
 			WATER: this.waterImg,
 			ETH: this.ethIconImg
+		}
+		this.ownerAddr = this.userAddr
+		console.log('userAddr', this.userAddr)
+		// this.ownerAddr = localStorage.getItem('EthlandAddr')
+		// 第一次注册赠送熊猫蛋
+		const genePanda = await serverRequest.genePandaRandom(this.ownerAddr)
+		if (!genePanda) {
+			alertErrInfo(this, CommonCodes.Service_Wrong)
+			return
 		}
 		// 查询当前地址下所有熊猫
 		const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
@@ -621,6 +631,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			userAddr: state => state.login.userAddr
+		}),
 		sellPandaInfo () {
 			if (this.pandasArr.length === 0) {
 				return { // 初始化熊猫数据
