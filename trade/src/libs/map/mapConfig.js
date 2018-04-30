@@ -96,9 +96,12 @@ let mapConfig  = {
 
 function getMapConfig (val) {
   return {
-    backgroundColor: '#003',
+    backgroundColor: '#13194b',
     title: {},
-    tooltip: {},
+    tooltip : {
+        trigger: 'item',
+        formatter: '[{c}]'
+    },
     geo: {
       name: '',
       type: 'map',
@@ -112,7 +115,7 @@ function getMapConfig (val) {
       itemStyle: {
         normal: {
           borderColor: '#003',
-          color: '#005'
+          color: '#4372b4'
         }
       }
     },
@@ -122,7 +125,7 @@ function getMapConfig (val) {
       data: val,
       large: true,
       // largeThreshold: 100,
-      symbolSize: 20,
+      symbolSize: 16,
       // symbol: 'image://(./static/img/ethereum.png)',
       showEffectOn: 'render',
       rippleEffect: {
@@ -130,15 +133,15 @@ function getMapConfig (val) {
       },
       hoverAnimation: true,
       label: {
-        normal: {
-          formatter: '{b}',
-          position: 'right',
-          show: true
-        }
+        // normal: {
+        //   formatter: '经度: {b}<br>纬度: {c}',
+        //   position: 'right',
+        //   show: true
+        // }
       },
       itemStyle: {
         normal: {
-          color: 'purple',
+          color: '#5ae47c',
           shadowBlur: 100,
           shadowColor: 'white'
         }

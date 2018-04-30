@@ -42,6 +42,10 @@
 						<div class="item"></div>
 					</div>
 				</div>
+  <!-- 蝴蝶 -->
+  <div class="butter">
+    <!-- <img src="../../images/butterfly.png" class="butterfly1"> -->
+  </div>
 	<div class="loading">
 		<div class="pic">
 			<div class="egg-wrapper">
@@ -477,6 +481,17 @@
   left: .5rem;
   background-color: #442418;
 }
+/*蝴蝶*/
+.butter {
+  position: absolute;
+  right: 60px;
+  bottom: 25%;
+  z-index: -1;
+}
+.butterfly1 {
+  right: 0;
+  -webkit-animation:bee1 10s ease-in infinite;
+}
 /*动画*/
 .infinite{-webkit-animation-iteration-count: infinite;}
 @-webkit-keyframes greenpulse {
@@ -650,6 +665,9 @@
   50% { transform: scale(.8,.8)}
   75% {transform: scale(1,1)}
   100% { transform: scale(.8,.8)}
+}
+@-webkit-keyframes butterfly1 {
+  0% {  }
 }
 </style>
 <script>

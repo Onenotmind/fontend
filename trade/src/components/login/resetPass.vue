@@ -1,13 +1,8 @@
 <i18n src='../../common/i18n/login/resetPass.json'></i18n>
 <template>
 	<div id="resetPass">
-		<Card :bordered="false" style="height: 400px;">
-		<p slot="title" class="text-center">
-			<img src="">
-			<span>EthLand</span>
-		</p>
 		<p>
-		<Steps :current="stepNum" style="margin-left: 80px;">
+		<Steps :current="stepNum" style="margin-left: 80px;display:none;">
         <Step :title='$t("check_email")' icon="email"></Step>
         <Step :title='$t("resetPass")' icon="android-lock"></Step>
         <Step :title='$t("resetPassSucc")' icon="person-add"></Step>
@@ -28,7 +23,6 @@
     <p class="text-center section-margin" v-show="stepNum === 2">
      <Alert type="success" show-icon style="width:400px;margin-left: 200px;">{{ $t("resetPassSucc") }}</Alert>
     </p>
-		</Card>
 	</div>
 </template>
 <style scoped>
@@ -40,8 +34,7 @@
 }
 #resetPass {
 	width: 800px;
-	margin-top: 80px;
-	background-color: #fff;
+	margin-top: 28%;
 	margin-left: -400px;
 	position: relative;
 	left: 50%;

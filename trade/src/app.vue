@@ -87,7 +87,8 @@
 			<comboService v-if="currentView === 'comboService'" />
 			<landService v-if="currentView === 'landService'" />
 			<marketService v-if="currentView === 'marketService'" />
-			<myAssetsService v-if="currentView === 'myAssetsService'" />
+			<myAssetsService ref="myAssetsService" v-if="currentView === 'myAssetsService'" />
+			<discoverService v-if="currentView === 'discoverService'" />
 		</Content>
 		<Footer class="layout-footer-center">ethLand.best@2017-2018 All Right Resolved.</Footer>
 </layout>
@@ -176,9 +177,18 @@ export default {
 				case 'app_assets':
 					this.$nextTick(() => {
 						this.currentView = 'myAssetsService'
+						this.$nextTick(() => {
+							this.$refs.myAssetsService.changeCurrentListItem('myAssets')
+						})
 					})
 					break
 				case 'app_Account_Safe':
+					this.$nextTick(() => {
+						this.currentView = 'myAssetsService'
+						this.$nextTick(() => {
+							this.$refs.myAssetsService.changeCurrentListItem('modify-bind-email')
+						})
+					})
 					break
 				case 'app_log_out':
 					this.$nextTick(() => {
@@ -228,7 +238,8 @@ export default {
 		landService,
 		marketService,
 		myAssetsService,
-		enterPage
+		enterPage,
+		discoverService
 	}
 }
 

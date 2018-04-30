@@ -10,10 +10,10 @@
 					<img :src="panda.state === 'home' ? testPandaImg: woodEgg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel" :pandaIndex="index" @blur="pandaBlur" 
 					:gen="panda.pandaGen" >
 				</Tooltip>
-				<img :src="waterImg" class="panda-options">
-				<img :src="waterImg" class="panda-options" @click="startOut">
-				<img :src="waterImg" class="panda-options" @click="soldPanda">
-				<img :src="waterImg" class="panda-options" @click="dropPanda">
+				<img :src="optionsIcon.feedIcon" class="panda-options">
+				<img :src="optionsIcon.beginOutIcon" class="panda-options" @click="startOut">
+				<img :src="optionsIcon.sellIcon" class="panda-options" @click="soldPanda">
+				<img :src="optionsIcon.dropIcon" class="panda-options" @click="dropPanda">
 			</Col>
 		</Row>
     <Modal v-model="outModel">
@@ -234,6 +234,7 @@ img {
 	margin-left: -71.5px;
 	margin-top: 43.5px;
 	opacity: 0;
+	z-index: -1;
 }
 .btn-wid {
 	width: 60px;
@@ -256,6 +257,10 @@ import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import woodEgg from '../../images/wood-egg.png'
 import eggImg from '../../images/charactor/figure/egg.png'
+import feedIcon from '../../images/feed.png'
+import beginOutIcon from '../../images/begin-out.png'
+import sellIcon from '../../images/sell.png'
+import dropIcon from '../../images/drop.png'
 import { alertSuccInfo, alertErrInfo, LandProductCodes, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 
 let testFinalData = [
@@ -303,7 +308,13 @@ export default {
 			toAnimate: [], // 熊猫孵化动画
 			starPointArr: [], // 商品产生点数组
 			starPointGeneTime: 1000 * 1000 * 24,
-			sellPandaPrice: ''
+			sellPandaPrice: '',
+			optionsIcon: { // 选项图标
+				feedIcon: feedIcon,
+				beginOutIcon: beginOutIcon,
+				sellIcon: sellIcon,
+				dropIcon: dropIcon
+			}
 		}
 	},
 	components: {
@@ -512,15 +523,18 @@ export default {
 		createAniEle () {
 			let fragment = document.createDocumentFragment();
 			let maxElements = 250;
-			let colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+			let colors = ['#f2df0f', '#1be625', '#8a36e9', '#2bdde8', '#f1a00f'];
 		  for (let i = 0; i < maxElements; i++) {
 		    let el = document.createElement('div');
 		    // el.setAttribute('class','particule');
-		    el.style.position = 'absolute'
-		    el.style.left = '50%'
-		    el.style.top = '50%'
+		    el.style.position = 'fixed'
+		    // el.style.left ='50%'
+		    // el.style.top = '60%'
+		    let rate = i % 2 === 0 ? 1 : -1
+		    el.style.left = 50 + rate* Math.random() * 10 + '%' 
+		    el.style.top = 60 + rate* Math.random() * 15 + '%'
 		    // el.style.backgroundColor = 'rgb(0, 155, 70)'
-		    el.style.backgroundColor = colors[anime.random(0, 3)];
+		    el.style.backgroundColor = colors[anime.random(0, 4)];
 		    el.style.width = '0.5rem'
 		    el.style.height = '0.5rem'
 		    el.style.borderRadius = '1rem'

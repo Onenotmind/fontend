@@ -34,7 +34,9 @@ const ssapiPath = {
   delPandaByGen: 'delPandaByGen',
   getUserInfoAndAssetsByAddr: 'getUserInfoAndAssetsByAddr',
   sirePanda: 'sirePanda',
-  getCurrentStarPoint: 'getCurrentStarPoint'
+  getCurrentStarPoint: 'getCurrentStarPoint',
+  queryLandProductByAddr: 'queryLandProductByAddr',
+  exchangeProduct: 'exchangeProduct'
 }
 
 function intercept () {
@@ -216,6 +218,16 @@ function getUserInfoAndAssetsByAddr (addr) {
 function getCurrentStarPoint () {
   return ssapiAxios.get(ssapiPath.getCurrentStarPoint, { params: { }})
 }
+
+// 获取用户的商品列表
+function queryLandProductByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.queryLandProductByAddr, { params: { addr }})
+}
+
+// 兑换商品
+function exchangeProduct (addr, productId, username, userPhone, userRealAddr, pwd, code) {
+  return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, username, userPhone, userRealAddr, pwd, code }})
+}
 export default {
   userGeneCode,
   userLogin,
@@ -246,5 +258,7 @@ export default {
   setHeader,
   userChangeTradePass,
   sirePanda,
-  getCurrentStarPoint
+  getCurrentStarPoint,
+  queryLandProductByAddr,
+  exchangeProduct
 }

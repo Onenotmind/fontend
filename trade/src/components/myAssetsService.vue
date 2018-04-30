@@ -1,6 +1,6 @@
 <template>
 	<div id="myAssetsService">
-		<myAssets v-show="currentView === 'myAssets'" />
+		<myAssets ref="myAssets" v-show="currentView === 'myAssets'" />
 	</div>
 </template>
 <style>
@@ -15,9 +15,10 @@ export default {
 		}
 	},
 	methods: {
-		changeAssetsState (state) {
-			
-		}
+		// 改变当前选中列表模块
+    changeCurrentListItem (item) {
+      this.$refs.myAssets.changeCurrentListItem(item)
+    }
 		
 	},
 	components: {

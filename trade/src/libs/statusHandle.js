@@ -3,7 +3,7 @@ let CommonCodes = {
 	'Service_Wrong': '注册人数过多，请稍后再试！'
 }
 let LoginCodes = {
-  'Register_Data_Null': '账号密码不为空！', // 账号密码错误
+  'Register_Data_Null': '地址密码不为空！', // 账号密码错误
   'Code_Error': '验证码错误！',
   'Code_Not_Null': '注册邮箱时，验证码不为空！',
   'Register_Succ': '注册成功',
@@ -19,7 +19,8 @@ let LoginCodes = {
 
 let LandProductCodes = {
   'Get_Star_Point_Succ': '获取商品生成中心',
-  'Get_Star_Point_Fail': '商品中心生成失败'
+  'Get_Star_Point_Fail': '商品中心生成失败',
+  'Exchange_Product_Info_Not_Null': '商品兑换信息不能为空'
 }
 
 function alertSuccInfo (self, msg) {

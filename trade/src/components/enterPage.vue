@@ -1,13 +1,15 @@
 <template>
 	<div id="fontPage">
 		<div class="eth-logo">
-			欢迎来到 EthLand.pro！
+			欢迎{{ loginAddr }}来到 EthLand.pro！
 		</div>
+		<!-- 注册 地址注册-->
 		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="enterPageState === 'addrSet'">
 			<Button slot="append" @click="checkAddr">
 				<Icon type="android-more-horizontal" size="14"></Icon>
 			</Button>
 		</Input>
+		<!-- 登陆 -->
 		<div class="login-enter" v-show="enterPageState === 'addrLog'|| enterPageState === 'pwdLog' ">
 			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的EthLand地址">
 			</Input>
@@ -17,8 +19,25 @@
 			</Input>
 			<br>
 			<br>
-			<Button type="success" style="width: 400px" @click="userLogin">进入Ethland</Button>
+			<Button type="success" style="width: 400px;" @click="userLogin">进入Ethland</Button>
+			<br>
+			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">注册</span>
+			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">忘记密码</span>
 		</div>
+		<!-- 重置密码 -->
+		<div class="reset-pass" v-show="enterPageState === 'reset-pass'">
+			<Input v-model="resetEthCode" class="code-input" placeholder="验证码">
+			</Input>
+			<Button type="info" style="width: 176px" @click="getCode">获取验证码</Button>
+			<br>
+			<br>
+			<Input v-model="resetEthPwd" class="pwd-btn" placeholder="请输入您的新EthLand密码">
+			</Input>
+			<br>
+			<br>
+			<Button type="success" style="width: 400px" @click="resetPass">重置密码</Button>
+		</div>
+		<!-- 邮箱注册 -->
 		<div class="info-set" v-show="enterPageState === 'reg' || enterPageState === 'emailReg'">
 			<Input v-model="ethPwd" class="pwd-btn" placeholder="请输入您的EthLand密码">
 			</Input>
@@ -41,14 +60,24 @@
 	</div>
 </template>
 <style scoped>
+span {
+	display: inline-block;
+	font-size: 16px;
+	color: #eee;
+	cursor: pointer;
+}
 #fontPage {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top:0;
-	left: 0;
-	background: url(../images/webbg/home-bg.jpg) no-repeat;
-	background-size: 100% 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background: linear-gradient(#13194b,#4372b4);
+    background-position: 50% 50%;
 }
 .enter-btn {
 	width: 460px;
@@ -91,6 +120,14 @@
 	font-family: FZCuYuan-M03S;
 	color: #fff;
 }
+.reset-pass {
+	width: 460px;
+	position: absolute;
+	top:48%;
+	left: 50%;
+	margin-left: -230px;
+	text-align: center;
+}
 @font-face {
   font-family: FZCuYuan-M03S;
   src: url(../images/font/FZCuYuan-M03S.ttf);
@@ -100,6 +137,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import serverRequest from '../libs/serverRequest.js'
 import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/statusHandle.js'
+import beginWave from '../libs/wave.js'
 export default {
 	data () {
 		return {
@@ -112,19 +150,33 @@ export default {
 			loginModal: false,
 			loginPwd: '',
 			loginAddr: '',
+			resetEthPwd: '', // 重置密码模块新密码
+			resetEthCode:'', // 重置密码邮件验证码
 			enterPageState: 'addrSet' // { 'addrSet', 'reg', 'emailReg', 'addrLog', 'pwdLog'}
 		}
 	},
+	components: {
+	},
 	mounted () {
-		// this.userAddr = '123'
-		this.enterPageState = 'addrSet'
-		// this.userLogin()
+		if (localStorage.getItem('EthlandAddr') !== '') {
+			this.enterPageState = 'addrLog'
+			this.loginAddr = localStorage.getItem('EthlandAddr')
+		} else {
+			this.enterPageState = 'addrSet'
+		}
+		this.$nextTick(() => {
+			// beginWave()
+		})
 	},
 	methods: {
 		...mapActions([
 			'changeUserAddr'
 		]),
 		checkAddr () {
+			if (this.ethAddr === '') {
+				alertErrInfo(this, LoginCodes.Register_Data_Null)
+				return
+			}
 			this.enterPageState = 'reg'
 		},
 		showEmailModal () {
@@ -162,22 +214,24 @@ export default {
 			serverRequest.handleRequestRes(registerData.data, succCb, errCb)
 		},
 		async userLogin () {
-			if (this.userAddr === '') {
-				alertErrInfo(this, CommonCodes.Login_Addr_Fail)
-				this.enterPageState = 'addrLog'
+			// if (this.userAddr === '') {
+			// 	alertErrInfo(this, CommonCodes.Login_Addr_Fail)
+			// 	this.enterPageState = 'addrLog'
+			// 	return
+			// }
+			if (this.loginPwd === '' || this.loginAddr === '') {
+				alertErrInfo(this, CommonCodes.Register_Data_Null)
 				return
 			}
-			if (this.loginPwd === '') {
-				alertErrInfo(this, CommonCodes.Password_Not_Null)
-				return
-			}
-			const login = await serverRequest.userLogin(this.userAddr, this.loginPwd)
+			const login = await serverRequest.userLogin(this.loginAddr, this.loginPwd)
 			if (!login) {
 				alertErrInfo(this, CommonCodes.Service_Wrong)
 				return
 			}
 			let succCb = (data) => {
 				alertSuccInfo(this, LoginCodes.Login_Succ)
+				localStorage.setItem('EthlandAddr', this.loginAddr)
+				this.changeUserAddr({ addr: this.loginAddr })
 				serverRequest.setHeader('token', data)
 				this.$emit('switch-land')
 			}
@@ -202,6 +256,18 @@ export default {
 		},
 		changeEnterState (state) {
 			this.enterPageState = state
+		},
+		// 重置密码
+		resetPass () {
+
+		},
+		// 切换到注册模块
+		toRigister () {
+			this.enterPageState = 'addrSet'
+		},
+		// 切换到重置密码
+		toResetPass () {
+			this.enterPageState = 'reset-pass'
 		}
 	}
 }
