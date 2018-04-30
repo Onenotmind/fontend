@@ -53,7 +53,7 @@
   		</Col>
   	</Row>
     <Row type="flex">
-    	<Col span="5" offset="1" v-for="(panda, index) in showPanda" class="nomal-padding" >
+    	<Col span="5" offset="1" v-for="(panda, index) in showPanda" class="nomal-padding" style="width:200px">
     		<Card style="width: 100%;cursor:pointer;" :shadow="true"  >
     			<p>
             <Icon type="ios-film-outline"></Icon>
@@ -64,20 +64,12 @@
 	            10000
 	        </a>
     			<div class="text-center nomal-padding" >
-    				<img src="../../images/charactor/figure/testdog1.png" class="nomal-padding" @click="buyPanda" :pandaIndex="index">
+            <canvas :id=" 'cvs' + index" width="200" height="200" class="nomal-padding"></canvas>
+    				<!-- <img src="../../images/charactor/figure/testdog1.png" class="nomal-padding" @click="buyPanda" :pandaIndex="index"> -->
     				<Row type="flex" justify="space-between">
-    					<Col><img :src="waterImg" class="img-vertical" >{{ panda.speed }}</Col>
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.hungry }}</Col>
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.goldCatch }}</Col>
-    				</Row>
-    				<Row type="flex" justify="space-between">
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.waterCatch }}</Col>
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.woodCatch }}</Col>
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.fireCatch }}</Col>
-    				</Row>
-    				<Row type="flex" justify="space-between">
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.earthCatch }}</Col>
-    					<Col><img :src="waterImg" class="img-vertical" > {{ panda.special }}</Col>
+              <Col v-for="(attr, index) in showAttr(panda)">
+              <img :src="attrIconObj[attr]" class="img-vertical" >
+            </Col>
     				</Row>
     			</div>
     		</Card>
@@ -95,24 +87,26 @@
             <Icon type="ios-film-outline"></Icon>
             <Icon type="ios-film-outline"></Icon>
           </Col>
-          <Col span="12" offset="12" align="center">
+          <Col span="12" align="center">
           <a href="#">
               <Icon type="ios-loop-strong"></Icon>
               {{initPandaBuyInfo.price}}
           </a>
           </Col>
         </Row>
+        <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.speed}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.hungry}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.goldCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.waterCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{initPandaBuyInfo.speed}}</Col>
+          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{initPandaBuyInfo.hungry}}</Col>
+          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{initPandaBuyInfo.goldCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{initPandaBuyInfo.waterCatch}}</Col>
         </Row>
+        <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.woodCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" > {{initPandaBuyInfo.fireCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.earthCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{initPandaBuyInfo.special}} </Col>
+          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo.woodCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo.fireCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo.earthCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo.special}} </Col>
       </Row>
        <br>
       </p>
@@ -144,7 +138,17 @@
 </style>
 <script>
 import waterImg from '../../images/land/water.png'
+import earthIcon from '../../images/earth-icon.png'
+import fireIcon from '../../images/fire-icon.png'
+import woodIcon from '../../images/wood-icon.png'
+import metalIcon from '../../images/metal-icon.png'
+import waterIcon from '../../images/water-icon.png'
+import superIcon from '../../images/super-icon.png'
+import speedIcon from '../../images/speed-icon.png'
+import hungryIcon from '../../images/hungry-icon.png'
 import serverRequest from '../../libs/serverRequest.js'
+import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
+import CanvasImgTypesArr from '../../libs/charactor/CanvasImgTypes.js'
 export default {
 	data () {
 		return {
@@ -188,7 +192,18 @@ export default {
         fireCatch: 0,
         special: 0
       },
-      testAddr: '1234'
+      testAddr: '1234',
+      attrIconObj: { // 属性icon对象
+        'water': waterIcon,
+        'fire': fireIcon,
+        'earth': earthIcon,
+        'metal': metalIcon,
+        'wood': woodIcon,
+        'super': superIcon,
+        'speed': speedIcon,
+        'hungry': hungryIcon
+      },
+      canvasArr: [] // 画布数组
 		}
 	},
   mounted () {
@@ -197,6 +212,9 @@ export default {
       console.log('v',v)
       let succCb = (data) => {
         this.pandas = data
+        this.$nextTick(() => {
+          this.updateMarketCharactor(this.showPanda)
+        })
       }
       let errCb = () => {}
       serverRequest.handleRequestRes(v.data, succCb, errCb)
@@ -204,10 +222,49 @@ export default {
     .catch(e => {})
   },
 	methods: {
+    async updateMarketCharactor (showPanda) {
+      if (this.canvasArr.length > 0) {
+        for (let cvs of this.canvasArr) {
+          await cvs.clearCanvas()
+        }
+      }
+      this.canvasArr = []
+      if (showPanda.length === 0) return
+      for (const [index, panda] of showPanda.entries()) {
+        // console.log(index, panda)
+        let cvs = new BaseCanvas('cvs' + index)
+        this.canvasArr.push(cvs)
+      }
+      for (let cvs of this.canvasArr) {
+        await cvs.drawCharactor(CanvasImgTypesArr)
+      }
+      // const canvasDraw3 = await baseCanvas3.drawCharactor()
+    },
+
+    // 通过基因绘画熊猫形象
+    drawCharactorByGeni (gen) {
+
+    },
 		pageChange (val) {
 			console.log('page',val)
       this.pageIndex = val
 		},
+    showAttr (panda) {
+      let baseAttiArr = []
+      baseAttiArr.push({ type: 'metal', val: panda.goldCatch })
+      baseAttiArr.push({ type: 'water', val: panda.waterCatch })
+      baseAttiArr.push({ type: 'fire', val:panda.fireCatch })
+      baseAttiArr.push({ type: 'wood', val: panda.woodCatch })
+      baseAttiArr.push({ type: 'earth', val: panda.earthCatch })
+      baseAttiArr.sort(function(a, b) {
+        return b.val - a.val;
+      })
+      if (panda.special) {
+        return ['super', baseAttiArr[0].type, baseAttiArr[1].type]
+      } else {
+        return [baseAttiArr[0].type, baseAttiArr[1].type, baseAttiArr[2].type]
+      }
+    },
     onPageSizeChange (val) {
       console.log('pageSize', val)
       this.pageSize = val
@@ -263,17 +320,27 @@ export default {
         pandasFilterArr = this.pandas
       }
       let pandasCountArr = pandasFilterArr.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize)
-     let finalArr = pandasCountArr.sort((a, b) => {
-            let aVal = a[this.sortType]
-            let bVal = b[this.sortType]
-            return aVal - bVal
-          })
+      let finalArr = pandasCountArr.sort((a, b) => {
+        let aVal = a[this.sortType]
+        let bVal = b[this.sortType]
+        return aVal - bVal
+      })
      console.log('finalArr', finalArr)
      if (this.sortWay === 'highFirst') {
       return finalArr.reverse()
      } else {
       return finalArr
      }
+    }
+  },
+  watch: {
+    showPanda: {
+      handler: function (pandaArr, oldVal) {
+        this.$nextTick(() => {
+          this.updateMarketCharactor(pandaArr)
+        })
+      },
+      deep: true
     }
   }
 }

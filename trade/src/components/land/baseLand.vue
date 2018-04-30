@@ -1,12 +1,13 @@
 <i18n src='../../common/i18n/land/baseLand.json'></i18n>
 <template>
 	<div id="baseLand">
-		<div class="baseLand-bg"></div>
+		<!-- <div class="baseLand-bg"></div> -->
+		<landBg />
 		<div id="container" :class="{ 'landScaleLarger': scale==='larger', 'landScaleSmall': scale==='small'}" @click="changeScale" @blur="mapBlur" tabindex="0"></div>
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasArr" :key="index" :span="24 / pandasArr.length" align="center" :class="'panda' + index ">
 				<Tooltip content="主人, 让我再休息会~" placement="top">
-					<img :src="panda.state === 'home' ? testPandaImg: eggImg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel" :pandaIndex="index" @blur="pandaBlur" 
+					<img :src="panda.state === 'home' ? testPandaImg: woodEgg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel" :pandaIndex="index" @blur="pandaBlur" 
 					:gen="panda.pandaGen" >
 				</Tooltip>
 				<img :src="waterImg" class="panda-options">
@@ -202,11 +203,11 @@
 	top: 70%;
 }
 #pandas{
-	position: absolute;
+	position: fixed;
 	width: 600px;
 	height: 400px;
 	left: 50%;
-	top: 40%;
+	top: 60%;
 	margin-left: -300px;
 }
 img {
@@ -245,6 +246,7 @@ img {
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import landBg from './landBg.vue'
 import anime from 'animejs'
 import serverRequest from '../../libs/serverRequest.js'
 import EchartHandle from '../../libs/map/EchartHandle.js'
@@ -252,6 +254,7 @@ import {getMapConfig} from '../../libs/map/mapConfig.js'
 import testPandaImg from '../../images/charactor/figure/testdog1.png'
 import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
+import woodEgg from '../../images/wood-egg.png'
 import eggImg from '../../images/charactor/figure/egg.png'
 import { alertSuccInfo, alertErrInfo, LandProductCodes, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 
@@ -280,6 +283,7 @@ export default {
 			testPandaImg: testPandaImg, // 测试图片
 			waterImg: waterImg, // 测试图片
 			eggImg: eggImg, // 测试图片
+			woodEgg: woodEgg,
 			ethIconImg: ethIconImg, // 测试图片
 			outModel: false,
 			bambooCount: 0, // 外出竹子数量
@@ -301,6 +305,9 @@ export default {
 			starPointGeneTime: 1000 * 1000 * 24,
 			sellPandaPrice: ''
 		}
+	},
+	components: {
+		landBg
 	},
 	async mounted () {
 		this.backAssetsType = {
