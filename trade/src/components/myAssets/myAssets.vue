@@ -102,7 +102,6 @@
               <img :src="lineImg">
             </Col>
             <Col span="6" align="center">
-<<<<<<< HEAD
               <Button type="success" @click="assetsRollOut(asset.label)">提现</Button>
               <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">充值</Button>
             </Col>
