@@ -1,0 +1,20 @@
+{
+  "en": {
+    "Charge": "Charge",
+    "Get Bamboo": "Get Bamboo",
+    "Advertise": "Advertise",
+    "Life Service": "Life Service",
+    "Product Auction": "Product Auction",
+    "Dress": "Dress",
+    "Cosmetics": "Cosmetics"
+  },
+  "cn": {
+    "Charge": "充话费",
+    "Get Bamboo": "获取竹子",
+    "Advertise": "看广告",
+    "Life Service": "生活服务",
+    "Product Auction": "商品竞拍",
+    "Dress": "裙子",
+    "Cosmetics": "化妆品"
+  }
+}

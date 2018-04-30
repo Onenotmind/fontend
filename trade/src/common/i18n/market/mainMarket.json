@@ -1,8 +1,23 @@
 {
   "en": {
-    
+    "All the pandas": "All the Pandas",
+    "special pandas": "Special",
+    "All the goods": "All the Goods",
+    "Holy water": "Holy Water",
+    "backpack": "Backpack",
+    "A total of 3560 pandas": "A total of 99 Pandas",
+    "Purchase": "Purchase",
+    "Cancel": "Cancel"
+
   },
   "cn": {
-    
+    "All the pandas": "全部熊猫",
+    "special pandas": "特殊熊猫",
+    "All the goods": "全部商品",
+    "Holy water": "圣水",
+    "backpack": "背包",
+    "A total of 3560 pandas": "共 3560 熊猫",
+    "Purchase": "购买",
+    "Cancel": "取消"
   }
 }
