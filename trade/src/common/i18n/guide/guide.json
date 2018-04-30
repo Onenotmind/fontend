@@ -1,0 +1,30 @@
+{
+  "en": {
+    "Newbie guide": "Newbie guide",
+    "Walkthrough": "Walkthrough",
+    "Pandas' Property": "Property",
+    "Travel": "Travel",
+    "PandaHome": "PandaHome",
+    "Common problem": "Problem",
+    "Register and Login": "Register and Login",
+    "Recharge and Withdraw": "Recharge and Withdraw",
+    "Buy Pandas":"Buy Pandas",
+    "Get Bamboo": "Get Bamboo",
+    "Incubation": "Incubation",
+    "Go Out": "Go Out"
+  },
+  "cn": {
+    "Newbie guide": "新手引导",
+    "Walkthrough": "游戏攻略",
+    "Pandas' Property": "熊猫属性",
+    "Travel": "熊猫旅游",
+    "PandaHome": "熊猫家园",
+    "Common problem": "常见问题",
+    "Register and Login": "注册与登陆",
+    "Recharge and Withdraw": "充值与提现",
+    "Buy Pandas":"购买熊猫",
+    "Get Bamboo": "获取竹子",
+    "Incubation": "熊猫孵化",
+    "Go Out": "熊猫外出"
+  }
+}

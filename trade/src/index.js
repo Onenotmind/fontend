@@ -21,7 +21,7 @@ Vue.locale = () => {}
 
 // Create VueI18n instance with options
 const i18n = new VueI18n({
-  locale: 'cn', // set locale
+  locale: 'en', // set locale
 })
 
 Vue.use(iView, {

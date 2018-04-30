@@ -7,7 +7,7 @@
         <MenuGroup title="熊猫市场">
             <MenuItem name="all-panda">
                 <Icon type="document-text"></Icon>
-                全部熊猫
+                {{ $t("All the pandas") }}
             </MenuItem>
             <MenuItem name="low-level-panda">
                 <Icon type="chatbubbles"></Icon>
@@ -19,21 +19,21 @@
             </MenuItem>
             <MenuItem name="special-panda">
                 <Icon type="chatbubbles"></Icon>
-                特殊熊猫
+                {{ $t("special pandas") }}
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="商品市场">
             <MenuItem name="all-product">
                 <Icon type="heart"></Icon>
-                全部商品
+                {{ $t("All the goods") }}
             </MenuItem>
             <MenuItem name="product-water">
                 <Icon type="heart-broken"></Icon>
-                圣水
+                {{ $t("Holy water") }}
             </MenuItem>
             <MenuItem name="product-bag">
                 <Icon type="heart-broken"></Icon>
-                背包
+                {{ $t("backpack") }}
             </MenuItem>
         </MenuGroup>
     </Menu>
@@ -41,7 +41,7 @@
   <Col span="20">
   	<Row class="nomal-padding">
   		<Col span="4">
-  			<span class="total-panda">共 3560 熊猫</span>
+  			<span class="total-panda">{{ $t("A total of 3560 pandas") }}</span>
   		</Col>
   		<Col span="20" align="right">
   			<Select v-model="sortType" style="width:120px" align="center">
@@ -111,8 +111,8 @@
        <br>
       </p>
       <div slot="footer" align="center">
-          <Button type="success" @click="onSureBuy">购买</Button>
-          <Button offset="2" @click="onCancelBuy">取消</Button>
+          <Button type="success" @click="onSureBuy">{{ $t("Purchase") }}</Button>
+          <Button offset="2" @click="onCancelBuy">{{ $t("Cancel") }}</Button>
       </div>
   </Modal>
     <Page :total="100" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange" show-sizer></Page>

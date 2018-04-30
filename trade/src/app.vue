@@ -88,6 +88,7 @@
 			<landService v-if="currentView === 'landService'" />
 			<marketService v-if="currentView === 'marketService'" />
 			<myAssetsService ref="myAssetsService" v-if="currentView === 'myAssetsService'" />
+			<guideService v-if="currentView === 'guideService'" />
 			<discoverService v-if="currentView === 'discoverService'" />
 		</Content>
 		<Footer class="layout-footer-center">ethLand.best@2017-2018 All Right Resolved.</Footer>
@@ -156,6 +157,7 @@ import landService from './components/landService.vue'
 import marketService from './components/marketService.vue'
 import myAssetsService from './components/myAssetsService.vue'
 import discoverService from './components/discoverService.vue'
+import guideService from './components/guideService.vue'
 import serverRequest from './libs/serverRequest.js'
 import enterPage from './components/enterPage.vue'
 import i18n from "./index.js"
@@ -219,7 +221,10 @@ export default {
         	break
         case 'app_discover':
         	this.currentView = 'discoverService'
-        	break
+					break
+				case 'app_guide':
+					this.currentView = 'guideService'
+					break
         default:
           break
       }
@@ -238,8 +243,9 @@ export default {
 		landService,
 		marketService,
 		myAssetsService,
-		enterPage,
-		discoverService
+		guideService,
+		discoverService,
+		enterPage
 	}
 }
 

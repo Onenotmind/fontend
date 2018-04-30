@@ -1,3 +1,4 @@
+<i18n src='../../common/i18n/discover/discover.json'></i18n>
 <template>
 	<div id="discover">
 		<Row>
@@ -48,7 +49,11 @@
 </Row>
 	</div>
 </template>
+</template>
 <style scoped>
+.text-center {
+	text-align: center;
+}
 .nomal-padding {
 	padding-top: 15px;
 	padding-bottom: 20px;
@@ -61,5 +66,15 @@
 }
 </style>
 <script>
-	
+export default {
+	data () {
+		return {
+		}
+	},
+	methods: {
+		selectMenu(menu) {
+			
+		}
+	}
+}
 </script>

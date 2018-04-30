@@ -1,44 +1,40 @@
-<i18n src='../../common/i18n/market/mainMarket.json'></i18n>
+<i18n src='../../common/i18n/assets/landAssets.json'></i18n>
 <template>
 	<div id="myAssets">
 		<Row>
 			<Col span="4" class="nomal-padding">
 		<Menu  active-name="my-assets" style="width:160px;" @on-select="selectMenu">
-        <MenuGroup title="我的资产">
+        <MenuGroup :title="$t('my assets')">
             <MenuItem name="assets-list">
                 <Icon type="document-text"></Icon>
-                资产列表
+                {{ $t("assets_list") }}
             </MenuItem>
             <MenuItem name="assets-rollout">
-                <Icon type="forward"></Icon>
-                提现资产
+                <Icon type="chatbubbles"></Icon>
+                {{ $t("assets_withdraw") }}
             </MenuItem>
             <MenuItem name="assets-recharge">
-                <Icon type="reply"></Icon>
-                充值资产
+                <Icon type="chatbubbles"></Icon>
+                {{ $t("assets_recharge") }}
             </MenuItem>
             <MenuItem name="product-exchange">
                 <Icon type="navigate"></Icon>
                 商品兑换
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="安全中心">
+        <MenuGroup :title="$t('security center')">
           <MenuItem name="modify-bind-email">
-                <Icon type="email"></Icon>
-                绑定邮箱
+                <Icon type="heart"></Icon>
+                {{ $t( "assets_bind") }}
             </MenuItem>
             <MenuItem name="modify-login-pass">
-                <Icon type="locked"></Icon>
-                更改密码
+                <Icon type="heart"></Icon>
+                {{ $t("password") }}
             </MenuItem>
             <MenuItem name="modify-trade-pass">
-                <Icon type="key"></Icon>
-                更改交易密码
-            </MenuItem>
-            <!-- <MenuItem name="product-bag">
                 <Icon type="heart-broken"></Icon>
-                切换账户
-            </MenuItem> -->
+                {{ $t("transaction password") }}
+            </MenuItem>
         </MenuGroup>
     </Menu>
   </Col>
@@ -50,22 +46,22 @@
             <img src="https://best.bi/assets/xx/avatars/avatar.png" class="avatar">
           </Col>
           <Col span="10" style="border-right: 1px solid #E1E2EA">
-            <p> 我的地址：{{ userInfo.uaddr || ''}}</p>
+            <p> {{ $t("my address") }}：{{ userInfo.uaddr || ''}}</p>
             <br>
-            <p> 我的邮箱：{{ userInfo.uemail || ''}}</p>
+            <p> {{ $t("my email") }}：{{ userInfo.uemail || ''}}</p>
           </Col>
           <Col span="11" style="padding-left: 100px;">
-            <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">身份验证：</span>
+            <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">{{ $t("authentication") }}：</span>
             <br>
             <br>
             <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.uemail !==''"></Icon>
             <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.uemail ===''"></Icon>
-            <span style="margin-left: 20px;">邮箱认证</span>
+            <span style="margin-left: 20px;">{{ $t("email authentication") }}</span>
             <br>
             <br>
             <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.utradePass !==''"></Icon>
             <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.utradePass ===''"></Icon>
-            <span style="margin-left: 20px;">交易密码设置</span>
+            <span style="margin-left: 20px;">{{ $t("transaction password setting") }}</span>
           </Col>
         </Row>
       </p>
@@ -77,7 +73,7 @@
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'myAssets'">
     <p slot="title" style="height:30px;">
       <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-      <span class="my-assets-title">我的资产</span>
+      <span class="my-assets-title">{{ $t("my assets") }}</span>
     </p>
     <a href="#" slot="extra">
       <Icon type="ios-loop-strong"></Icon>
@@ -106,6 +102,7 @@
               <img :src="lineImg">
             </Col>
             <Col span="6" align="center">
+<<<<<<< HEAD
               <Button type="success" @click="assetsRollOut(asset.label)">提现</Button>
               <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">充值</Button>
             </Col>
@@ -142,7 +139,7 @@
               {{ asset.value }}
             </Col>
             <Col span="6" align="center">
-              <Button type="success" @click="exchangeProductClick">兑换</Button>
+              <Button type="success" @click="exchangeProductClick">{{ $t("withdraw") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -157,7 +154,7 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-          <span class="my-assets-title">资产提现</span>
+          <span class="my-assets-title">{{ $t("assets_withdraw") }}</span>
           <Select v-model="assetsRollOutType" style="width:120px;margin-left: 40px;">
             <Option v-for="item in assetsTypeArr" :value="item" :key="item">{{ item }}</Option>
         </Select>
@@ -166,7 +163,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">钱包地址：</span>
+          <span class="rollout-card-word">{{ $t("wallet address") }}：</span>
         </Col>
         <Col span="18">
           <Input v-model="rollOutAddr" placeholder="" style="width: 300px"></Input>
@@ -176,7 +173,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">提现数量：</span>
+          <span class="rollout-card-word">{{ $t("withdrawal amount") }}：</span>
         </Col>
         <Col span="18">
           <Input v-model="rollOutCount" placeholder="" style="width: 300px"></Input>
@@ -186,7 +183,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-              <span class="rollout-card-word">交易密码：</span>
+              <span class="rollout-card-word">{{ $t("trade password") }}：</span>
             </Col>
             <Col span="18">
               <Input v-model="rollOutPass" placeholder="" style="width: 300px"></Input>
@@ -196,16 +193,16 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-              <span class="rollout-card-word">验证码：</span>
+              <span class="rollout-card-word">{{ $t("verification code") }}：</span>
             </Col>
             <Col span="18">
               <Input v-model="rollOutCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode">获取验证码</Button>
+              <Button type="info" style="width: 150px;" @click="getCode">{{ $t("Get verification code") }}</Button>
             </Col>
           </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="AssetsRollOut">提现资产</Button>
+          <Button type="success" style="width: 400px;" @click="AssetsRollOut">{{ $t("assets_withdraw") }}</Button>
         </Col>
       </Row>
       <Col span="24" class="rollout-card-margin">
@@ -222,7 +219,7 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-          <span class="my-assets-title">资产充值</span>
+          <span class="my-assets-title">{{ $t("assets_recharge") }}</span>
           <Select v-model="assetsRollInType" style="width:120px;margin-left: 40px;">
             <Option v-for="item in assetsTypeArr" :value="item" :key="item">{{ item }}</Option>
         </Select>
@@ -232,7 +229,7 @@
           <img :src="getaddrqrImg">
         </Col>
         <Col span="24" class="rollout-card-margin" align="center">
-          <Button type="success" style="width: 80px;margin-right: 15px;" @click="copyAddr">复制地址</Button>
+          <Button type="success" style="width: 80px;margin-right: 15px;" @click="copyAddr">{{ $t("Copy the address") }}</Button>
           <Input value="0xF455C2dae83e65F67E7938B1aFAE6A269455B194" placeholder="" style="width: 350px;pointer-events:none;height: 30px;"></Input>
         </Col>
         <Col span="24" class="rollout-card-margin">
@@ -330,13 +327,13 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-          <span class="my-assets-title">绑定邮箱</span>
+          <span class="my-assets-title">{{ $t("assets_bind") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">邮箱地址：</span>
+            <span class="rollout-card-word">{{ $t("email address") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="emailBind" placeholder="" style="width: 300px"></Input>
@@ -346,16 +343,16 @@
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">验证码：</span>
+            <span class="rollout-card-word">{{ $t("verification code") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="emailBindCode" placeholder="" style="width: 150px"></Input>
-            <Button type="info" style="width: 150px;" @click="getEmailCode">获取验证码</Button>
+            <Button type="info" style="width: 150px;" @click="getEmailCode">{{ $t("Get verification code") }}</Button>
           </Col>
         </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="bindEmail">提交</Button>
+          <Button type="success" style="width: 400px;" @click="bindEmail">{{ $t("submit") }}</Button>
         </Col>
       </Row>
     </p>
@@ -369,13 +366,13 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-          <span class="my-assets-title">更改登陆密码</span>
+          <span class="my-assets-title">{{ $t("Change login password") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">旧登陆密码：</span>
+            <span class="rollout-card-word">{{ $t("Old login password") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="oldLoginPass" placeholder="" style="width: 300px"></Input>
@@ -385,7 +382,7 @@
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">新登陆密码：</span>
+            <span class="rollout-card-word">{{ $t("New login password") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="newLoginPass" placeholder="" style="width: 300px"></Input>
@@ -395,7 +392,7 @@
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">新密码确认：</span>
+            <span class="rollout-card-word">{{ $t("Verify code") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="newLoginPassRepeat" placeholder="" style="width: 300px"></Input>
@@ -403,7 +400,7 @@
         </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="resetLoginPass">确认修改</Button>
+          <Button type="success" style="width: 400px;" @click="resetLoginPass">{{ $t("Confirm the change") }}</Button>
         </Col>
       </Row>
     </p>
@@ -417,13 +414,13 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
-          <span class="my-assets-title">更改交易密码</span>
+          <span class="my-assets-title">{{ $t("Change transaction password") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">旧交易密码：</span>
+            <span class="rollout-card-word">{{ $t("Old trade password") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="oldTradePass" placeholder="" style="width: 300px"></Input>
@@ -433,7 +430,7 @@
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">新交易密码：</span>
+            <span class="rollout-card-word">{{ $t("New trade password") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="newTradePass" placeholder="" style="width: 300px"></Input>
@@ -443,7 +440,7 @@
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">新密码确认：</span>
+            <span class="rollout-card-word">{{ $t("Verify code") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="newTradePassRepeat" placeholder="" style="width: 300px"></Input>
@@ -453,16 +450,16 @@
         <Col span="24" class="rollout-card-margin">
         <Row>
           <Col span="6"  align="right">
-            <span class="rollout-card-word">验证码：</span>
+            <span class="rollout-card-word">{{ $t("verification code") }}：</span>
           </Col>
           <Col span="18" align="left">
             <Input v-model="modifyTradePassCode" placeholder="" style="width: 150px"></Input>
-            <Button type="info" style="width: 150px;" @click="getTradeCode">获取验证码</Button>
+            <Button type="info" style="width: 150px;" @click="getTradeCode">{{ $t("Get verification code") }}</Button>
           </Col>
         </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="resetTradePass">确认修改</Button>
+          <Button type="success" style="width: 400px;" @click="resetTradePass">{{ $t("Confirm the change") }}</Button>
         </Col>
       </Row>
     </p>
