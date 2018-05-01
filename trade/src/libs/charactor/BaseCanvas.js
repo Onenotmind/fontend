@@ -7,11 +7,15 @@ import testDogEye from '../../images/petbaidu/eye.png'
 
 
 class BaseCanvas {
-	constructor (divid) {
+	constructor (divid, wh) {
 		this.canvasDiv = document.getElementById(divid)
 		this.ctx = this.canvasDiv.getContext('2d')
-		this.width = 200
-		this.height = 200
+		if (wh) {
+			this.width = this.height = parseInt(wh)
+		} else {
+			this.width = 200
+			this.height = 200
+		}
 		this.canvasDiv.onclick = (e) => {
 			console.log('onclick')
       this.downEvent(e)
@@ -19,7 +23,7 @@ class BaseCanvas {
 	}
 
 	convertImageToCanvas (image, left, top) {
-		this.ctx.drawImage(image, left, top)
+		this.ctx.drawImage(image, left, top, this.width, this.height)
 	}
 
 	downEvent (e) {
@@ -31,7 +35,6 @@ class BaseCanvas {
 		image.src = imageSrc
 		return new Promise((resolve, reject) => {
 			image.onload = function () {
-				console.log(image)
 				resolve(image)
 			}
 		})

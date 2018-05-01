@@ -20,7 +20,9 @@ let LoginCodes = {
 let LandProductCodes = {
   'Get_Star_Point_Succ': '获取商品生成中心',
   'Get_Star_Point_Fail': '商品中心生成失败',
-  'Exchange_Product_Info_Not_Null': '商品兑换信息不能为空'
+  'Exchange_Product_Info_Not_Null': '商品兑换信息不能为空',
+  'Current_Product_Null': '当前活动商品为空！',
+  'Vote_Product_Succ': '给商品投票成功'
 }
 
 function alertSuccInfo (self, msg) {

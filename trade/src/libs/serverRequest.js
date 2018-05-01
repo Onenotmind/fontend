@@ -11,6 +11,7 @@ const ssapiPath = {
   userRegister: 'userRegister',
   userGeneCode: 'userGeneCode',
   userCheckCode: 'userCheckCode',
+  bindEmail: 'bindEmail',
   userChangeLoginPass: 'userChangeLoginPass',
   userChangeTradePass: 'userChangeTradePass',
   queryAllAssets: 'queryAllAssets',
@@ -36,7 +37,10 @@ const ssapiPath = {
   sirePanda: 'sirePanda',
   getCurrentStarPoint: 'getCurrentStarPoint',
   queryLandProductByAddr: 'queryLandProductByAddr',
-  exchangeProduct: 'exchangeProduct'
+  exchangeProduct: 'exchangeProduct',
+  getCurrentProduct: 'getCurrentProduct',
+  getCurrentVotedProduct: 'getCurrentVotedProduct',
+  voteProduct: 'voteProduct'
 }
 
 function intercept () {
@@ -98,6 +102,10 @@ function userRegister (addr, email, pwd, code) {
 // 检测验证码
 function userCheckCode (email, code) {
   return ssapiAxios.get(ssapiPath.userCheckCode, { params: { email, code }})
+}
+
+function bindEmail (email, code) {
+  return ssapiAxios.get(ssapiPath.bindEmail, { params: { email, code }})
 }
 
 // 重置密码
@@ -228,12 +236,28 @@ function queryLandProductByAddr (addr) {
 function exchangeProduct (addr, productId, username, userPhone, userRealAddr, pwd, code) {
   return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, username, userPhone, userRealAddr, pwd, code }})
 }
+
+// 获取正在活动中的商品
+function getCurrentProduct () {
+  return ssapiAxios.get(ssapiPath.getCurrentProduct, { params: { }})
+}
+
+// 获取正在投票中的商品
+function getCurrentVotedProduct () {
+  return ssapiAxios.get(ssapiPath.getCurrentVotedProduct, { params: { }})
+}
+
+// 给商品投票
+function voteProduct (productId, num) {
+  return ssapiAxios.get(ssapiPath.voteProduct, { params: { productId, num }})
+}
 export default {
   userGeneCode,
   userLogin,
   userRegister,
   handleRequestRes,
   userCheckCode,
+  bindEmail,
   userChangeLoginPass,
   queryAllAssets,
   queryAllRollInAssets,
@@ -260,5 +284,8 @@ export default {
   sirePanda,
   getCurrentStarPoint,
   queryLandProductByAddr,
-  exchangeProduct
+  exchangeProduct,
+  getCurrentProduct,
+  getCurrentVotedProduct,
+  voteProduct
 }

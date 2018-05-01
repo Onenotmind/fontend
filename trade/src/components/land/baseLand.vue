@@ -7,8 +7,9 @@
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasArr" :key="index" :span="24 / pandasArr.length" align="center" :class="'panda' + index ">
 				<Tooltip content="主人, 让我再休息会~" placement="top">
-					<img :src="panda.state === 'home' ? testPandaImg: woodEgg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel" :pandaIndex="index" @blur="pandaBlur" 
+					<img v-show="panda.state === 'egg'" :src="woodEgg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel(index)" :pandaIndex="index" @blur="pandaBlur" 
 					:gen="panda.pandaGen" >
+					<canvas v-show="panda.state === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" @click="showPandaPanel(index)"></canvas>
 				</Tooltip>
 				<img :src="optionsIcon.feedIcon" class="panda-options">
 				<img :src="optionsIcon.beginOutIcon" class="panda-options" @click="startOut">
@@ -19,8 +20,9 @@
     <Modal v-model="outModel">
 	    <p align="left" style="margin-top: 15px;">
 	    	<Row>
-	    		<Col span="24" align="center" style="margin-bottom: 15px;">
-	    			<img :src="testPandaImg">
+	    		<Col span="24" align="center">
+	    			<!-- <img :src="testPandaImg"> -->
+	    			<canvas id="cvsout" width="200" height="200"></canvas>
 	    		</Col>
 	    	</Row>
 	    	<Row>
@@ -31,10 +33,10 @@
 	        	<img src="../../images/land/water.png" style="vertical-align:middle;">
 	        	<Input v-model="bambooCount" placeholder="" style="width:40px;"></Input>
 	        </Col>
-	        <Col span="5" offset="1" align="left">
+	        <!-- <Col span="5" offset="1" align="left">
 	        	<img src="../../images/land/water.png" style="vertical-align:middle;">
 	        	<Input v-model="waterCount" placeholder="" style="width:40px;"></Input>
-	        </Col>
+	        </Col> -->
 	    </Row>
 	     <br>
 	    <Row>
@@ -66,7 +68,8 @@
         <p style="margin-top: 15px;">
         	<Row type="flex" justify="center" align="middle">
         		<Col span="11" align="center" style="min-width: 210px;">
-        			<img v-for="(panda, index) in outBackPandas" :key="index" :src="testPandaImg" :style="{'width': 111 / (index + 1) + 'px'}">
+        			<!-- <img v-for="(panda, index) in outBackPandas" :key="index" :src="testPandaImg" :style="{'width': 111 / (index + 1) + 'px'}"> -->
+        			<canvas  v-for="(panda, index) in outBackPandas" :id=" 'backcvs' + index" :width="111 / (index + 1)" :height="111 / (index + 1)"></canvas>
         		</Col>
         		<Col span="13">
         			<Row>
@@ -117,33 +120,35 @@
     <Modal v-model="sellPanda">
       <p align="left" style="margin-top: 15px;">
         <Row>
-          <Col span="24" align="center" style="margin-bottom: 15px;">
-            <img :src="testPandaImg" class="nomal-padding">
+          <Col span="24" align="center">
+            <!-- <img :src="testPandaImg" class="nomal-padding"> -->
+            <canvas id="cvssell" width="200" height="200"></canvas>
           </Col>
         </Row>
         <Row span="24">
           <Col span="12" align="center">
-            <Icon type="ios-film-outline"></Icon>
-            <Icon type="ios-film-outline"></Icon>
+            <Icon type="social-yen"></Icon>
+              {{sellPandaInfo.price}}
           </Col>
           <Col span="12" align="center">
           <a href="#">
-              <Icon type="ios-loop-strong"></Icon>
-              {{sellPandaInfo.price}}
+              G{{ 10 - parseInt(sellPandaInfo.integral / 100)}}
           </a>
           </Col>
         </Row>
+        <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.speed}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.hungry}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.goldCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.waterCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{sellPandaInfo.speed}}</Col>
+          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{sellPandaInfo.hungry}}</Col>
+          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{sellPandaInfo.goldCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{sellPandaInfo.waterCatch}}</Col>
         </Row>
+        <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.woodCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" > {{sellPandaInfo.fireCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.earthCatch}}</Col>
-          <Col span="4"><img :src="waterImg" class="img-vertical" >{{sellPandaInfo.special}} </Col>
+          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo.woodCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo.fireCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo.earthCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo.special}} </Col>
       </Row>
        <br>
        <Row type="flex" justify="center">
@@ -247,13 +252,15 @@ img {
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
+import CanvasImgTypesArr from '../../libs/charactor/CanvasImgTypes.js'
 import landBg from './landBg.vue'
 import anime from 'animejs'
 import serverRequest from '../../libs/serverRequest.js'
 import EchartHandle from '../../libs/map/EchartHandle.js'
 import {getMapConfig} from '../../libs/map/mapConfig.js'
 import testPandaImg from '../../images/charactor/figure/testdog1.png'
-import waterImg from '../../images/land/water.png'
+// import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import woodEgg from '../../images/wood-egg.png'
 import eggImg from '../../images/charactor/figure/egg.png'
@@ -261,6 +268,15 @@ import feedIcon from '../../images/feed.png'
 import beginOutIcon from '../../images/begin-out.png'
 import sellIcon from '../../images/sell.png'
 import dropIcon from '../../images/drop.png'
+import waterImg from '../../images/land/water.png'
+import earthIcon from '../../images/earth-icon.png'
+import fireIcon from '../../images/fire-icon.png'
+import woodIcon from '../../images/wood-icon.png'
+import metalIcon from '../../images/metal-icon.png'
+import waterIcon from '../../images/water-icon.png'
+import superIcon from '../../images/super-icon.png'
+import speedIcon from '../../images/speed-icon.png'
+import hungryIcon from '../../images/hungry-icon.png'
 import { alertSuccInfo, alertErrInfo, LandProductCodes, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 
 let testFinalData = [
@@ -297,7 +313,7 @@ export default {
 			direction: '', // 外出方向变量
 			pandaGen: '',
 			ownerAddr: '123', // 主人的地址
-			outBackPandas: [],
+			outBackPandas: [2,3],
 			backAssetsType: null, // ethland assets 类型
 			backAssets: { // 带回来的assets
 				'carry': [],
@@ -314,7 +330,21 @@ export default {
 				beginOutIcon: beginOutIcon,
 				sellIcon: sellIcon,
 				dropIcon: dropIcon
-			}
+			},
+			attrIconObj: { // 属性icon对象
+        'water': waterIcon,
+        'fire': fireIcon,
+        'earth': earthIcon,
+        'metal': metalIcon,
+        'wood': woodIcon,
+        'super': superIcon,
+        'speed': speedIcon,
+        'hungry': hungryIcon
+      },
+			canvasArr: [], // 在家时的形象画布渲染数组
+			sellCanvas: null, // 出售熊猫的画布
+			outCanvas: null, // 熊猫外出时的画布
+			backCanvasArr: [] // 外出回来时画布渲染数组
 		}
 	},
 	components: {
@@ -352,6 +382,10 @@ export default {
 				} else {
 					this.pandasArr.push(panda)
 				}
+				this.$nextTick(() => { // 熊猫图形渲染
+					this.updateHomeCharactor(this.pandasArr)
+					this.updateBackHomeCharactor(this.outBackPandas)
+				})
 			}
 			console.log('outBackPandas', this.outBackPandas)
 			// 查询熊猫是否外出且带回物品
@@ -385,6 +419,46 @@ export default {
 		}, this.starPointGeneTime)
 	},
 	methods: {
+		// 渲染在家时的熊猫画布
+		async updateHomeCharactor (showPanda) {
+      if (this.canvasArr.length > 0) {
+        for (let cvs of this.canvasArr) {
+          await cvs.clearCanvas()
+        }
+      }
+      this.canvasArr = []
+      if (showPanda.length === 0) return
+      for (const [index, panda] of showPanda.entries()) {
+        // console.log(index, panda)
+        let cvs = new BaseCanvas('homecvs' + index)
+        this.canvasArr.push(cvs)
+      }
+      for (let cvs of this.canvasArr) {
+        await cvs.drawCharactor(CanvasImgTypesArr)
+      }
+      // const canvasDraw3 = await baseCanvas3.drawCharactor()
+    },
+
+    // 渲染外出回家时的熊猫画布
+		async updateBackHomeCharactor (showPanda) {
+      if (this.backCanvasArr.length > 0) {
+        for (let cvs of this.backCanvasArr) {
+          await cvs.clearCanvas()
+        }
+      }
+      this.backCanvasArr = []
+      if (showPanda.length === 0) return
+      for (const [index, panda] of showPanda.entries()) {
+        // console.log(index, panda)
+        let wh = document.getElementById('backcvs' + index).getAttribute('width')
+        let cvs = new BaseCanvas('backcvs' + index, parseInt(wh))
+        this.backCanvasArr.push(cvs)
+      }
+      for (let cvs of this.backCanvasArr) {
+        await cvs.drawCharactor(CanvasImgTypesArr)
+      }
+      // const canvasDraw3 = await baseCanvas3.drawCharactor()
+    },
 
 		// 地图操作 放大地图
 		changeScale () {
@@ -428,8 +502,8 @@ export default {
 		},
 
 		// 熊猫操作 点击熊猫
-		async showPandaPanel (e) {
-			this.pandaIndex = parseInt(e.target.getAttribute('pandaIndex'))
+		async showPandaPanel (index) {
+			this.pandaIndex = index
 			if (this.pandasArr[this.pandaIndex].state === 'egg') { // 熊猫蛋点击
 				this.hatchPanda('.pandaImg' + this.pandaIndex)
 				const sirePanda = await serverRequest.sirePanda(this.pandasArr[this.pandaIndex].pandaGen)
@@ -442,7 +516,7 @@ export default {
 				return
 			}
 			// 点击熊猫
-			this.pandaGen = e.target.getAttribute('gen')
+			this.pandaGen = this.pandasArr[this.pandaIndex].pandaGen
 			let pandaClass = 'panda' + this.pandaIndex
 			let pandaOpt = 4
 			let optOps = [
@@ -568,8 +642,15 @@ export default {
 		},
 
 		// 售卖熊猫
-		soldPanda () {
+		async soldPanda () {
 			this.sellPanda = true
+			// sellPandaInfo 出售熊猫的信息
+			if (this.sellCanvas) {
+        await this.sellCanvas.clearCanvas()
+      } else {
+        this.sellCanvas = new BaseCanvas('cvssell')
+      }
+      await this.sellCanvas.drawCharactor(CanvasImgTypesArr)
 		},
 
 		// 确认出售熊猫
@@ -594,9 +675,15 @@ export default {
 		},
 
 		// 熊猫外出模板展示
-		startOut () {
+		async startOut () {
 			console.log('startOut')
 			this.outModel = true
+			if (this.outCanvas) {
+        await this.outCanvas.clearCanvas()
+      } else {
+        this.outCanvas = new BaseCanvas('cvsout')
+      }
+      await this.outCanvas.drawCharactor(CanvasImgTypesArr)
 		},
 		// 熊猫外出
 		onSureOut () {

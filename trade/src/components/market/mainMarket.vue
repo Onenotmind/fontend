@@ -6,23 +6,20 @@
 		<Menu  active-name="all-panda" style="width:160px;" @on-select="selectMenu">
         <MenuGroup title="熊猫市场">
             <MenuItem name="all-panda">
-                <Icon type="document-text"></Icon>
+                <Icon type="grid"></Icon>
                 {{ $t("All the pandas") }}
             </MenuItem>
             <MenuItem name="low-level-panda">
-                <Icon type="chatbubbles"></Icon>
                 G10 ~ G6
             </MenuItem>
             <MenuItem name="high-level-panda">
-                <Icon type="chatbubbles"></Icon>
                 G5 ~ G0
             </MenuItem>
             <MenuItem name="special-panda">
-                <Icon type="chatbubbles"></Icon>
                 {{ $t("special pandas") }}
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="商品市场">
+        <!-- <MenuGroup title="商品市场">
             <MenuItem name="all-product">
                 <Icon type="heart"></Icon>
                 {{ $t("All the goods") }}
@@ -35,14 +32,14 @@
                 <Icon type="heart-broken"></Icon>
                 {{ $t("backpack") }}
             </MenuItem>
-        </MenuGroup>
+        </MenuGroup> -->
     </Menu>
   </Col>
   <Col span="20">
   	<Row class="nomal-padding">
-  		<Col span="4">
+  		<!-- <Col span="4">
   			<span class="total-panda">{{ $t("A total of 3560 pandas") }}</span>
-  		</Col>
+  		</Col> -->
   		<Col span="20" align="right">
   			<Select v-model="sortType" style="width:120px" align="center">
 	        <Option v-for="item in sortTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -53,19 +50,19 @@
   		</Col>
   	</Row>
     <Row type="flex">
-    	<Col span="5" offset="1" v-for="(panda, index) in showPanda" class="nomal-padding" style="width:200px">
-    		<Card style="width: 100%;cursor:pointer;" :shadow="true"  >
+    	<Col span="5" offset="1" v-for="(panda, index) in showPanda" class="nomal-padding" style="width:200px" :key="index">
+    		<Card style="width: 100%;cursor:pointer;" :shadow="true">
     			<p>
-            <Icon type="ios-film-outline"></Icon>
-            <Icon type="ios-film-outline"></Icon>
+            <a href="#" @click="buyPanda(panda)" :pandaIndex="index">
+              <Icon type="social-yen"></Icon>
+              {{panda.price}}
+            </a>
 	        </p>
-	        <a href="#" slot="extra" @click="buyPanda" :pandaIndex="index">
-	            <Icon type="ios-loop-strong"></Icon>
-	            10000
-	        </a>
-    			<div class="text-center nomal-padding" >
-            <canvas :id=" 'cvs' + index" width="200" height="200" class="nomal-padding"></canvas>
-    				<!-- <img src="../../images/charactor/figure/testdog1.png" class="nomal-padding" @click="buyPanda" :pandaIndex="index"> -->
+          <a href="#" slot="extra">
+            G{{ 10 - parseInt(panda.integral / 100)}}
+          </a>
+    			<div class="text-center nomal-padding">
+            <canvas :id=" 'cvs' + index" width="200" height="200" class="nomal-padding" @click="buyPanda(panda)"></canvas>
     				<Row type="flex" justify="space-between">
               <Col v-for="(attr, index) in showAttr(panda)">
               <img :src="attrIconObj[attr]" class="img-vertical" >
@@ -79,19 +76,19 @@
       <p align="left" style="margin-top: 15px;">
         <Row>
           <Col span="24" align="center" style="margin-bottom: 15px;">
-            <img src="../../images/charactor/figure/testdog1.png" class="nomal-padding">
+          <canvas id="cvsbuy" width="200" height="200"></canvas>
+            <!-- <img src="../../images/charactor/figure/testdog1.png" class="nomal-padding"> -->
           </Col>
         </Row>
         <Row span="24">
           <Col span="12" align="center">
-            <Icon type="ios-film-outline"></Icon>
-            <Icon type="ios-film-outline"></Icon>
-          </Col>
-          <Col span="12" align="center">
           <a href="#">
-              <Icon type="ios-loop-strong"></Icon>
+              <Icon type="social-yen"></Icon>
               {{initPandaBuyInfo.price}}
           </a>
+          </Col>
+          <Col span="12" align="center">
+            G{{ 10 - parseInt(initPandaBuyInfo.integral / 100)}}
           </Col>
         </Row>
         <br>
@@ -137,6 +134,7 @@
 }
 </style>
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import waterImg from '../../images/land/water.png'
 import earthIcon from '../../images/earth-icon.png'
 import fireIcon from '../../images/fire-icon.png'
@@ -203,7 +201,8 @@ export default {
         'speed': speedIcon,
         'hungry': hungryIcon
       },
-      canvasArr: [] // 画布数组
+      canvasArr: [], // 画布数组
+      cvsBuyModal: null // 购买面板的画布
 		}
 	},
   mounted () {
@@ -282,34 +281,46 @@ export default {
           break
       }
     },
-    buyPanda (e) {
-      this.buyPandaIndex = parseInt(e.target.getAttribute('pandaIndex'))
+    async buyPanda (panda) {
+      // this.buyPandaIndex = parseInt(e.target.getAttribute('pandaIndex'))
       this.pandaBuy = true
-      this.initPandaBuyInfo = this.showPanda[this.buyPandaIndex]
+      this.initPandaBuyInfo = panda
+      if (this.cvsBuyModal) {
+        await this.cvsBuyModal.clearCanvas()
+      } else {
+        this.cvsBuyModal = new BaseCanvas('cvsbuy')
+      }
+      await this.cvsBuyModal.drawCharactor(CanvasImgTypesArr)
     },
     onSureBuy () {
-      let price = this.showPanda[this.buyPandaIndex].price
-      let pandaGen = this.showPanda[this.buyPandaIndex].pandaGen
-      serverRequest.buyPanda(this.testAddr, pandaGen, price)
+      let price = this.initPandaBuyInfo.price
+      let pandaGen = this.initPandaBuyInfo.pandaGen
+      serverRequest.buyPanda(this.userAddr, pandaGen, price)
       .then(v => {
         let succCb = (data) => {
-          console.log('lll', data)
+          this.pandaBuy = false
         }
         let errCb = () => {
-
+          this.pandaBuy = false
         }
         serverRequest.handleRequestRes(v.data, succCb, errCb)
       })
       .catch(e => {})
     },
     onCancelBuy () {
-
+      this.pandaBuy = false
+    },
+    testCvsClick () {
+      console.log('cvscvs')
     }
 	},
 	components: {
 		
 	},
   computed: {
+    ...mapState({
+      userAddr: state => state.login.userAddr
+    }),
     showPanda () {
       let pandasFilterArr = []
       if (this.filterIntegral === 'lowFilter') {
@@ -325,7 +336,6 @@ export default {
         let bVal = b[this.sortType]
         return aVal - bVal
       })
-     console.log('finalArr', finalArr)
      if (this.sortWay === 'highFirst') {
       return finalArr.reverse()
      } else {
