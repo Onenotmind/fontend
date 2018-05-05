@@ -13,6 +13,8 @@ const ssapiPath = {
   userCheckCode: 'userCheckCode',
   bindEmail: 'bindEmail',
   userChangeLoginPass: 'userChangeLoginPass',
+  queryUserEmail: 'queryUserEmail',
+  changePwdWhenForget: 'changePwdWhenForget',
   userChangeTradePass: 'userChangeTradePass',
   queryAllAssets: 'queryAllAssets',
   queryAllRollInAssets: 'queryAllRollInAssets',
@@ -40,7 +42,8 @@ const ssapiPath = {
   exchangeProduct: 'exchangeProduct',
   getCurrentProduct: 'getCurrentProduct',
   getCurrentVotedProduct: 'getCurrentVotedProduct',
-  voteProduct: 'voteProduct'
+  voteProduct: 'voteProduct',
+  updateUserBamboo: 'updateUserBamboo'
 }
 
 function intercept () {
@@ -113,9 +116,19 @@ function userChangeLoginPass (addr, oldPwd, newPwd) {
   return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, oldPwd, newPwd }))
 }
 
+// 忘记密码时获取验证码
+function queryUserEmail (addr) {
+  return ssapiAxios.get(ssapiPath.queryUserEmail, { params: { addr }})
+}
+
+// 登陆时忘记密码
+function changePwdWhenForget (addr, pwd, code) {
+  return ssapiAxios.get(ssapiPath.changePwdWhenForget, { params: { addr, pwd, code }})
+}
+
 // 重置交易密码
-function userChangeTradePass (addr, oldPwd, newPwd, code, email) {
-  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, oldPwd, newPwd, code, email }))
+function userChangeTradePass (addr, newPwd, code) {
+  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, newPwd, code }))
 }
 // 查询未确定资产
 function queryAllAssets () {
@@ -193,8 +206,8 @@ function serverTime () {
 }
 
 // 获取熊猫外出回归的商品
-function getPandaBackAssets (pandaGen) {
-  return ssapiAxios.get(ssapiPath.getPandaBackAssets, { params: {pandaGen}})
+function getPandaBackAssets () {
+  return ssapiAxios.get(ssapiPath.getPandaBackAssets, { params: {}})
 }
 
 // 查询所有售卖中的熊猫
@@ -251,6 +264,11 @@ function getCurrentVotedProduct () {
 function voteProduct (productId, num) {
   return ssapiAxios.get(ssapiPath.voteProduct, { params: { productId, num }})
 }
+
+// 更新用户的竹子数量
+function updateUserBamboo (addr) {
+  return ssapiAxios.get(ssapiPath.updateUserBamboo, { params: { addr }})
+}
 export default {
   userGeneCode,
   userLogin,
@@ -259,6 +277,8 @@ export default {
   userCheckCode,
   bindEmail,
   userChangeLoginPass,
+  queryUserEmail,
+  changePwdWhenForget,
   queryAllAssets,
   queryAllRollInAssets,
   queryRollInAssetsByAddr,
@@ -287,5 +307,6 @@ export default {
   exchangeProduct,
   getCurrentProduct,
   getCurrentVotedProduct,
-  voteProduct
+  voteProduct,
+  updateUserBamboo
 }

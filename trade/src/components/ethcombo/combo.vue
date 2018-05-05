@@ -140,12 +140,13 @@
 }
 </style>
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import ComboHandle from '../../libs/comboHandle.js'
 const comboHandle = new ComboHandle()
 export default {
 	data () {
 		return {
-			percent: 0,
+			// percent: 0,
 			mineState: 'start',
 			threads: 3,
 			throttle: 0.3,
@@ -157,10 +158,26 @@ export default {
 	},
 	mounted () {
 		// comboHandle.startMine()
-		setInterval(() => {
-			this.percent += 10
-		}, 1000)
+		// setInterval(() => {
+		// 	this.percent += 10
+		// }, 1000)
 	},
+	computed: {
+    ...mapState({
+      userAddr: state => state.login.userAddr
+    }),
+    percent: function () {
+    	return parseInt(this.totalHash % 100)
+    }
+  },
+  watch: {
+  	totalHash: function (val) {
+  		if (val % 100 === 0) {
+  			let count = parseInt(val / 100)
+  			
+  		}
+  	}
+  },
 	methods: {
 		startMine () {
 			this.mineState = 'mine'

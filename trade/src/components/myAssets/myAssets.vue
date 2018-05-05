@@ -128,16 +128,16 @@
       <Row span="24" type="flex" justify="center" align="middle">
         <Col span="24">
           <Row span="24" style="margin-bottom: 15px;" v-for="(asset, index) in myProducts">
-            <Col span="10" align="left">
-              {{ asset.label }}
+            <Col span="15" align="left">
+              {{ asset.name }}
             </Col>
-            <Col span="5" class="line">
-              <img :src="lineImg" style="height: 15px;">
+            <Col span="4" class="line">
+              <img :src="asset.imgSrc" style="height: 25px;">
             </Col>
             <Col span="1" align="center">
               {{ asset.value }}
             </Col>
-            <Col span="6" align="center">
+            <Col span="3" align="center" v-show="asset.value > 2">
               <Button type="success" @click="exchangeProductClick">{{ $t("withdraw") }}</Button>
             </Col>
           </Row>
@@ -247,8 +247,8 @@
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="navigate" size="25" class="vertical"></Icon>
           <span class="my-assets-title">商品兑换</span>
-          <Select v-model="productExchangeType" style="width:120px;margin-left: 40px;">
-            <Option v-for="item in productsTypeArr" :value="item" :key="item">{{ item }}</Option>
+          <Select v-model="productExchangeType" style="width:420px;margin-left: 40px;">
+            <Option v-for="item in productsTypeArr" :value="item.name" :key="item.productId">{{ item.name }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -329,7 +329,13 @@
           <span class="my-assets-title">{{ $t("assets_bind") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
-        <Col span="24" class="rollout-card-margin" align="center">
+        <!-- 邮箱已经绑定 -->
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail !==''">
+          <Icon type="checkmark-circled" color="green" size="50"></Icon>
+          <span class="email-bind-word">邮箱已经绑定成功！</span>
+        </Col>
+        <!-- 邮箱未绑定 -->
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail ===''">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("email_address") }}：</span>
@@ -339,7 +345,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="24" class="rollout-card-margin" align="center">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail ===''">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("verification_code") }}：</span>
@@ -350,7 +356,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="20" class="rollout-card-margin" offset="4">
+        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo.uemail ===''">
           <Button type="success" style="width: 400px;" @click="bindEmail">{{ $t("submit") }}</Button>
         </Col>
       </Row>
@@ -360,7 +366,7 @@
 
   <!-- 更改登陆密码 -->
   <Col span="20">
-  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'modify-login-pass'">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-if="assetState === 'modify-login-pass'">
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
@@ -408,7 +414,7 @@
 
 <!-- 更改交易密码 -->
   <Col span="20">
-  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'modify-trade-pass'">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-if="assetState === 'modify-trade-pass'">
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
@@ -416,7 +422,7 @@
           <span class="my-assets-title">{{ $t("Change_transaction_password") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
-        <Col span="24" class="rollout-card-margin" align="center">
+        <!-- <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("Old_trade_password") }}：</span>
@@ -425,7 +431,7 @@
             <Input v-model="oldTradePass" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
-        </Col>
+        </Col> -->
         <Col span="24" class="rollout-card-margin" align="center">
         <Row>
           <Col span="6"  align="right">
@@ -458,7 +464,7 @@
         </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="resetTradePass">{{ $t("Confirm_the_change") }}</Button>
+          <Button type="success" style="width: 400px;" @click="resetTradePass">{{ $t("Confirm_the_change")}}</Button>
         </Col>
       </Row>
     </p>
@@ -487,6 +493,14 @@
   font-weight: bold;
   font-size: 14px;
   letter-spacing: 0.1em;
+}
+.email-bind-word {
+  margin-left: 15px;
+  font-size: 28px;
+  margin-top: -30px;
+  line-height: 40px;
+  display: inline-block;
+  vertical-align: middle;
 }
 .my-assets-title {
   font-size:18px;
@@ -560,7 +574,7 @@ export default {
       oldLoginPass: '', // 旧登陆密码
       newLoginPass: '', // 新登陆密码
       newLoginPassRepeat: '', // 新登陆密码重复
-      oldTradePass: '', // 旧交易密码
+      // oldTradePass: '', // 旧交易密码
       newTradePass: '', // 新交易密码
       newTradePassRepeat: '', // 新交易密码重复
       modifyTradePassCode: '', // 修改交易密码时验证码
@@ -581,7 +595,6 @@ export default {
       //   'value': 1.3
       // }
       ],
-      productsTypeArr: [], // 商品兑换列表可选项数组
       productExchangeType: '', // 商品兑换选中项
       exchangeName: '', // 商品兑换联系人
       exchangePhone: '', // 商品兑换联系人电话
@@ -721,7 +734,7 @@ export default {
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
     },
     async resetTradePass () {
-      if (this.oldTradePass === '' || this.newTradePass === '') {
+      if (this.newTradePass === '') {
         alertErrInfo(this, LoginCodes.Password_Not_Null)
         return
       }
@@ -729,7 +742,7 @@ export default {
         alertErrInfo(this, LoginCodes.Password_Not_Repeat)
         return
       }
-      const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.newTradePass)
+      const loginPassChange = await serverRequest.userChangeTradePass(this.userAddr, this.newTradePass, this.modifyTradePassCode)
       if (!loginPassChange) {
         alertErrInfo(this, CommonCodes.Service_Wrong)
         return
@@ -840,6 +853,15 @@ export default {
     ...mapState({
       userAddr: state => state.login.userAddr
     }),
+    productsTypeArr () { // 商品兑换列表可选项数组
+      if (this.myProducts.length > 0) {
+        return this.myProducts.filter(pro => {
+          return pro.value > 2
+        })
+      } else {
+        return []
+      }
+    },
     myAssets () {
       if (!this.myTotalAssets) {
         return [

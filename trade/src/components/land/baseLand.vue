@@ -6,11 +6,11 @@
 		<div id="container" :class="{ 'landScaleLarger': scale==='larger', 'landScaleSmall': scale==='small'}" @click="changeScale" @blur="mapBlur" tabindex="0"></div>
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasArr" :key="index" :span="24 / pandasArr.length" align="center" :class="'panda' + index ">
-				<Tooltip content="主人, 让我再休息会~" placement="top">
-					<img v-show="panda.state === 'egg'" :src="woodEgg" tabindex="0" :class="'pandaImg' + index " @click="showPandaPanel(index)" :pandaIndex="index" @blur="pandaBlur" 
+				<!-- <Tooltip content="主人, 让我再休息会~" placement="top"> -->
+					<img v-show="panda.state === 'egg'" :src="woodEgg" :class="'pandaImg' + index " @click="showPandaPanel(index)" :pandaIndex="index"  
 					:gen="panda.pandaGen" >
-					<canvas v-show="panda.state === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" @click="showPandaPanel(index)"></canvas>
-				</Tooltip>
+					<canvas v-show="panda.state === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" tabindex="0" @click="showPandaPanel(index)" @blur="pandaBlur"></canvas>
+				<!-- </Tooltip> -->
 				<img :src="optionsIcon.feedIcon" class="panda-options">
 				<img :src="optionsIcon.beginOutIcon" class="panda-options" @click="startOut">
 				<img :src="optionsIcon.sellIcon" class="panda-options" @click="soldPanda">
@@ -73,29 +73,33 @@
         		</Col>
         		<Col span="13">
         			<Row>
-        				<Col>
+        				<Col v-show="backAssets['carry'].length > 0">
         					{{ $t("carry_back_treasure") }}:
         				</Col>
         			</Row>
         			<Row>
         				<Col v-for="(backAsset, index) in backAssets['carry']" :key="index" span="5">
-        					<img :src="backAssetsType[backAsset.split('/')[1]]" style="vertical-align:middle;">
+        					<img :src="backAsset.imgSrc" style="vertical-align:middle;" class="backAssetImg">
         					<!-- <img :src="waterImg" style="vertical-align:middle;"> -->
         					<br>
-        					0.115
+        					<p style="text-align: center">
+        						<Icon type="plus-round"></Icon> {{ backAsset.value}}
+        					</p>
         				</Col>
         			</Row>
         			<br>
         			<Row>
-        				<Col>
+        				<Col v-show="backAssets['drop'].length > 0">
         					{{ $t("drop_treasure") }}:
         				</Col>
         			</Row>
         			<Row>
         				<Col v-for="(dropAsset, index) in backAssets['drop']" :key="index" span="5">
-        					<img src="../../images/land/water.png" style="vertical-align:middle;">
+        					<img :src="dropAsset.imgSrc" style="vertical-align:middle;" class="backAssetImg">
         					<br>
-        					0.1115
+        					<p style="text-align: center">
+        						<Icon type="plus-round"></Icon> {{ dropAsset.value}}
+        					</p>
         				</Col>
         			</Row>
         			<br>
@@ -236,8 +240,8 @@ img {
 }
 .panda-options {
 	position: absolute;
-	margin-left: -71.5px;
-	margin-top: 43.5px;
+	margin-left: -100px;
+	margin-top: 100px;
 	opacity: 0;
 	z-index: -1;
 }
@@ -248,6 +252,10 @@ img {
 .btn-offset {
 	margin-left: 8px;
 	margin-bottom: 10px;
+}
+.backAssetImg {
+	width: 80%;
+	margin-left: 10%;
 }
 </style>
 <script>
@@ -300,7 +308,7 @@ export default {
 			echartHandle: null, // echarts对接
 			scale: 'small', // 大小地图标识参数
 			pandasArr: [],  // 展示的panda数组
-			pandaIndex: -1, // 当前操作的panda index
+			pandaIndex: 0, // 当前操作的panda index
 			testPandaImg: testPandaImg, // 测试图片
 			waterImg: waterImg, // 测试图片
 			eggImg: eggImg, // 测试图片
@@ -364,54 +372,46 @@ export default {
 			alertErrInfo(this, CommonCodes.Service_Wrong)
 			return
 		}
-		// 查询当前地址下所有熊猫
-		const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
-		if (!allPanda) {
+		// 查询熊猫是否外出且带回物品
+		let assets = await serverRequest.getPandaBackAssets()
+		if (!assets) {
 			alertErrInfo(this, CommonCodes.Service_Wrong)
 			return
 		}
-		let succCb = async (data) => {
-			for (let panda of data) {
-				this.pandaIndex = 0
-				if (panda.state === 'out') { // 判断当前在家熊猫数量
-					const t = await serverRequest.serverTime()
-					if (t.data.res.data > panda.price) {
-						this.outBackPandas.push(panda)
-						this.pandasArr.push(panda)
-					} else {}
-				} else {
-					this.pandasArr.push(panda)
-				}
+		let backAssetsSuccCb = async (data) => {
+			if (data.backPandas.length > 0) {
+				console.log('data', data)
+				this.outBackPandas = data.backPandas.slice(0)
+				this.backAssets['carry'] = data.resProducts.slice(0)
+				this.backAssets['drop'] = data.dropProducts.slice(0)
 				this.$nextTick(() => { // 熊猫图形渲染
-					this.updateHomeCharactor(this.pandasArr)
 					this.updateBackHomeCharactor(this.outBackPandas)
+					this.backModel = true
 				})
 			}
-			console.log('outBackPandas', this.outBackPandas)
-			// 查询熊猫是否外出且带回物品
-			if (this.outBackPandas.length > 0) {
-				for (let backPanda of this.outBackPandas) {
-					let assets = await serverRequest.getPandaBackAssets(backPanda.pandaGen)
-					console.log('assets', assets)
-					if (assets.data && assets.data.res && assets.data.res.data) {
-						let pandaAssets = assets.data.res.data[0].backAssets.split('|')
-						for (let asset of pandaAssets) {
-							this.backAssets['carry'].push(asset)
-						}
-						let pandaDropAsets = assets.data.res.data[0].dropAssets.split('|')
-						for (let dropasset of pandaDropAsets) {
-							this.backAssets['drop'].push(dropasset)
-						}
-					}
-				}
-				console.log(this.backAssets)
-				this.backModel = true
+		}
+		let backAssetsErrCb = async () => {
+		}
+		serverRequest.handleRequestRes(assets.data, backAssetsSuccCb, backAssetsErrCb)
+		// 查询当前地址下所有熊猫
+		this.$nextTick(async () => {
+			const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
+			if (!allPanda) {
+				alertErrInfo(this, CommonCodes.Service_Wrong)
+				return
 			}
-		}
-		let errCb = (msg) => {
-			alertErrInfo(this, msg)
-		}
-		serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
+			let succCb = async (data) => {
+				this.pandasArr = data.slice(0)
+				this.$nextTick(() => { // 熊猫图形渲染
+					this.updateHomeCharactor(this.pandasArr)
+				})
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, msg)
+			}
+			serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
+		})
+		// 地图初始化
 		this.echartHandle = new EchartHandle('container')
 		this.geneStarPoint()
 		setInterval(() => {
@@ -521,19 +521,19 @@ export default {
 			let pandaOpt = 4
 			let optOps = [
 			{
-				x: -100,
+				x: -120,
 				y: -25
 			},
 			{
-				x: -75,
-				y: -75
+				x: -90,
+				y: -120
 			},
 			{
-				x: 75,
-				y: -75
+				x: 90,
+				y: -120
 			},
 			{
-				x: 100,
+				x: 120,
 				y: -25
 			}
 			]
@@ -554,14 +554,19 @@ export default {
 		pandaBlur (e) {
 			let pandaClass = 'panda' + this.pandaIndex
 			let pandaDiv = document.getElementsByClassName(pandaClass)[0]
-			// setTimeout(() => {
-			// 	let eleAttr = pandaDiv.getElementsByClassName('panda-options')
-			// 	for (let item in eleAttr) {
-			// 		// eleAttr[item].setAttribute('class', 'panda-options')
-			// 		eleAttr[item].style.opacity = '0'
-			// 		eleAttr[item].style.transform = ''
-			// 	}
-			// }, 500)
+			setTimeout(() => {
+				let eleAttr = pandaDiv.getElementsByClassName('panda-options')
+				for (let item of eleAttr) {
+					anime({
+					targets: item,
+					translateX: 0,
+					translateY: 0,
+					duration: 2000,
+					opacity: 0,
+					easing: 'easeOutSine'
+				})
+				}
+			}, 500)
 				
 		},
 

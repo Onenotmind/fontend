@@ -19,6 +19,16 @@
                 {{ $t("special pandas") }}
             </MenuItem>
         </MenuGroup>
+       <!--  <MenuGroup title="我的买卖">
+          <MenuItem name="my-sell">
+              <Icon type="heart"></Icon>
+              我的出售
+          </MenuItem>
+          <MenuItem name="my-buy">
+              <Icon type="heart"></Icon>
+              我的购买
+          </MenuItem>
+        </MenuGroup> -->
         <!-- <MenuGroup title="商品市场">
             <MenuItem name="all-product">
                 <Icon type="heart"></Icon>

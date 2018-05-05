@@ -28,7 +28,7 @@
 		<div class="reset-pass" v-show="enterPageState === 'reset-pass'">
 			<Input v-model="resetEthCode" class="code-input" placeholder="验证码">
 			</Input>
-			<Button type="info" style="width: 176px" @click="getCode">获取验证码</Button>
+			<Button type="info" style="width: 176px" @click="getCodeWhenChangePwd">获取验证码</Button>
 			<br>
 			<br>
 			<Input v-model="resetEthPwd" class="pwd-btn" placeholder="请输入您的新EthLand密码">
@@ -52,7 +52,7 @@
 			<br v-show="enterPageState === 'emailReg'">
 			<Input v-model="ethCode" class="code-input" placeholder="验证码" v-show="enterPageState === 'emailReg'">
 			</Input>
-			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode">获取验证码</Button>
+			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode(ethEmail)">获取验证码</Button>
 			<br v-show="enterPageState === 'emailReg'">
 			<br v-show="enterPageState === 'emailReg'">
 			<Button type="success" style="width: 400px" @click="landRegister">进入Ethland</Button>
@@ -240,8 +240,8 @@ export default {
 			}
 			serverRequest.handleRequestRes(login.data, succCb, errCb)
 		},
-		async getCode () {
-			const sendEmail = await serverRequest.userGeneCode(this.ethEmail)
+		async getCode (email) {
+			const sendEmail = await serverRequest.userGeneCode(email)
 			if (!sendEmail) {
 				alertErrInfo(this, CommonCodes.Service_Wrong)
 				return
@@ -258,9 +258,51 @@ export default {
 			this.enterPageState = state
 		},
 		// 重置密码
-		resetPass () {
+		async resetPass () {
+			if (!this.resetEthCode) {
+				alertErrInfo(this, LoginCodes.Code_Not_Null)
+				return 
+			}
+			if (!this.resetEthPwd) {
+				alertErrInfo(this, LoginCodes.Password_Not_Null)
+				return
+			}
+			const setpass = await serverRequest.changePwdWhenForget(this.loginAddr, this.resetEthPwd, this.resetEthCode)
+			if (!setpass) {
+				alertErrInfo(this, CommonCodes.Service_Wrong)
+				return
+			}
+			let succCb = (data) => {
+				alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+				this.enterPageState = 'addrLog'
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, msg)
+			}
+			serverRequest.handleRequestRes(setpass.data, succCb, errCb)
+		},
+
+		// 忘记密码时获取验证码
+		async getCodeWhenChangePwd () {
+			const email = await serverRequest.queryUserEmail(this.loginAddr)
+			if (!email) {
+				alertErrInfo(this, CommonCodes.Service_Wrong)
+				return
+			}
+			let succCb = async (data) => {
+				if (data.length > 0) {
+					await this.getCode(data[0].uemail)
+				} else {
+					alertErrInfo(this, LoginCodes.Can_Not_Change_Pwd_Because_Not_Email)
+				}
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, msg)
+			}
+			serverRequest.handleRequestRes(email.data, succCb, errCb)
 
 		},
+
 		// 切换到注册模块
 		toRigister () {
 			this.enterPageState = 'addrSet'

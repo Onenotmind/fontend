@@ -39,7 +39,7 @@
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="20" class="card-margin" offset="2">
-        	<Carousel autoplay v-model="adIndex" loop>
+        	<Carousel autoplay v-model="adIndex">
 		        <CarouselItem v-for="(product, index) in curProducts" :key="index">
 		            <div class="ad-image">
 		            	<!-- <a :href="product.link"> -->
@@ -76,7 +76,7 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in curProducts" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img :src="product.imgSrc">
+	    					<img :src="product.imgSrc" class="productImg">
 	    				</p>
 	    				<p>{{product.name}}</p>
 	    				<br>
@@ -146,7 +146,7 @@
 	color: #fff;
 }
 .ad-img {
-	width: 100%;
+	width: 50%;
 	height: 100%;
 }
 .discover-card-title {
@@ -154,6 +154,10 @@
   color:green;
   margin-left:8px;
   line-height: 20px;
+}
+.productImg {
+  width: 120px;
+  height: 120px;
 }
 </style>
 <script>
