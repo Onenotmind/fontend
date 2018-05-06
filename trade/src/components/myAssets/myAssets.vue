@@ -196,7 +196,7 @@
             </Col>
             <Col span="18">
               <Input v-model="rollOutCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode">{{ $t("Get_verification_code") }}</Button>
+              <Button type="info" style="width: 150px;" @click="getCode(userInfo.uemail || '')">{{ $t("Get_verification_code") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -248,7 +248,7 @@
           <Icon type="navigate" size="25" class="vertical"></Icon>
           <span class="my-assets-title">商品兑换</span>
           <Select v-model="productExchangeType" style="width:420px;margin-left: 40px;">
-            <Option v-for="item in productsTypeArr" :value="item.name" :key="item.productId">{{ item.name }}</Option>
+            <Option v-for="item in productsTypeArr" :value="item.productId" :key="item.productId">{{ item.name }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -304,7 +304,7 @@
             </Col>
             <Col span="18">
               <Input v-model="exchangeCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode">获取验证码</Button>
+              <Button type="info" style="width: 150px;" @click="getCode(userInfo.uemail || '')">获取验证码</Button>
             </Col>
           </Row>
         </Col>
@@ -705,8 +705,23 @@ export default {
       serverRequest.handleRequestRes(products.data, succCb, errCb)
     },
 
-    getCode () {
-
+    async getCode (email) {
+      if (email === '') {
+        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+        return
+      }
+      const sendEmail = await serverRequest.userGeneCode(email)
+      if (!sendEmail) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
     },
     AssetsRollOut () {
 
@@ -720,6 +735,11 @@ export default {
         alertErrInfo(this, LoginCodes.Password_Not_Repeat)
         return
       }
+      const cleanInput = () => {
+        this.oldLoginPass = ''
+        this.newLoginPass = ''
+        this.newLoginPassRepeat = ''
+      }
       const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.oldLoginPass, this.newLoginPass)
       if (!loginPassChange) {
         alertErrInfo(this, CommonCodes.Service_Wrong)
@@ -732,6 +752,7 @@ export default {
         alertErrInfo(this, msg)
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
+      cleanInput()
     },
     async resetTradePass () {
       if (this.newTradePass === '') {
@@ -742,18 +763,25 @@ export default {
         alertErrInfo(this, LoginCodes.Password_Not_Repeat)
         return
       }
+      const cleanInput = () => {
+        this.newTradePass = ''
+        this.modifyTradePassCode = ''
+        this.newTradePassRepeat = ''
+      }
       const loginPassChange = await serverRequest.userChangeTradePass(this.userAddr, this.newTradePass, this.modifyTradePassCode)
       if (!loginPassChange) {
         alertErrInfo(this, CommonCodes.Service_Wrong)
         return
       }
       let succCb = (data) => {
+        this.getUserInfo()
         alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
       }
       let errCb = (msg) => {
         alertErrInfo(this, msg)
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
+      cleanInput()
     },
     async getTradeCode () {
       if (!this.userInfo || this.userInfo.uemail === '') {
@@ -778,18 +806,7 @@ export default {
         alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
         return
       } 
-      const sendEmail = await serverRequest.userGeneCode(this.emailBind)
-      if (!sendEmail) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
-        return
-      }
-      let succCb = (data) => {
-        alertSuccInfo(this, LoginCodes.Send_Email_Succ)
-      }
-      let errCb = (msg) => {
-        alertErrInfo(this, msg)
-      }
-      serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
+      await this.getCode(this.emailBind)
     },
     async bindEmail () {
       const checkEmail = await serverRequest.bindEmail(this.emailBind, this.emailBindCode)
@@ -797,7 +814,8 @@ export default {
         alertErrInfo(this, CommonCodes.Service_Wrong)
         return
       }
-      let succCb = (data) => {
+      let succCb = async (data) => {
+        await this.getUserInfo()
         alertSuccInfo(this, LoginCodes.Set_Email_Succ)
       }
       let errCb = (msg) => {
@@ -810,6 +828,7 @@ export default {
     },
     // 确认商品兑换订单
     async confirmExchange () {
+      console.log('...', this.productExchangeType)
       if (!this.exchangeName || !this.exchangePhone || !this.exchangeAddr) {
         alertErrInfo(this, LandProductCodes.Exchange_Product_Info_Not_Null)
         return
@@ -818,18 +837,26 @@ export default {
         alertErrInfo(this, LandProductCodes.Exchange_Product_Info_Not_Null)
         return
       }
-      const exchange = await serverRequest.exchangeProduct(this.userAddr, 'TYPE',this.exchangeName, this.exchangePhone, exchangeAddr, exchangePass, exchangeCode)
+      const cleanInput = () => {
+        this.exchangeName = ''
+        this.exchangePhone = ''
+        this.exchangeAddr = ''
+        this.exchangePass = ''
+        this.exchangeCode = ''
+      }
+      const exchange = await serverRequest.exchangeProduct(this.userAddr, this.productExchangeType,this.exchangeName, this.exchangePhone, this.exchangeAddr, this.exchangePass, this.exchangeCode)
       if (!exchange) {
         alertErrInfo(this, CommonCodes.Service_Wrong)
         return
       }
       let succCb = (data) => {
-        // alertSuccInfo(this, LoginCodes.Set_Email_Succ)
+        alertSuccInfo(this, LandProductCodes.Exchange_Product_Succ)
       }
       let errCb = (msg) => {
         alertErrInfo(this, msg)
       }
       serverRequest.handleRequestRes(exchange.data, succCb, errCb)
+      cleanInput()
     },
     // 资产提现点击
     assetsRollOut (type) {

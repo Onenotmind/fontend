@@ -107,7 +107,7 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in nextProducts" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img class="nextProImg" :src="product.imgSrc">
+	    					<img :src="product.imgSrc" class="productImg">
 	    				</p>
 	    				<br>
 	    				<span style="float: left">总票数：{{product.time}}</span>
@@ -168,8 +168,8 @@ export default {
 	data () {
 		return {
 			currentCard: 'ads-list', // 当前卡片内容
-			curProducts: [1,2,3,1,1,1], // 当前商品列表
-			nextProducts: [1,1,1,1,], // 下期商品列表
+			curProducts: [], // 当前商品列表
+			nextProducts: [], // 下期商品列表
 			currentAds: [], // 轮播的图片与链接
 			voteBaseCount: 100, //投票数量
 			voteNum: 0, // 商品投票的票数

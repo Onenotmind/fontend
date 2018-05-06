@@ -43,7 +43,8 @@ const ssapiPath = {
   getCurrentProduct: 'getCurrentProduct',
   getCurrentVotedProduct: 'getCurrentVotedProduct',
   voteProduct: 'voteProduct',
-  updateUserBamboo: 'updateUserBamboo'
+  updateUserBamboo: 'updateUserBamboo',
+  unSoldPanda: 'unSoldPanda'
 }
 
 function intercept () {
@@ -128,7 +129,7 @@ function changePwdWhenForget (addr, pwd, code) {
 
 // 重置交易密码
 function userChangeTradePass (addr, newPwd, code) {
-  return ssapiAxios.post(ssapiPath.userChangeLoginPass, qs.stringify({ addr, newPwd, code }))
+  return ssapiAxios.post(ssapiPath.userChangeTradePass, qs.stringify({ addr, newPwd, code }))
 }
 // 查询未确定资产
 function queryAllAssets () {
@@ -217,12 +218,17 @@ function queryAllPandaSold () {
 
 // 购买熊猫
 function buyPanda (addr, pandaGen, price) {
-  return ssapiAxios.post(ssapiPath.buyPanda, qs.stringify({ addr, pandaGen, price }))
+  return ssapiAxios.get(ssapiPath.buyPanda, { params: { addr, pandaGen, price }})
 }
 
 // 出售熊猫
 function sellPanda (pandaGen, price) {
   return ssapiAxios.get(ssapiPath.sellPanda, { params: { pandaGen, price }})
+}
+
+// 取消出售熊猫
+function unSoldPanda (pandaGen, addr) {
+  return ssapiAxios.get(ssapiPath.unSoldPanda, { params: { pandaGen, addr }})
 }
 
 // 丢弃熊猫
@@ -246,8 +252,8 @@ function queryLandProductByAddr (addr) {
 }
 
 // 兑换商品
-function exchangeProduct (addr, productId, username, userPhone, userRealAddr, pwd, code) {
-  return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, username, userPhone, userRealAddr, pwd, code }})
+function exchangeProduct (addr, productId, userName, userPhone, userRealAddr, pwd, code) {
+  return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, userName, userPhone, userRealAddr, pwd, code }})
 }
 
 // 获取正在活动中的商品
@@ -297,6 +303,7 @@ export default {
   queryAllPandaSold,
   buyPanda,
   sellPanda,
+  unSoldPanda,
   delPandaByGen,
   getUserInfoAndAssetsByAddr,
   setHeader,

@@ -19,16 +19,12 @@
                 {{ $t("special pandas") }}
             </MenuItem>
         </MenuGroup>
-       <!--  <MenuGroup title="我的买卖">
+        <MenuGroup title="我的市场">
           <MenuItem name="my-sell">
               <Icon type="heart"></Icon>
               我的出售
           </MenuItem>
-          <MenuItem name="my-buy">
-              <Icon type="heart"></Icon>
-              我的购买
-          </MenuItem>
-        </MenuGroup> -->
+        </MenuGroup>
         <!-- <MenuGroup title="商品市场">
             <MenuItem name="all-product">
                 <Icon type="heart"></Icon>
@@ -45,7 +41,9 @@
         </MenuGroup> -->
     </Menu>
   </Col>
-  <Col span="20">
+
+  <!-- 熊猫市场主UI -->
+  <Col span="20" v-show="filterIntegral !== 'mySell'">
   	<Row class="nomal-padding">
   		<!-- <Col span="4">
   			<span class="total-panda">{{ $t("A total of 3560 pandas") }}</span>
@@ -124,6 +122,35 @@
   </Modal>
     <Page :total="100" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange" show-sizer></Page>
   </Col>
+
+  <!-- 我的市场 -->
+  <Col span="20" v-show="filterIntegral === 'mySell'">
+  <Row type="flex">
+      <Col span="5" offset="1" v-for="(panda, index) in mySoldPanda" class="nomal-padding" style="width:200px" :key="index">
+        <Card style="width: 100%;cursor:pointer;" :shadow="true">
+          <p>
+            <a href="#" :pandaIndex="index">
+              <Icon type="social-yen"></Icon>
+              {{panda.price}}
+            </a>
+          </p>
+          <a href="#" slot="extra">
+            G{{ 10 - parseInt(panda.integral / 100)}}
+          </a>
+          <div class="text-center nomal-padding">
+            <canvas :id=" 'soldcvs' + index" width="200" height="200" class="nomal-padding"></canvas>
+            <Row type="flex" justify="space-between">
+              <Col v-for="(attr, index) in showAttr(panda)">
+              <img :src="attrIconObj[attr]" class="img-vertical" >
+            </Col>
+            </Row>
+            <br>
+            <Button type="success" style="width: 100%;" @click="cancelSoldPanda(panda.pandaGen)">取消出售</Button>
+          </div>
+        </Card>
+      </Col>
+    </Row>
+  </Col>
     </Row>
 	</div>
 </template>
@@ -145,6 +172,7 @@
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 import waterImg from '../../images/land/water.png'
 import earthIcon from '../../images/earth-icon.png'
 import fireIcon from '../../images/fire-icon.png'
@@ -212,23 +240,12 @@ export default {
         'hungry': hungryIcon
       },
       canvasArr: [], // 画布数组
-      cvsBuyModal: null // 购买面板的画布
+      cvsBuyModal: null, // 购买面板的画布
+      mySoldCanvasArr: [], // 我的售卖中的熊猫画布数组
 		}
 	},
   mounted () {
-    serverRequest.queryAllPandaSold()
-    .then(v => {
-      console.log('v',v)
-      let succCb = (data) => {
-        this.pandas = data
-        this.$nextTick(() => {
-          this.updateMarketCharactor(this.showPanda)
-        })
-      }
-      let errCb = () => {}
-      serverRequest.handleRequestRes(v.data, succCb, errCb)
-    })
-    .catch(e => {})
+    this.queryAllPandaSold()
   },
 	methods: {
     async updateMarketCharactor (showPanda) {
@@ -248,6 +265,61 @@ export default {
         await cvs.drawCharactor(CanvasImgTypesArr)
       }
       // const canvasDraw3 = await baseCanvas3.drawCharactor()
+    },
+
+    // 查询所有出售中的熊猫
+    async queryAllPandaSold () {
+      const pandas = await serverRequest.queryAllPandaSold()
+      if (!pandas) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        this.pandas = data
+        this.$nextTick(() => {
+          this.updateMarketCharactor(this.showPanda)
+        })
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(pandas.data, succCb, errCb)
+    },
+
+    // 更新我出售中的熊猫形象
+    async updateMySoldCharactor (showPanda) {
+      if (this.mySoldCanvasArr.length > 0) {
+        for (let cvs of this.mySoldCanvasArr) {
+          await cvs.clearCanvas()
+        }
+      }
+      this.mySoldCanvasArr = []
+      if (showPanda.length === 0) return
+      for (const [index, panda] of showPanda.entries()) {
+        // console.log(index, panda)
+        let cvs = new BaseCanvas('soldcvs' + index)
+        this.mySoldCanvasArr.push(cvs)
+      }
+      for (let cvs of this.mySoldCanvasArr) {
+        await cvs.drawCharactor(CanvasImgTypesArr)
+      }
+    },
+
+    // 取消出售熊猫
+    async cancelSoldPanda (gen) {
+      const unSoldPanda = await serverRequest.unSoldPanda(gen, this.userAddr)
+      if (!unSoldPanda) {
+        alertErrInfo(this, CommonCodes.Service_Wrong)
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, LandProductCodes.Unsold_Panda_Succ)
+        this.queryAllPandaSold()
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, msg)
+      }
+      serverRequest.handleRequestRes(unSoldPanda.data, succCb, errCb)
     },
 
     // 通过基因绘画熊猫形象
@@ -281,11 +353,23 @@ export default {
     selectMenu (name) {
       console.log(name)
       switch(name) {
+        case 'all-panda':
+          this.filterIntegral = 'allPanda'
+          break
         case 'low-level-panda': 
           this.filterIntegral = 'lowFilter'
           break
         case 'high-level-panda':
           this.filterIntegral = 'highFilter'
+          break
+        case 'special-panda':
+          this.filterIntegral = 'specialPanda'
+          break
+        case 'my-sell':
+          this.filterIntegral = 'mySell'
+          this.$nextTick(() => {
+            this.updateMySoldCharactor(this.mySoldPanda)
+          })
           break
         default:
           break
@@ -351,6 +435,9 @@ export default {
      } else {
       return finalArr
      }
+    },
+    mySoldPanda () {
+      return this.showPanda.filter(panda => panda.ownerAddr === this.userAddr)
     }
   },
   watch: {

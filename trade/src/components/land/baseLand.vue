@@ -396,6 +396,7 @@ export default {
 		// 查询当前地址下所有熊猫
 		this.$nextTick(async () => {
 			const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
+			console.log('allPanda', allPanda)
 			if (!allPanda) {
 				alertErrInfo(this, CommonCodes.Service_Wrong)
 				return
@@ -663,11 +664,11 @@ export default {
 			if (parseInt(this.sellPandaPrice) <= 0) return
 			console.log('onSureSold')
 			const sellPanda = await serverRequest.sellPanda(this.pandaGen, parseInt(this.sellPandaPrice))
-			console.log('sellPanda', sellPanda)
 			if (!sellPanda) {
 				alertErrInfo(CommonCodes.Net_Wrong)
 			}
 			let succCb = (data) => {
+				this.pandasArr.splice(this.pandaIndex, 1)
 				this.sellPanda = false
 			}
 			let errCb = () => { this.sellPanda = false }

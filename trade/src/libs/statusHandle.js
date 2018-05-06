@@ -23,7 +23,9 @@ let LandProductCodes = {
   'Get_Star_Point_Fail': '商品中心生成失败',
   'Exchange_Product_Info_Not_Null': '商品兑换信息不能为空',
   'Current_Product_Null': '当前活动商品为空！',
-  'Vote_Product_Succ': '给商品投票成功'
+  'Vote_Product_Succ': '给商品投票成功',
+  'Exchange_Product_Succ': '商品兑换成功！',
+  'Unsold_Panda_Succ': '取消出售熊猫成功！'
 }
 
 function alertSuccInfo (self, msg) {
