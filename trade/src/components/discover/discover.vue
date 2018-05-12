@@ -43,7 +43,7 @@
 		        <CarouselItem v-for="(product, index) in curProducts" :key="index">
 		            <div class="ad-image">
 		            	<!-- <a :href="product.link"> -->
-		            		<img :src="product.imgSrc" class="ad-img">
+		            		<img :src="product[LandModel.src]" class="ad-img">
 		            	<!-- </a> -->
 		          	</div>
 		        </CarouselItem>
@@ -76,12 +76,12 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in curProducts" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img :src="product.imgSrc" class="productImg">
+	    					<img :src="product[LandModel.src]" class="productImg">
 	    				</p>
-	    				<p>{{product.name}}</p>
+	    				<p>{{product[LandModel.name]}}</p>
 	    				<br>
-	    				<span style="float: left">{{product.recommender}}</span>
-	    				<span style="float: right">市价：{{product.value}}</span>
+	    				<span style="float: left">{{product[LandModel.recommender]}}</span>
+	    				<span style="float: right">市价：{{product[LandModel.value]}}</span>
 	    				<br>
 			    	</Col>
 		    </Row>
@@ -107,15 +107,15 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in nextProducts" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img :src="product.imgSrc" class="productImg">
+	    					<img :src="product[LandModel.src]" class="productImg">
 	    				</p>
 	    				<br>
-	    				<span style="float: left">总票数：{{product.time}}</span>
-	    				<span style="float: right">市价：{{product.value}}</span>
+	    				<span style="float: left">总票数：{{product[LandModel.time]}}</span>
+	    				<span style="float: right">市价：{{product[LandModel.value]}}</span>
 	    				<br>
-	    				<span style="float: left"> {{product.recommender}}</span>
+	    				<span style="float: left"> {{product[LandModel.recommender]}}</span>
 	    				<br>
-	    				<Button type="success" style="width: 200px;" @click="votePro(product.productId)">投票</Button>
+	    				<Button type="success" style="width: 200px;" @click="votePro(product[LandModel.productId])">投票</Button>
 			    	</Col>
 		    </Row>
       	</Col>
@@ -162,6 +162,7 @@
 </style>
 <script>
 import serverRequest from '../../libs/serverRequest.js'
+import { LandModel, PandaModel, AssetsModel } from '../../libs/ClientModel.js'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 const testImg = 'https://best.bi/assets/xx/avatars/avatar.png'
 export default {
@@ -173,7 +174,9 @@ export default {
 			currentAds: [], // 轮播的图片与链接
 			voteBaseCount: 100, //投票数量
 			voteNum: 0, // 商品投票的票数
-			adIndex: 0 // 广告轮播index
+			adIndex: 0, // 广告轮播index
+      // 服务端对接字段
+      LandModel: LandModel
 		}
 	},
 	mounted () {

@@ -7,9 +7,9 @@
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasArr" :key="index" :span="24 / pandasArr.length" align="center" :class="'panda' + index ">
 				<!-- <Tooltip content="主人, 让我再休息会~" placement="top"> -->
-					<img v-show="panda.state === 'egg'" :src="woodEgg" :class="'pandaImg' + index " @click="showPandaPanel(index)" :pandaIndex="index"  
-					:gen="panda.pandaGen" >
-					<canvas v-show="panda.state === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" tabindex="0" @click="showPandaPanel(index)" @blur="pandaBlur"></canvas>
+					<img v-show="panda[PandaModel.state] === 'egg'" :src="woodEgg" :class="'pandaImg' + index " @click="showPandaPanel(index)" :pandaIndex="index"  
+					:gen="panda[PandaModel.gen]" >
+					<canvas v-show="panda[PandaModel.state] === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" tabindex="0" @click="showPandaPanel(index)" @blur="pandaBlur"></canvas>
 				<!-- </Tooltip> -->
 				<img :src="optionsIcon.feedIcon" class="panda-options">
 				<img :src="optionsIcon.beginOutIcon" class="panda-options" @click="startOut">
@@ -79,11 +79,11 @@
         			</Row>
         			<Row>
         				<Col v-for="(backAsset, index) in backAssets['carry']" :key="index" span="5">
-        					<img :src="backAsset.imgSrc" style="vertical-align:middle;" class="backAssetImg">
+        					<img :src="backAsset[LandModel.src]" style="vertical-align:middle;" class="backAssetImg">
         					<!-- <img :src="waterImg" style="vertical-align:middle;"> -->
         					<br>
         					<p style="text-align: center">
-        						<Icon type="plus-round"></Icon> {{ backAsset.value}}
+        						<Icon type="plus-round"></Icon> {{ backAsset[LandModel.value]}}
         					</p>
         				</Col>
         			</Row>
@@ -95,10 +95,10 @@
         			</Row>
         			<Row>
         				<Col v-for="(dropAsset, index) in backAssets['drop']" :key="index" span="5">
-        					<img :src="dropAsset.imgSrc" style="vertical-align:middle;" class="backAssetImg">
+        					<img :src="dropAsset[LandModel.src]" style="vertical-align:middle;" class="backAssetImg">
         					<br>
         					<p style="text-align: center">
-        						<Icon type="plus-round"></Icon> {{ dropAsset.value}}
+        						<Icon type="plus-round"></Icon> {{ dropAsset[LandModel.value]}}
         					</p>
         				</Col>
         			</Row>
@@ -132,27 +132,27 @@
         <Row span="24">
           <Col span="12" align="center">
             <Icon type="social-yen"></Icon>
-              {{sellPandaInfo.price}}
+              {{sellPandaInfo[PandaModel.price]}}
           </Col>
           <Col span="12" align="center">
           <a href="#">
-              G{{ 10 - parseInt(sellPandaInfo.integral / 100)}}
+              G{{ 10 - parseInt(sellPandaInfo[PandaModel.integral] / 100)}}
           </a>
           </Col>
         </Row>
         <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{sellPandaInfo.speed}}</Col>
-          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{sellPandaInfo.hungry}}</Col>
-          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{sellPandaInfo.goldCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{sellPandaInfo.waterCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{sellPandaInfo[PandaModel.speed]}}</Col>
+          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{sellPandaInfo[PandaModel.hungry]}}</Col>
+          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{sellPandaInfo[PandaModel.goldCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{sellPandaInfo[PandaModel.waterCatch]}}</Col>
         </Row>
         <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo.woodCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo.fireCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo.earthCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo.special}} </Col>
+          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo[PandaModel.woodCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo[PandaModel.fireCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo[PandaModel.earthCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
        <Row type="flex" justify="center">
@@ -260,6 +260,7 @@ img {
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
 import CanvasImgTypesArr from '../../libs/charactor/CanvasImgTypes.js'
 import landBg from './landBg.vue'
@@ -352,7 +353,10 @@ export default {
 			canvasArr: [], // 在家时的形象画布渲染数组
 			sellCanvas: null, // 出售熊猫的画布
 			outCanvas: null, // 熊猫外出时的画布
-			backCanvasArr: [] // 外出回来时画布渲染数组
+			backCanvasArr: [], // 外出回来时画布渲染数组
+			// 服务端对接字段
+      PandaModel: PandaModel,
+      LandModel: LandModel
 		}
 	},
 	components: {
@@ -505,9 +509,9 @@ export default {
 		// 熊猫操作 点击熊猫
 		async showPandaPanel (index) {
 			this.pandaIndex = index
-			if (this.pandasArr[this.pandaIndex].state === 'egg') { // 熊猫蛋点击
+			if (this.pandasArr[this.pandaIndex][this.PandaModel.state] === 'egg') { // 熊猫蛋点击
 				this.hatchPanda('.pandaImg' + this.pandaIndex)
-				const sirePanda = await serverRequest.sirePanda(this.pandasArr[this.pandaIndex].pandaGen)
+				const sirePanda = await serverRequest.sirePanda(this.pandasArr[this.pandaIndex][this.PandaModel.gen])
 				let succCb = (data) => {
 				}
 				let errCb = (msg) => {
@@ -517,7 +521,7 @@ export default {
 				return
 			}
 			// 点击熊猫
-			this.pandaGen = this.pandasArr[this.pandaIndex].pandaGen
+			this.pandaGen = this.pandasArr[this.pandaIndex][this.PandaModel.gen]
 			let pandaClass = 'panda' + this.pandaIndex
 			let pandaOpt = 4
 			let optOps = [
@@ -583,7 +587,7 @@ export default {
 			let pandaShow = () => {
 				setTimeout(() => {
 					let index = parseInt(className.split('pandaImg')[1])
-					this.pandasArr[index].state = 'home'
+					this.pandasArr[index][this.PandaModel.state] = 'home'
 					anime({
 						targets: className,
 						scale: 1,
@@ -667,6 +671,7 @@ export default {
 			if (!sellPanda) {
 				alertErrInfo(CommonCodes.Net_Wrong)
 			}
+			console.log('sellPanda', sellPanda)
 			let succCb = (data) => {
 				this.pandasArr.splice(this.pandaIndex, 1)
 				this.sellPanda = false

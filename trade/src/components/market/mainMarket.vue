@@ -63,11 +63,11 @@
     			<p>
             <a href="#" @click="buyPanda(panda)" :pandaIndex="index">
               <Icon type="social-yen"></Icon>
-              {{panda.price}}
+              {{panda[PandaModel.price]}}
             </a>
 	        </p>
           <a href="#" slot="extra">
-            G{{ 10 - parseInt(panda.integral / 100)}}
+            G{{ 10 - parseInt(panda[PandaModel.integral] / 100)}}
           </a>
     			<div class="text-center nomal-padding">
             <canvas :id=" 'cvs' + index" width="200" height="200" class="nomal-padding" @click="buyPanda(panda)"></canvas>
@@ -92,26 +92,26 @@
           <Col span="12" align="center">
           <a href="#">
               <Icon type="social-yen"></Icon>
-              {{initPandaBuyInfo.price}}
+              {{initPandaBuyInfo[PandaModel.price]}}
           </a>
           </Col>
           <Col span="12" align="center">
-            G{{ 10 - parseInt(initPandaBuyInfo.integral / 100)}}
+            G{{ 10 - parseInt(initPandaBuyInfo[PandaModel.integral] / 100)}}
           </Col>
         </Row>
         <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{initPandaBuyInfo.speed}}</Col>
-          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{initPandaBuyInfo.hungry}}</Col>
-          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{initPandaBuyInfo.goldCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{initPandaBuyInfo.waterCatch}}</Col>
+          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.speed]}}</Col>
+          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.hungry]}}</Col>
+          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.goldCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.waterCatch]}}</Col>
         </Row>
         <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo.woodCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo.fireCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo.earthCatch}}</Col>
-          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo.special}} </Col>
+          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.woodCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo[PandaModel.fireCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.earthCatch]}}</Col>
+          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
       </p>
@@ -131,11 +131,11 @@
           <p>
             <a href="#" :pandaIndex="index">
               <Icon type="social-yen"></Icon>
-              {{panda.price}}
+              {{panda[PandaModel.price]}}
             </a>
           </p>
           <a href="#" slot="extra">
-            G{{ 10 - parseInt(panda.integral / 100)}}
+            G{{ 10 - parseInt(panda[PandaModel.integral] / 100)}}
           </a>
           <div class="text-center nomal-padding">
             <canvas :id=" 'soldcvs' + index" width="200" height="200" class="nomal-padding"></canvas>
@@ -145,7 +145,7 @@
             </Col>
             </Row>
             <br>
-            <Button type="success" style="width: 100%;" @click="cancelSoldPanda(panda.pandaGen)">取消出售</Button>
+            <Button type="success" style="width: 100%;" @click="cancelSoldPanda(panda[PandaModel.gen])">取消出售</Button>
           </div>
         </Card>
       </Col>
@@ -173,6 +173,7 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
+import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import waterImg from '../../images/land/water.png'
 import earthIcon from '../../images/earth-icon.png'
 import fireIcon from '../../images/fire-icon.png'
@@ -242,6 +243,8 @@ export default {
       canvasArr: [], // 画布数组
       cvsBuyModal: null, // 购买面板的画布
       mySoldCanvasArr: [], // 我的售卖中的熊猫画布数组
+      // 服务端对接字段
+      PandaModel: PandaModel
 		}
 	},
   mounted () {
@@ -332,15 +335,15 @@ export default {
 		},
     showAttr (panda) {
       let baseAttiArr = []
-      baseAttiArr.push({ type: 'metal', val: panda.goldCatch })
-      baseAttiArr.push({ type: 'water', val: panda.waterCatch })
-      baseAttiArr.push({ type: 'fire', val:panda.fireCatch })
-      baseAttiArr.push({ type: 'wood', val: panda.woodCatch })
-      baseAttiArr.push({ type: 'earth', val: panda.earthCatch })
+      baseAttiArr.push({ type: 'metal', val: panda[this.PandaModel.goldCatch] })
+      baseAttiArr.push({ type: 'water', val: panda[this.PandaModel.waterCatch] })
+      baseAttiArr.push({ type: 'fire', val:panda[this.PandaModel.fireCatch] })
+      baseAttiArr.push({ type: 'wood', val: panda[this.PandaModel.woodCatch] })
+      baseAttiArr.push({ type: 'earth', val: panda[this.PandaModel.earthCatch]})
       baseAttiArr.sort(function(a, b) {
         return b.val - a.val;
       })
-      if (panda.special) {
+      if (panda[this.PandaModel.special]) {
         return ['super', baseAttiArr[0].type, baseAttiArr[1].type]
       } else {
         return [baseAttiArr[0].type, baseAttiArr[1].type, baseAttiArr[2].type]
@@ -387,8 +390,8 @@ export default {
       await this.cvsBuyModal.drawCharactor(CanvasImgTypesArr)
     },
     onSureBuy () {
-      let price = this.initPandaBuyInfo.price
-      let pandaGen = this.initPandaBuyInfo.pandaGen
+      let price = this.initPandaBuyInfo[this.PandaModel.price]
+      let pandaGen = this.initPandaBuyInfo[this.PandaModel.gen]
       serverRequest.buyPanda(this.userAddr, pandaGen, price)
       .then(v => {
         let succCb = (data) => {
@@ -418,9 +421,9 @@ export default {
     showPanda () {
       let pandasFilterArr = []
       if (this.filterIntegral === 'lowFilter') {
-        pandasFilterArr = this.pandas.filter(panda => panda.integral <= 500)
+        pandasFilterArr = this.pandas.filter(panda => panda[this.PandaModel.integral] <= 500)
       } else if (this.filterIntegral === 'highFilter') {
-        pandasFilterArr = this.pandas.filter(panda => panda.integral > 500)
+        pandasFilterArr = this.pandas.filter(panda => panda[this.PandaModel.integral] > 500)
       } else {
         pandasFilterArr = this.pandas
       }
@@ -437,7 +440,7 @@ export default {
      }
     },
     mySoldPanda () {
-      return this.showPanda.filter(panda => panda.ownerAddr === this.userAddr)
+      return this.showPanda.filter(panda => panda[this.PandaModel.addr] === this.userAddr)
     }
   },
   watch: {

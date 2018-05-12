@@ -46,21 +46,21 @@
             <img src="https://best.bi/assets/xx/avatars/avatar.png" class="avatar">
           </Col>
           <Col span="10" style="border-right: 1px solid #E1E2EA">
-            <p> {{ $t("my_address") }}：{{ userInfo.uaddr || ''}}</p>
+            <p> {{ $t("my_address") }}：{{ userInfo[UserModel.addr] || ''}}</p>
             <br>
-            <p> {{ $t("my_email") }}：{{ userInfo.uemail || ''}}</p>
+            <p> {{ $t("my_email") }}：{{ userInfo[UserModel.email] || ''}}</p>
           </Col>
           <Col span="11" style="padding-left: 100px;">
             <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">{{ $t("authentication") }}：</span>
             <br>
             <br>
-            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.uemail !==''"></Icon>
-            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.uemail ===''"></Icon>
+            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo[UserModel.email] !==''"></Icon>
+            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo[UserModel.email] ===''"></Icon>
             <span style="margin-left: 20px;">{{ $t("email_authentication") }}</span>
             <br>
             <br>
-            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo.utradePwd !==''"></Icon>
-            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo.utradePwd ===''"></Icon>
+            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo[UserModel.tradePwd] !==''"></Icon>
+            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo[UserModel.tradePwd] ===''"></Icon>
             <span style="margin-left: 20px;">{{ $t("transaction_password_setting") }}</span>
           </Col>
         </Row>
@@ -129,15 +129,15 @@
         <Col span="24">
           <Row span="24" style="margin-bottom: 15px;" v-for="(asset, index) in myProducts">
             <Col span="15" align="left">
-              {{ asset.name }}
+              {{ asset[LandModel.name] }}
             </Col>
             <Col span="4" class="line">
-              <img :src="asset.imgSrc" style="height: 25px;">
+              <img :src="asset[LandModel.src]" style="height: 25px;">
             </Col>
             <Col span="1" align="center">
-              {{ asset.value }}
+              {{ asset[LandModel.value] }}
             </Col>
-            <Col span="3" align="center" v-show="asset.value > 2">
+            <Col span="3" align="center" v-show="asset[LandModel.value] > 2">
               <Button type="success" @click="exchangeProductClick">{{ $t("withdraw") }}</Button>
             </Col>
           </Row>
@@ -196,7 +196,7 @@
             </Col>
             <Col span="18">
               <Input v-model="rollOutCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode(userInfo.uemail || '')">{{ $t("Get_verification_code") }}</Button>
+              <Button type="info" style="width: 150px;" @click="getCode(userInfo[UserModel.email] || '')">{{ $t("Get_verification_code") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -248,7 +248,7 @@
           <Icon type="navigate" size="25" class="vertical"></Icon>
           <span class="my-assets-title">商品兑换</span>
           <Select v-model="productExchangeType" style="width:420px;margin-left: 40px;">
-            <Option v-for="item in productsTypeArr" :value="item.productId" :key="item.productId">{{ item.name }}</Option>
+            <Option v-for="item in productsTypeArr" :value="item[LandModel.productId]" :key="item[LandModel.productId]">{{ item[LandModel.name] }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -304,7 +304,7 @@
             </Col>
             <Col span="18">
               <Input v-model="exchangeCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode(userInfo.uemail || '')">获取验证码</Button>
+              <Button type="info" style="width: 150px;" @click="getCode(userInfo[UserModel.email] || '')">获取验证码</Button>
             </Col>
           </Row>
         </Col>
@@ -330,12 +330,12 @@
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <!-- 邮箱已经绑定 -->
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail !==''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] !==''">
           <Icon type="checkmark-circled" color="green" size="50"></Icon>
           <span class="email-bind-word">邮箱已经绑定成功！</span>
         </Col>
         <!-- 邮箱未绑定 -->
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail ===''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] ===''">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("email_address") }}：</span>
@@ -345,7 +345,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo.uemail ===''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] ===''">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("verification_code") }}：</span>
@@ -356,7 +356,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo.uemail ===''">
+        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo[UserModel.email] ===''">
           <Button type="success" style="width: 400px;" @click="bindEmail">{{ $t("submit") }}</Button>
         </Col>
       </Row>
@@ -522,6 +522,7 @@
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import lineImg from '../../images/line.png'
 import getaddrqrImg from '../../images/webbg/getaddrqr.png'
 import serverRequest from '../../libs/serverRequest.js'
@@ -627,7 +628,10 @@ export default {
           key: 'state'
         }
       ],
-      exchangeData: [] // 商品兑换列表内容
+      exchangeData: [], // 商品兑换列表内容
+      // 服务端对接字段
+      UserModel: UserModel,
+      LandModel: LandModel
     }
 	},
   mounted () {
@@ -912,18 +916,18 @@ export default {
         return [
           {
             label: 'ETH',
-            value: this.myTotalAssets.eth || 0,
-            lock: this.myTotalAssets.ethLock || 0
+            value: this.myTotalAssets[AssetsModel.eth] || 0,
+            lock: this.myTotalAssets[AssetsModel.ethLock] || 0
           },
           {
             label: 'EOS',
-            value: this.myTotalAssets.eos || 0,
-            lock: this.myTotalAssets.eosLock || 0
+            value: this.myTotalAssets[AssetsModel.eos] || 0,
+            lock: this.myTotalAssets[AssetsModel.eosLock] || 0
           },
           {
             label: 'BAMBOO',
-            value: this.myTotalAssets.bamboo || 0,
-            lock: this.myTotalAssets.bambooLock || 0
+            value: this.myTotalAssets[AssetsModel.bamboo] || 0,
+            lock: this.myTotalAssets[AssetsModel.bambooLock] || 0
           }
         ]
       }

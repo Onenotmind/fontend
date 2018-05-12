@@ -66,6 +66,7 @@ function intercept () {
 }
 
 function handleRequestRes (data, succCb, errCb) { // trade项目数据回调函数封装
+  console.log('data', data)
   if (data.status === 1) {
     if (data.res.status === 1) {
       if (succCb) {
