@@ -1,5 +1,8 @@
 <template>
 	<div id="fontPage">
+	<!-- 	<div class="enter-bg">
+			<img src="../images/land/ethIcon.png" class="ethup1">
+		</div> -->
 		<div class="eth-logo">
 			欢迎{{ loginAddr }}来到 EthLand.pro！
 		</div>
@@ -9,6 +12,7 @@
 				<Icon type="android-more-horizontal" size="14"></Icon>
 			</Button>
 		</Input>
+		<a href="http://www.qukuaiwang.com.cn/news/3171.html" style="top:calc(48% + 10px); left: calc(50% + 240px);position: absolute;" v-show="enterPageState === 'addrSet'">没有以太坊地址?</a>
 		<!-- 登陆 -->
 		<div class="login-enter" v-show="enterPageState === 'addrLog'|| enterPageState === 'pwdLog' ">
 			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的EthLand地址">
@@ -19,7 +23,7 @@
 			</Input>
 			<br>
 			<br>
-			<Button type="success" style="width: 400px;" @click="userLogin">进入Ethland</Button>
+			<Button type="primary" style="width: 400px;" @click="userLogin">进入Ethland</Button>
 			<br>
 			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">注册</span>
 			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">忘记密码</span>
@@ -55,11 +59,19 @@
 			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode(ethEmail)">获取验证码</Button>
 			<br v-show="enterPageState === 'emailReg'">
 			<br v-show="enterPageState === 'emailReg'">
-			<Button type="success" style="width: 400px" @click="landRegister">进入Ethland</Button>
+			<Button type="primary" style="width: 400px" @click="landRegister">进入Ethland</Button>
 		</div>
 	</div>
 </template>
 <style scoped>
+.enter-bg {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+}
 span {
 	display: inline-block;
 	font-size: 16px;
@@ -76,7 +88,8 @@ span {
     overflow: hidden;
     background-size: cover;
     background-repeat: no-repeat;
-    background: linear-gradient(#13194b,#4372b4);
+    /*background: linear-gradient(#13194b,#4372b4);*/
+    background: #18252E;
     background-position: 50% 50%;
 }
 .enter-btn {
@@ -128,6 +141,13 @@ span {
 	margin-left: -230px;
 	text-align: center;
 }
+.ethup1 {
+	-webkit-animation:ethup 5s ease-in infinite;
+}
+@-webkit-keyframes ethup {
+  0%   { transform: translateY(0) }
+  100% { transform: translateY(1080); }
+}
 @font-face {
   font-family: FZCuYuan-M03S;
   src: url(../images/font/FZCuYuan-M03S.ttf);
@@ -136,11 +156,15 @@ span {
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import serverRequest from '../libs/serverRequest.js'
+import anime from 'animejs'
 import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/statusHandle.js'
 import beginWave from '../libs/wave.js'
+import ethIcon1 from '../images/land/ethIcon.png'
 export default {
 	data () {
 		return {
+			animateArr: [], // 背景动画icon数组
+			ethIcon1: ethIcon1, // 背景动画图标
 			ethAddr: '',
 			ethPwd:'',
 			ethEmail: '',
@@ -165,7 +189,8 @@ export default {
 			this.enterPageState = 'addrSet'
 		}
 		this.$nextTick(() => {
-			// beginWave()
+			beginWave()
+			// this.createEnterBg()
 		})
 	},
 	methods: {
@@ -310,6 +335,35 @@ export default {
 		// 切换到重置密码
 		toResetPass () {
 			this.enterPageState = 'reset-pass'
+		},
+		// 背景动画
+		createEnterBg () {
+			let fragment = document.createDocumentFragment();
+			let maxElements = 20;
+		  for (let i = 0; i < maxElements; i++) {
+		    let el = document.createElement('img');
+		    el.style.position = 'fixed'
+		    el.src = ethIcon1
+		    let rate = i % 2 === 0 ? 1 : -1
+		    el.style.left = 960 + rate* Math.random() * 960 + 'px' 
+		    el.style.top = 540 + rate* Math.random() * 540 + 'px'
+		    el.style.width = '28px'
+		    el.style.height = '28px'
+		    el.style.zIndex = -1
+		    this.animateArr.push(el);
+		    fragment.appendChild(el);
+		  }
+		  document.body.appendChild(fragment)
+		  for(let el of this.animateArr) {
+				anime({
+		    targets: el,
+		    translateY: parseInt(el.style.top) - 1080,
+		    duration: 10000,
+		    easing: 'linear',
+  			// direction: 'alternate',
+		    loop: true
+		  })
+			}
 		}
 	}
 }

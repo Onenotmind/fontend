@@ -185,7 +185,7 @@ import speedIcon from '../../images/speed-icon.png'
 import hungryIcon from '../../images/hungry-icon.png'
 import serverRequest from '../../libs/serverRequest.js'
 import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
-import CanvasImgTypesArr from '../../libs/charactor/CanvasImgTypes.js'
+import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
 export default {
 	data () {
 		return {
@@ -264,9 +264,14 @@ export default {
         let cvs = new BaseCanvas('cvs' + index)
         this.canvasArr.push(cvs)
       }
-      for (let cvs of this.canvasArr) {
-        await cvs.drawCharactor(CanvasImgTypesArr)
+      for (const [index, cvs] of this.canvasArr.entries()) {
+        const CanvasImgTypesArr = this.getImgArrByPandaGen(showPanda[index][PandaModel.gen])
+        console.log('CanvasImgTypesArr', CanvasImgTypesArr)
+        await this.canvasArr[index].drawCharactor(CanvasImgTypesArr)
       }
+      // for (let cvs of this.canvasArr) {
+      //   await cvs.drawCharactor(CanvasImgTypesArr)
+      // }
       // const canvasDraw3 = await baseCanvas3.drawCharactor()
     },
 
@@ -303,9 +308,13 @@ export default {
         let cvs = new BaseCanvas('soldcvs' + index)
         this.mySoldCanvasArr.push(cvs)
       }
-      for (let cvs of this.mySoldCanvasArr) {
-        await cvs.drawCharactor(CanvasImgTypesArr)
+      for (const [index, cvs] of showPanda.entries()) {
+        const CanvasImgTypesArr = this.getImgArrByPandaGen(showPanda[index][PandaModel.gen])
+        await this.mySoldCanvasArr[index].drawCharactor(CanvasImgTypesArr)
       }
+      // for (let cvs of this.mySoldCanvasArr) {
+      //   await cvs.drawCharactor(CanvasImgTypesArr)
+      // }
     },
 
     // 取消出售熊猫
@@ -329,6 +338,23 @@ export default {
     drawCharactorByGeni (gen) {
 
     },
+
+    // 根据熊猫基因返回熊猫的canvasImgArr
+    getImgArrByPandaGen (gen) {
+      console.log('gen', gen)
+      return [
+        CanvasImgTypes.body[parseInt(gen.substr(0, 3))],
+        CanvasImgTypes.collar[parseInt(gen.substr(3, 3))],
+        CanvasImgTypes.ear[parseInt(gen.substr(6, 3))],
+        CanvasImgTypes.eye[parseInt(gen.substr(9, 3))],
+        CanvasImgTypes.head[parseInt(gen.substr(12, 3))],
+        CanvasImgTypes.mouth[parseInt(gen.substr(15, 3))],
+        CanvasImgTypes.tail[parseInt(gen.substr(18, 3))],
+        CanvasImgTypes.pattern[parseInt(gen.substr(21, 3))],
+        CanvasImgTypes.tattoos[parseInt(gen.substr(24, 3))]
+      ]
+    },
+
 		pageChange (val) {
 			console.log('page',val)
       this.pageIndex = val
@@ -387,6 +413,7 @@ export default {
       } else {
         this.cvsBuyModal = new BaseCanvas('cvsbuy')
       }
+      const CanvasImgTypesArr = this.getImgArrByPandaGen(panda[PandaModel.gen])
       await this.cvsBuyModal.drawCharactor(CanvasImgTypesArr)
     },
     onSureBuy () {

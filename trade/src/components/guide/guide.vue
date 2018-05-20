@@ -104,6 +104,136 @@
     </p>
   </Card>
 </Col>
+
+<!-- 熊猫家园 -->
+  <Col span="20">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="guideState === 'land_activity'">
+    <p slot="title" style="height:30px;">
+      <Icon type="ios-film-outline" size="25" class="vertical"></Icon>
+      <span class="title">{{ $t("land_activity") }}</span>
+    </p>
+    <a href="#" slot="extra">
+      <Icon type="ios-loop-strong"></Icon>
+    </a>
+    <p>
+      <Row span="24" type="flex" justify="center" align="middle">
+        <Col span="24">
+          <Row span="24" style="margin-bottom: 15px;">
+            <h3>孵化熊猫</h3>
+            <br>
+            <p>孵化熊猫只需点击熊猫家园中的熊猫蛋，即可进行孵化，如下图:</p>
+            <br>
+            <img src="../../images/guide/land/land1.png">
+            <br>
+            <h3>熊猫活动</h3>
+            <br>
+            <p>点击熊猫，将显示熊猫当前可进行的活动：</p>
+            <br>
+            <img src="../../images/guide/land/land3.png">
+            <br>
+            <h4>熊猫外出</h4>
+            <br>
+            <p>点击熊猫，在弹出的选项中点击外出选项，即可弹出外出面板：</p>
+            <br>
+            <img src="../../images/guide/land/land4.png">
+            <br>
+            <p>在外出面板中，有两个必选项，第一个是本次熊猫外出所储备的粮食--竹子。当给与的竹子越多，熊猫外出的时间越长，则外出的距离就越远，获得的商品可能性就越大。要理解这个，我们得理解两个关键点，一个是商品产生中心，第二个是自身的地理位置。我们可以点击左下角的地理图：如图</p>
+            <br>
+            <img src="../../images/guide/land/land6.png">
+            <br>
+            <p>点击之后地理图变大</p>
+            <br>
+            <img src="../../images/guide/land/land7.png">
+            <br>
+            <p>图中位置图标显示的是你当前所处的位置，五个绿色的圆圈球标识五个商品中心，当离商品中心越近，熊猫获取的概率就越大。同时，获取商品也跟熊猫对商品属性的探测，及熊猫自身的属性有关。</p>
+            <br>
+            <h4>出售熊猫</h4>
+            <br>
+            <p>点击熊猫选项中的第三个 出售选项 即可弹出出售面板，如图：</p>
+            <br>
+            <img src="../../images/guide/land/land5.png">
+            <br>
+            <p>出售面板上面显示熊猫相应的属性能力值，与参考售价，用户只要在售价中填写售价值，点击确定即可。</p>
+          </Row>
+        </Col>
+      </Row>
+    </p>
+  </Card>
+</Col>
+
+
+<!-- 熊猫市场 -->
+  <Col span="20">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="guideState === 'main_market'">
+    <p slot="title" style="height:30px;">
+      <Icon type="ios-film-outline" size="25" class="vertical"></Icon>
+      <span class="title">{{ $t("main_market") }}</span>
+    </p>
+    <a href="#" slot="extra">
+      <Icon type="ios-loop-strong"></Icon>
+    </a>
+    <p>
+      <Row span="24" type="flex" justify="center" align="middle">
+        <Col span="24">
+          <Row span="24" style="margin-bottom: 15px;">
+            <h3>购买熊猫</h3>
+            <br>
+            <p>进入熊猫市场，将展示所有待售的熊猫。如下图</p>
+            <br>
+            <img src="../../images/guide/market/market1.png">
+            <br>
+            <h4>筛选熊猫</h4>
+            <br>
+            <p>我们提供多种筛选条件帮助用户更好的找到心仪的熊猫。如对属性值的筛选，对熊猫代数的筛选。</p>
+            <br>
+            <img src="../../images/guide/market/market3.png">
+            <br>
+            <img src="../../images/guide/market/market4.png">
+            <br>
+            <h4>购买熊猫</h4>
+            <br>
+            <p>点击熊猫市场中心仪的熊猫，将会出现熊猫购买的面板，面板上详细的显示出熊猫的属性值：</p>
+            <br>
+            <img src="../../images/guide/market/market2.png">
+            <br>
+            <p>如所选熊猫符合用户的预期，则点击购买即可得到该熊猫。</p>
+          </Row>
+        </Col>
+      </Row>
+    </p>
+  </Card>
+</Col>
+
+<!-- 获取竹子 -->
+  <Col span="20">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="guideState === 'combo_center'">
+    <p slot="title" style="height:30px;">
+      <Icon type="ios-film-outline" size="25" class="vertical"></Icon>
+      <span class="title">{{ $t("combo_center") }}</span>
+    </p>
+    <a href="#" slot="extra">
+      <Icon type="ios-loop-strong"></Icon>
+    </a>
+    <p>
+      <Row span="24" type="flex" justify="center" align="middle">
+        <Col span="24">
+          <Row span="24" style="margin-bottom: 15px;">
+            <h3>获取竹子</h3>
+            <br>
+            <p>进入获取竹子页面，点击开始按钮即可。如下图</p>
+            <br>
+            <img src="../../images/guide/combo/combo1.png">
+            <br>
+            <h4>参与算力池之后，可进行相应的操作，如暂停等。</h4>
+            <br>
+             <img src="../../images/guide/combo/combo2.png">
+          </Row>
+        </Col>
+      </Row>
+    </p>
+  </Card>
+</Col>
+
 </Row>
 	</div>
 </template>

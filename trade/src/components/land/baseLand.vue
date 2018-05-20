@@ -21,7 +21,6 @@
 	    <p align="left" style="margin-top: 15px;">
 	    	<Row>
 	    		<Col span="24" align="center">
-	    			<!-- <img :src="testPandaImg"> -->
 	    			<canvas id="cvsout" width="200" height="200"></canvas>
 	    		</Col>
 	    	</Row>
@@ -262,17 +261,16 @@ img {
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
-import CanvasImgTypesArr from '../../libs/charactor/CanvasImgTypes.js'
+import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
 import landBg from './landBg.vue'
 import anime from 'animejs'
 import serverRequest from '../../libs/serverRequest.js'
 import EchartHandle from '../../libs/map/EchartHandle.js'
 import {getMapConfig} from '../../libs/map/mapConfig.js'
-import testPandaImg from '../../images/charactor/figure/testdog1.png'
+// import testPandaImg from '../../images/charactor/figure/testdog1.png'
 // import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import woodEgg from '../../images/wood-egg.png'
-import eggImg from '../../images/charactor/figure/egg.png'
 import feedIcon from '../../images/feed.png'
 import beginOutIcon from '../../images/begin-out.png'
 import sellIcon from '../../images/sell.png'
@@ -302,7 +300,6 @@ let testFinalData1 = [
   { value : [-142.5, 1.5, 60] },
   { value : [22.5, -41.5, 70] }
 ]
-
 export default {
 	data () {
 		return {
@@ -310,9 +307,8 @@ export default {
 			scale: 'small', // 大小地图标识参数
 			pandasArr: [],  // 展示的panda数组
 			pandaIndex: 0, // 当前操作的panda index
-			testPandaImg: testPandaImg, // 测试图片
+			// testPandaImg: testPandaImg, // 测试图片
 			waterImg: waterImg, // 测试图片
-			eggImg: eggImg, // 测试图片
 			woodEgg: woodEgg,
 			ethIconImg: ethIconImg, // 测试图片
 			outModel: false,
@@ -438,8 +434,9 @@ export default {
         let cvs = new BaseCanvas('homecvs' + index)
         this.canvasArr.push(cvs)
       }
-      for (let cvs of this.canvasArr) {
-        await cvs.drawCharactor(CanvasImgTypesArr)
+      for (const [index, cvs] of this.canvasArr.entries()) {
+      	const CanvasImgTypesArr = this.getImgArrByPandaGen(showPanda[index][PandaModel.gen])
+        await this.canvasArr[index].drawCharactor(CanvasImgTypesArr)
       }
       // const canvasDraw3 = await baseCanvas3.drawCharactor()
     },
@@ -459,8 +456,12 @@ export default {
         let cvs = new BaseCanvas('backcvs' + index, parseInt(wh))
         this.backCanvasArr.push(cvs)
       }
-      for (let cvs of this.backCanvasArr) {
-        await cvs.drawCharactor(CanvasImgTypesArr)
+      // for (let cvs of this.backCanvasArr) {
+      //   await cvs.drawCharactor(CanvasImgTypesArr)
+      // }
+      for (const [index, cvs] of this.backCanvasArr.entries()) {
+      	const CanvasImgTypesArr = this.getImgArrByPandaGen(this.backCanvasArr[index][PandaModel.gen])
+        await this.backCanvasArr[index].drawCharactor(CanvasImgTypesArr)
       }
       // const canvasDraw3 = await baseCanvas3.drawCharactor()
     },
@@ -504,6 +505,21 @@ export default {
 			let starErrCb = () => {
 			}
 			serverRequest.handleRequestRes(starPoint.data, starSuccCb, starErrCb)
+		},
+
+		// 根据熊猫基因返回熊猫的canvasImgArr
+		getImgArrByPandaGen (gen) {
+			return [
+				CanvasImgTypes.body[0],
+				CanvasImgTypes.collar[parseInt(gen.substr(3, 3))],
+				CanvasImgTypes.ear[parseInt(gen.substr(6, 3))],
+				CanvasImgTypes.eye[parseInt(gen.substr(9, 3))],
+				CanvasImgTypes.head[parseInt(gen.substr(12, 3))],
+				CanvasImgTypes.mouth[parseInt(gen.substr(15, 3))],
+				CanvasImgTypes.tail[parseInt(gen.substr(18, 3))],
+				CanvasImgTypes.pattern[parseInt(gen.substr(21, 3))],
+				CanvasImgTypes.tattoos[parseInt(gen.substr(24, 3))]
+			]
 		},
 
 		// 熊猫操作 点击熊猫
@@ -557,6 +573,7 @@ export default {
 		},
 		// 熊猫失去焦点 选项消失
 		pandaBlur (e) {
+			return
 			let pandaClass = 'panda' + this.pandaIndex
 			let pandaDiv = document.getElementsByClassName(pandaClass)[0]
 			setTimeout(() => {
@@ -660,7 +677,9 @@ export default {
       } else {
         this.sellCanvas = new BaseCanvas('cvssell')
       }
+      const CanvasImgTypesArr = this.getImgArrByPandaGen(this.sellPandaInfo[PandaModel.gen])
       await this.sellCanvas.drawCharactor(CanvasImgTypesArr)
+      // await this.sellCanvas.drawCharactor(CanvasImgTypesArr)
 		},
 
 		// 确认出售熊猫
@@ -694,6 +713,7 @@ export default {
       } else {
         this.outCanvas = new BaseCanvas('cvsout')
       }
+      const CanvasImgTypesArr = this.getImgArrByPandaGen(this.pandaGen)
       await this.outCanvas.drawCharactor(CanvasImgTypesArr)
 		},
 		// 熊猫外出
