@@ -15,7 +15,9 @@ let LoginCodes = {
   'Can_Not_Change_Pwd_Because_Not_Email': '没有绑定邮箱无法重置密码！',
   'Login_Addr_Fail': '地址本地储存过期, 请重新输入',
   'Please_Bind_Email_First': '请先绑定邮箱!',
-  'Set_Email_Succ': '绑定邮箱成功！'
+  'Set_Email_Succ': '绑定邮箱成功！',
+  'Copy_Addr_Succ': '地址复制成功！',
+  'Copy_Addr_Fail': '地址复制失败'
 }
 
 let LandProductCodes = {

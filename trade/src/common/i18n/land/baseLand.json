@@ -15,7 +15,11 @@
     "northwest": "northwest",
     "carry_back_treasure": "carryBack",
     "drop_treasure": "drop",
-    "far_treasure": "faraway"
+    "far_treasure": "faraway",
+    "confirm": "Confirm",
+    "concel": "Cancel",
+    "sell_price": "Price",
+    "drop_panda_tips": "Do master really drop cute me?"
   },
   "cn": {
     "feed": "喂养",
@@ -33,6 +37,10 @@
     "northwest": "西北",
     "carry_back_treasure": "带回来的宝贝",
     "drop_treasure": "扔掉的宝贝",
-    "far_treasure": "远方的宝贝"
+    "far_treasure": "远方的宝贝",
+    "confirm": "确认",
+    "concel": "取消",
+    "sell_price": "售价",
+    "drop_panda_tips": "确定要丢弃萌萌哒的熊猫吗？"
   }
 }

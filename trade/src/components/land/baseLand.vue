@@ -29,8 +29,8 @@
 	    			{{ $t("carry") }}:
 	    		</Col>
 	        <Col span="5" align="right">
-	        	<img src="../../images/land/water.png" style="vertical-align:middle;">
-	        	<Input v-model="bambooCount" placeholder="" style="width:40px;"></Input>
+	        	<img src="../../images/bamboo.png" style="vertical-align:middle;">
+	        	<Input v-model="bambooCount" placeholder="" style="width:40px;margin-left:10px;"></Input>
 	        </Col>
 	        <!-- <Col span="5" offset="1" align="left">
 	        	<img src="../../images/land/water.png" style="vertical-align:middle;">
@@ -58,8 +58,8 @@
 	    </Row>
 	    </p>
 	    <div slot="footer" align="center">
-	        <Button type="success" @click="onSureOut">确认</Button>
-	        <Button offset="2" @click="onCancelOut">取消</Button>
+	        <Button type="success" @click="onSureOut">{{ $t("confirm") }}</Button>
+	        <Button offset="2" @click="onCancelOut">{{ $t("cancel") }}</Button>
 	    </div>
 	</Modal>
 	<Modal
@@ -116,8 +116,8 @@
         	</Row>
         </p>
         <div slot="footer" align="center">
-            <Button type="success" @click="onSureBack">确认</Button>
-            <Button offset="2" @click="onCancelBack">取消</Button>
+            <Button type="success" @click="onSureBack">{{ $t("confirm") }}</Button>
+            <Button offset="2" @click="onCancelBack">{{ $t("cancel") }}</Button>
         </div>
     </Modal>
     <Modal v-model="sellPanda">
@@ -155,22 +155,22 @@
       </Row>
        <br>
        <Row type="flex" justify="center">
-       	<Col span="12" align="right" style="font-size: 16px;">售价：</Col>
+       	<Col span="12" align="right" style="font-size: 16px;">{{ $t("sell_price") }}：</Col>
        	<Col span="12" align="left"> <Input v-model="sellPandaPrice" placeholder="" style="width: 50px;height: 20px;"></Input></Col>
        </Row>
       </p>
       <div slot="footer" align="center">
-          <Button type="success" @click="onSureSold">出售</Button>
-          <Button offset="2" @click="onCancelSold">取消</Button>
+          <Button type="success" @click="onSureSold">{{ $t("confirm") }}</Button>
+          <Button offset="2" @click="onCancelSold">{{ $t("cancel") }}</Button>
       </div>
   </Modal>
   <Modal v-model="dropPandaModal">
       <p align="center" style="margin-top: 15px;">
-        确定要丢弃萌萌哒的熊猫吗？
+        {{ $t("drop_panda_tips") }}
       </p>
       <div slot="footer" align="center">
-          <Button type="success" @click="onSureDrop">确认丢弃</Button>
-          <Button offset="2" @click="onCancelDrop">取消</Button>
+          <Button type="success" @click="onSureDrop">{{ $t("confirm") }}</Button>
+          <Button offset="2" @click="onCancelDrop">{{ $t("cancel") }}</Button>
       </div>
   </Modal>
 	</div>
@@ -276,6 +276,7 @@ import beginOutIcon from '../../images/begin-out.png'
 import sellIcon from '../../images/sell.png'
 import dropIcon from '../../images/drop.png'
 import waterImg from '../../images/land/water.png'
+import bambooImg from '../../images/bamboo.png'
 import earthIcon from '../../images/earth-icon.png'
 import fireIcon from '../../images/fire-icon.png'
 import woodIcon from '../../images/wood-icon.png'
@@ -309,6 +310,7 @@ export default {
 			pandaIndex: 0, // 当前操作的panda index
 			// testPandaImg: testPandaImg, // 测试图片
 			waterImg: waterImg, // 测试图片
+			bambooImg: bambooImg,
 			woodEgg: woodEgg,
 			ethIconImg: ethIconImg, // 测试图片
 			outModel: false,
@@ -460,7 +462,7 @@ export default {
       //   await cvs.drawCharactor(CanvasImgTypesArr)
       // }
       for (const [index, cvs] of this.backCanvasArr.entries()) {
-      	const CanvasImgTypesArr = this.getImgArrByPandaGen(this.backCanvasArr[index][PandaModel.gen])
+      	const CanvasImgTypesArr = this.getImgArrByPandaGen(showPanda[index])
         await this.backCanvasArr[index].drawCharactor(CanvasImgTypesArr)
       }
       // const canvasDraw3 = await baseCanvas3.drawCharactor()
@@ -510,13 +512,13 @@ export default {
 		// 根据熊猫基因返回熊猫的canvasImgArr
 		getImgArrByPandaGen (gen) {
 			return [
-				CanvasImgTypes.body[0],
+				CanvasImgTypes.body[parseInt(gen.substr(0, 3))],
 				CanvasImgTypes.collar[parseInt(gen.substr(3, 3))],
-				CanvasImgTypes.ear[parseInt(gen.substr(6, 3))],
+				CanvasImgTypes.ear[parseInt(gen.substr(0, 3))][parseInt(gen.substr(6, 3))],
 				CanvasImgTypes.eye[parseInt(gen.substr(9, 3))],
 				CanvasImgTypes.head[parseInt(gen.substr(12, 3))],
 				CanvasImgTypes.mouth[parseInt(gen.substr(15, 3))],
-				CanvasImgTypes.tail[parseInt(gen.substr(18, 3))],
+				CanvasImgTypes.tail[parseInt(gen.substr(0, 3))][parseInt(gen.substr(18, 3))],
 				CanvasImgTypes.pattern[parseInt(gen.substr(21, 3))],
 				CanvasImgTypes.tattoos[parseInt(gen.substr(24, 3))]
 			]
@@ -542,11 +544,11 @@ export default {
 			let pandaOpt = 4
 			let optOps = [
 			{
-				x: -120,
+				x: -160,
 				y: -25
 			},
 			{
-				x: -90,
+				x: -130,
 				y: -120
 			},
 			{

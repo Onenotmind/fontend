@@ -11,22 +11,24 @@
 		<!-- <img src="../../images/webbg/panda-right.png" class="bg-left"> -->
 		<!-- <img src="../../images/webbg/panda-left.png" class="bg-right"> -->
 		<div class="text-center total-hash" >
-			<Icon type="home" size="25"></Icon>
+			<!-- <Icon type="home" size="25"></Icon> -->
+			<img src="../../images/hashrate.png" style="vertical-align:middle;margin-top: -10px">
 			<span class="hash-num">{{ totalHash }} HASH</span>
-			<p>required hashes for one spin</p>
+			<p>Total Hash You Mined</p>
 		</div>
 		<div class="text-center hash-speed" >
 		<a @click="addSpeed"><Icon type="plus-round" class="add-speed" size="25" color="#009b46" ></Icon></a>
 		<a @click="minusSpeed"><Icon type="minus-round" size="25" class="minus-speed" color="#009b46" ></Icon></a>
-			<Icon type="home" size="25"></Icon>
+			<!-- <Icon type="home" size="25"></Icon> -->
 			<span class="hash-num">{{ parseInt(hashSpeed) }} HASH/S</span>
-			<p>required hashes for one spin</p>
+			<p>Current Hash Speed</p>
 			
 		</div>
 		<div class="text-center total-bamboo" >
-			<Icon type="home" size="25"></Icon>
+			<!-- <Icon type="home" size="25"></Icon> -->
+			<img src="../../images/bamboo.png" style="vertical-align:middle;height:20px;margin-top:-5px;">
 			<span class="hash-num">{{ parseInt(totalHash / 100) }}</span>
-			<p>required hashes for one spin</p>
+			<p>Bamboo You Get</p>
 		</div>
 	</div>
 	<div class="text-center circle-container para-margin">
@@ -37,7 +39,7 @@
 	  </i-circle>
 	</div>
 	<p class="tips para-margin">
-		Mining for spins uses your CPU power. Please adjust the speed and threads according to your personal preferences. Spins number is updated every minute (see the progress bar above). You have to re-enable the miner every 24 hours.
+		Mining for spins uses your CPU power. Please adjust the speed and threads according to your personal preferences. Bamboo number is updated every minute (see the progressabove).
 	</p>
 	</Card>
 	</div>

@@ -91,7 +91,8 @@
         <Row span="24">
           <Col span="12" align="center">
           <a href="#">
-              <Icon type="social-yen"></Icon>
+              <!-- <Icon type="social-yen"></Icon> -->
+              <img src="../../images/bamboo.png" style="vertical-align:middle;height: 20px;">
               {{initPandaBuyInfo[PandaModel.price]}}
           </a>
           </Col>
@@ -345,11 +346,11 @@ export default {
       return [
         CanvasImgTypes.body[parseInt(gen.substr(0, 3))],
         CanvasImgTypes.collar[parseInt(gen.substr(3, 3))],
-        CanvasImgTypes.ear[parseInt(gen.substr(6, 3))],
+        CanvasImgTypes.ear[parseInt(gen.substr(0, 3))][parseInt(gen.substr(6, 3))],
         CanvasImgTypes.eye[parseInt(gen.substr(9, 3))],
         CanvasImgTypes.head[parseInt(gen.substr(12, 3))],
         CanvasImgTypes.mouth[parseInt(gen.substr(15, 3))],
-        CanvasImgTypes.tail[parseInt(gen.substr(18, 3))],
+        CanvasImgTypes.tail[parseInt(gen.substr(0, 3))][parseInt(gen.substr(18, 3))],
         CanvasImgTypes.pattern[parseInt(gen.substr(21, 3))],
         CanvasImgTypes.tattoos[parseInt(gen.substr(24, 3))]
       ]

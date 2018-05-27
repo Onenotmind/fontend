@@ -33,7 +33,14 @@
       "Old_trade_password": "Old Password",
       "New_trade_password": "New Password",
       "transaction_password": "Trade Pwd",
-      "password": "Password"
+      "password": "Password",
+      "my_products": "My Products",
+      "product_exchange": "Product Exchange",
+      "receiver": "Receiver",
+      "telephone": "Telephone",
+      "address": "Address",
+      "confirm_order": "Confirm Order",
+      "email_bind_succ": "Email Bind Successful!"
         },
     "cn": {
       "assets_list": "资产列表",
@@ -69,7 +76,14 @@
       "Old_trade_password": "旧交易密码",
       "New_trade_password": "新交易密码",
       "transaction_password": "修改交易密码",
-      "password": "修改密码"
+      "password": "修改密码",
+      "my_products": "我的商品列表",
+      "product_exchange": "商品兑换",
+      "receiver": "收货人",
+      "telephone": "电话",
+      "address": "收获地址",
+      "confirm_order": "确认订单",
+      "email_bind_succ": "邮箱已经绑定成功！"
 
     }
   }

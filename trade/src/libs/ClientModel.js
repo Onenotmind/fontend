@@ -1,7 +1,8 @@
 const UserModel = {
 	addr: 'uk_addr',
 	email: 'uk_email',
-	tradePwd: 'utradePwd'
+	tradePwd: 'utradePwd',
+	account: 'uk_account'
 }
 
 const PandaModel = {

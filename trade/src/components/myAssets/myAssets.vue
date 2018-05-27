@@ -54,8 +54,8 @@
             <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">{{ $t("authentication") }}：</span>
             <br>
             <br>
-            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo[UserModel.email] !==''"></Icon>
-            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="userInfo[UserModel.email] ===''"></Icon>
+            <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo[UserModel.email]"></Icon>
+            <Icon type="close-circled" color="red" size="25" class="vertical" v-show="!userInfo[UserModel.email]"></Icon>
             <span style="margin-left: 20px;">{{ $t("email_authentication") }}</span>
             <br>
             <br>
@@ -102,8 +102,8 @@
               <img :src="lineImg">
             </Col>
             <Col span="6" align="center">
-              <Button type="success" @click="assetsRollOut(asset.label)">提现</Button>
-              <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">充值</Button>
+              <Button type="success" @click="assetsRollOut(asset.label)">{{ $t("withdraw") }}</Button>
+              <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">{{ $t("recharge") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -119,7 +119,7 @@
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'myAssets'">
     <p slot="title" style="height:30px;">
       <Icon type="ios-film-outline" size="25" class="vertical"></Icon>
-      <span class="my-assets-title">我的商品列表</span>
+      <span class="my-assets-title">{{ $t("my_products") }}</span>
     </p>
     <a href="#" slot="extra">
       <Icon type="ios-loop-strong"></Icon>
@@ -224,12 +224,12 @@
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
-        <Col span="24" class="rollout-card-margin" align="center">
-          <img :src="getaddrqrImg">
+        <Col span="24" class="rollout-card-margin" align="center" id="qrImg">
+          <!-- <img :src="getaddrqrImg"> -->
         </Col>
         <Col span="24" class="rollout-card-margin" align="center">
-          <Button type="success" style="width: 80px;margin-right: 15px;" @click="copyAddr">{{ $t("Copy_the_address") }}</Button>
-          <Input value="0xF455C2dae83e65F67E7938B1aFAE6A269455B194" placeholder="" style="width: 350px;pointer-events:none;height: 30px;"></Input>
+          <Button type="success" class="copy-btn" style="width: 80px;margin-right: 15px;"  data-clipboard-target="#copyInput">{{ $t("Copy_the_address") }}</Button>
+          <Input :value="userInfo[UserModel.account]" placeholder="" style="width: 350px;pointer-events:none;height: 30px;" id="copyInput"></Input>
         </Col>
         <Col span="24" class="rollout-card-margin">
           <Table :columns="rollOutColumns" :data="rollOutData"></Table>
@@ -246,7 +246,7 @@
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
           <Icon type="navigate" size="25" class="vertical"></Icon>
-          <span class="my-assets-title">商品兑换</span>
+          <span class="my-assets-title">{{ $t("product_exchange") }}</span>
           <Select v-model="productExchangeType" style="width:420px;margin-left: 40px;">
             <Option v-for="item in productsTypeArr" :value="item[LandModel.productId]" :key="item[LandModel.productId]">{{ item[LandModel.name] }}</Option>
         </Select>
@@ -256,7 +256,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">收货人：</span>
+          <span class="rollout-card-word">{{ $t("receiver") }}：</span>
         </Col>
         <Col span="18">
           <Input v-model="exchangeName" placeholder="" style="width: 300px"></Input>
@@ -267,7 +267,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">联系电话：</span>
+          <span class="rollout-card-word">{{ $t("telephone") }}:</span>
         </Col>
         <Col span="18">
           <Input v-model="exchangePhone" placeholder="" style="width: 300px"></Input>
@@ -278,7 +278,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">收货地址：</span>
+          <span class="rollout-card-word">{{ $t("address") }}:</span>
         </Col>
         <Col span="18">
           <Input v-model="exchangeAddr" placeholder="" style="width: 300px"></Input>
@@ -289,7 +289,7 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-              <span class="rollout-card-word">交易密码：</span>
+              <span class="rollout-card-word">{{ $t("trade_password") }}:</span>
             </Col>
             <Col span="18">
               <Input v-model="exchangePass" placeholder="" style="width: 300px"></Input>
@@ -300,16 +300,16 @@
         <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
-              <span class="rollout-card-word">验证码：</span>
+              <span class="rollout-card-word">{{ $t("verification_code") }}：</span>
             </Col>
             <Col span="18">
               <Input v-model="exchangeCode" placeholder="" style="width: 150px"></Input>
-              <Button type="info" style="width: 150px;" @click="getCode(userInfo[UserModel.email] || '')">获取验证码</Button>
+              <Button type="info" style="width: 150px;" @click="getCode(userInfo[UserModel.email] || '')">{{ $t("Get_verification_code") }}</Button>
             </Col>
           </Row>
         </Col>
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="confirmExchange">确认订单</Button>
+          <Button type="success" style="width: 400px;" @click="confirmExchange">{{ $t("confirm_order") }}</Button>
         </Col>
       </Row>
       <Col span="24" class="rollout-card-margin">
@@ -330,12 +330,12 @@
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <!-- 邮箱已经绑定 -->
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] !==''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email]">
           <Icon type="checkmark-circled" color="green" size="50"></Icon>
-          <span class="email-bind-word">邮箱已经绑定成功！</span>
+          <span class="email-bind-word">{{ $t("email_bind_succ") }}</span>
         </Col>
         <!-- 邮箱未绑定 -->
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] ===''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="!userInfo[UserModel.email]">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("email_address") }}：</span>
@@ -345,7 +345,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="24" class="rollout-card-margin" align="center" v-show="userInfo[UserModel.email] ===''">
+        <Col span="24" class="rollout-card-margin" align="center" v-show="!userInfo[UserModel.email]">
         <Row>
           <Col span="6"  align="right">
             <span class="rollout-card-word">{{ $t("verification_code") }}：</span>
@@ -356,7 +356,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo[UserModel.email] ===''">
+        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo[UserModel.email]">
           <Button type="success" style="width: 400px;" @click="bindEmail">{{ $t("submit") }}</Button>
         </Col>
       </Row>
@@ -522,11 +522,14 @@
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import Clipboard from 'clipboard'
 import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import lineImg from '../../images/line.png'
-import getaddrqrImg from '../../images/webbg/getaddrqr.png'
+// import getaddrqrImg from '../../images/webbg/getaddrqr.png'
 import serverRequest from '../../libs/serverRequest.js'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
+const qrCode = require('qrcode-npm')
+const clipboard = new Clipboard('.copy-btn')
 export default {
 	data () {
 		return {
@@ -540,7 +543,7 @@ export default {
       assetsRollOutType: 'ETH',
       assetsRollInType: 'ETH',
       lineImg: lineImg,
-      getaddrqrImg: getaddrqrImg,
+      getaddrqrImg: '',
       rollOutAddr: '',
       rollOutCount: '',
       rollOutCode: '',
@@ -640,6 +643,7 @@ export default {
     this.assetState = 'myAssets'
     this.getUserInfo()
     this.getUserProduct()
+    this.copyAddrBind()
   },
 	methods: {
     selectMenu (name) {
@@ -670,6 +674,18 @@ export default {
           break
       }
     },
+
+    // 复制功能回调绑定
+    copyAddrBind () {
+      let self = this
+      clipboard.on('success', function(e) {
+        alertSuccInfo(self, LoginCodes.Copy_Addr_Succ)
+      })
+      clipboard.on('error', function(e) {
+        alertErrInfo(self, LoginCodes.Copy_Addr_Fail)
+      })
+    },
+
     // 改变当前选中列表模块
     changeCurrentListItem (item) {
       console.log(item)
@@ -685,6 +701,11 @@ export default {
       let succCb = (data) => {
         this.userInfo = data
         this.myTotalAssets = data
+        const qr = qrCode.qrcode(10, 'L')
+        qr.addData(this.userInfo[UserModel.account])
+        qr.make()
+        var qrcodeNew = qr.createImgTag(4)
+        document.getElementById('qrImg').innerHTML = qrcodeNew
       }
       let errCb = (msg) => {
         alertErrInfo(this, msg)
@@ -827,9 +848,7 @@ export default {
       }
       serverRequest.handleRequestRes(checkEmail.data, succCb, errCb)
     },
-    copyAddr () {
 
-    },
     // 确认商品兑换订单
     async confirmExchange () {
       console.log('...', this.productExchangeType)

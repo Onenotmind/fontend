@@ -54,13 +54,13 @@
 	        </DropdownMenu>
     			</Dropdown>	
 					</MenuItem>
-					<MenuItem name="menu_lang">
-					<Dropdown trigger="click" style="margin-left: 20px">
-	        简体中文
+					<MenuItem name="menu_lang" >
+					<Dropdown trigger="click" style="margin-left: 20px" @on-click="i18nClick">
+	        选择语言
           <Icon type="arrow-down-b" style="margin-left: 10px"></Icon>
 	        <DropdownMenu slot="list">
-            <DropdownItem>English</DropdownItem>
-            <DropdownItem>Korean</DropdownItem>
+            <DropdownItem name="english">English</DropdownItem>
+            <DropdownItem name="chinese">简体中文</DropdownItem>
 	        </DropdownMenu>
     			</Dropdown>	
 					</MenuItem>
@@ -170,6 +170,22 @@ export default {
 		}
 	},
 	methods: {
+
+		i18nClick (name) {
+			let self = this
+			switch(name) {
+				case 'english':
+					console.log('ens')
+					i18n.locale = 'en'
+					break
+				case 'chinese':
+					i18n.locale = 'cn'
+					break
+				default:
+					break
+			}
+		},
+
 		menuAccontClick (name) {
 			console.log('menuAccontClick:', name)
 			// i18n.locale = 'en'

@@ -1,20 +1,34 @@
 {
   "en": {
-    "Charge": "Charge",
-    "Get Bamboo": "Get Bamboo",
+    "Charge": "Call charges",
+    "Get_Bamboo": "Get Bamboo",
     "Advertise": "Advertise",
-    "Life Service": "Life Service",
+    "current_products": "Current Products",
+    "next_products": "Next Products Vote",
+    "Life_Service": "Life Service",
+    "products_center": "Products Center",
+    "current_activity": "Current Activity",
     "Product Auction": "Product Auction",
     "Dress": "Dress",
-    "Cosmetics": "Cosmetics"
+    "Cosmetics": "Cosmetics",
+    "price": "price",
+    "total_vote": "Voted Number",
+    "vote": "Vote"
   },
   "cn": {
-    "Charge": "充话费",
-    "Get Bamboo": "获取竹子",
-    "Advertise": "看广告",
-    "Life Service": "生活服务",
+    "Charge": "充值话费",
+    "Get_Bamboo": "获取竹子",
+    "Advertise": "广告活动",
+    "current_products": "当前商品",
+    "next_products": "下期商品投票",
+    "Life_Service": "生活服务",
+    "products_center": "商品中心",
+    "current_activity": "当前活动",
     "Product Auction": "商品竞拍",
     "Dress": "裙子",
-    "Cosmetics": "化妆品"
+    "Cosmetics": "化妆品",
+    "price": "市价",
+    "total_vote": "总票数",
+    "vote": "投票"
   }
 }
