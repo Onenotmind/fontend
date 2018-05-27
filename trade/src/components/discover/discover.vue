@@ -12,17 +12,17 @@
         </MenuGroup>
         <MenuGroup :title="$t('Life_Service')">
           <MenuItem name="call-charge">
-                <Icon type="email"></Icon>
+                <!-- <Icon type="email"></Icon> -->
                 {{ $t("Charge") }}
             </MenuItem>
         </MenuGroup>
         <MenuGroup :title="$t('products_center')">
         	<MenuItem name="current-product-center">
-                <Icon type="email"></Icon>
+                <!-- <Icon type="email"></Icon> -->
                 {{ $t("current_products") }}
             </MenuItem>
           <MenuItem name="next-product-vote">
-                <Icon type="email"></Icon>
+                <!-- <Icon type="email"></Icon> -->
                 {{ $t("next_products") }}
             </MenuItem>
         </MenuGroup>
