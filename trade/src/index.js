@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './app.vue'
 import proManage from './proManage/proManage.vue'
 // import router from './router'
-import iView from 'iView'
+import iview from 'iview/dist/iview.min.js'
 import VueI18n from 'vue-i18n'
 import store from './store'
 import en from 'iview/dist/locale/en-US'
@@ -24,7 +24,7 @@ const i18n = new VueI18n({
   locale: 'cn', // set locale
 })
 
-Vue.use(iView, {
+Vue.use(iview, {
     i18n: (key, value) => i18n.t(key, value)
 })
 
