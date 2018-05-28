@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const htmlWepackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
 	context: path.resolve(__dirname, '../'),
@@ -73,7 +74,8 @@ module.exports = {
 		new htmlWepackPlugin({
 			template: './src/index.html'
 		}),
-		new cleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') })
+		new cleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
+    new UglifyJsPlugin()
 	],
 	resolve: {
 	  alias: {
