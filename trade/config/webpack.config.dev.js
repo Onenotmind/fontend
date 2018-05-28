@@ -7,7 +7,7 @@ module.exports = {
 	context: path.resolve(__dirname, '../'),
 	entry: './src/index.js',
 	output: {
-		filename: '[name].[hash].js',
+		filename: '[name].js',
 		path: path.resolve(__dirname, '../dist')
 	},
 	devServer: {
@@ -42,7 +42,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'static/img/[name].[hash:7].[ext]'
+          name: 'static/img/[name].[ext]'
         }
       },
       {
@@ -50,7 +50,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: 'static/media/[name].[hash:7].[ext]'
+          name: 'static/media/[name].[ext]'
         }
       },
       {
