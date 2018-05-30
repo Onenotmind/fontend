@@ -2,7 +2,7 @@ const axios = require('axios')
 const qs = require('qs')
 axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
-  baseURL: 'http://47.74.183.93/',
+  baseURL: 'http://47.88.158.254/',
   timeout: 10000
 })
 // axios.defaults.headers.common['token'] = '123'
