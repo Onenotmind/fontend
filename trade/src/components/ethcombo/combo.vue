@@ -54,12 +54,10 @@
 }
 #combo {
 	height: 600px;
-	width: 1056px;
+	width: 100%;
 	margin-top: 80px;
 	background-color: #fff;
-	margin-left: -528px;
 	position: relative;
-	left: 50%;
 }
 .combo-header {
 	height: 80px;

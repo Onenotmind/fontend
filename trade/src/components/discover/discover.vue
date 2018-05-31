@@ -3,7 +3,7 @@
 	<div id="discover">
 		<Row>
 			<Col span="4" class="nomal-padding">
-		<Menu  active-name="free-activity" style="width:160px;" @on-select="selectMenu">
+		<Menu  active-name="free-activity" style="width:90%;" @on-select="selectMenu">
         <MenuGroup :title="$t('current_activity')">
             <MenuItem name="ads-list">
                 <Icon type="document-text"></Icon>

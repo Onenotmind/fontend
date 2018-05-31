@@ -4,7 +4,7 @@
     <Row>
       <!-- 目录 -->
   <Col span="4" class="nomal-padding">
-    <Menu  active-name="quick_start" style="width:160px;" @on-select="selectMenu">
+    <Menu  active-name="quick_start" style="width:90%;margin-top:15px;" @on-select="selectMenu">
         <MenuGroup :title="$t('quick_start')">
           <MenuItem name="quick_start">
             <!-- <Icon type="heart"></Icon> -->
@@ -251,12 +251,19 @@ hr {
   margin-left:8px;
   line-height: 24px;
 }
+h3, h4{
+  text-align: center;
+}
 p {
   line-height: 20px;
   font-size: 16px;
   letter-spacing: 1px;
   text-indent: 2px;
   color: #999
+}
+img {
+  max-width: 100%;
+  transform: translate(-50%, 0%);
 }
 </style>
 <script>

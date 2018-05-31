@@ -3,7 +3,7 @@
 	<div id="mainMarket">
 		<Row>
 			<Col span="4" class="nomal-padding">
-		<Menu  active-name="all-panda" style="width:160px;" @on-select="selectMenu">
+		<Menu  active-name="all-panda" style="width:90%;" @on-select="selectMenu">
         <MenuGroup title="熊猫市场">
             <MenuItem name="all-panda">
                 <Icon type="grid"></Icon>

@@ -3,7 +3,7 @@
 	<div id="myAssets">
 		<Row>
 			<Col span="4" class="nomal-padding">
-		<Menu  active-name="my-assets" style="width:160px;" @on-select="selectMenu">
+		<Menu  active-name="my-assets" style="width:90%;" @on-select="selectMenu">
         <MenuGroup :title="$t('my_assets')">
             <MenuItem name="assets-list">
                 <Icon type="document-text"></Icon>

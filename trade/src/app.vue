@@ -3,7 +3,7 @@
 <div id="tradeContainer">
 <!--  头部导航栏 -->
 	<layout v-if="currentView !== 'enterPage'">
-		<Header>
+		<Header style="padding:0;">
 			<Menu mode="horizontal" theme="dark" active-name="1" @on-select="selectMenu">
 				<div class="layout-logo" style="background: #495060;top:5px;width:150px;">
 					<img src="./images/ethland.png" style="vertical-align:middle;">
@@ -56,7 +56,7 @@
 					</MenuItem>
 					<MenuItem name="menu_lang" >
 					<Dropdown trigger="click" style="margin-left: 20px" @on-click="i18nClick">
-	        选择语言
+	        语言
           <Icon type="arrow-down-b" style="margin-left: 10px"></Icon>
 	        <DropdownMenu slot="list">
             <DropdownItem name="english">English</DropdownItem>

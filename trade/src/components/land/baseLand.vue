@@ -200,6 +200,7 @@
 .landScaleLarger {
 	height: 600px;
   width: 1080px;
+  max-width: 90%;
   left: 50%;
   top: 75px;
   margin-left: -540px;
