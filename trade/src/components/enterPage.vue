@@ -130,7 +130,7 @@ span {
 	left: 50%;
 	margin-left: -300px;
 	text-align: center;
-	font-family: FZCuYuan-M03S;
+	/*font-family: FZCuYuan-M03S;*/
 	color: #fff;
 }
 .reset-pass {
@@ -148,10 +148,10 @@ span {
   0%   { transform: translateY(0) }
   100% { transform: translateY(1080); }
 }
-@font-face {
+/*@font-face {
   font-family: FZCuYuan-M03S;
   src: url(../images/font/FZCuYuan-M03S.ttf);
-}
+}*/
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'

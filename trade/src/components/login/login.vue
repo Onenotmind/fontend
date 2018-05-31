@@ -41,7 +41,7 @@
 	padding-top: 25px;
 }
 .login-word {
-	font-family: FZCuYuan-M03S;
+	/*font-family: FZCuYuan-M03S;*/
 	font-size: 35px;
 	line-height: 35px;
 	vertical-align: middle;
@@ -58,10 +58,10 @@
 	left: 50%;
 	margin-left: -150px;
 }
-@font-face {
+/*@font-face {
   font-family: FZCuYuan-M03S;
   src: url(../../images/font/FZCuYuan-M03S.ttf);
-}
+}*/
 </style>
 <script>
 import serverRequest from '../../libs/serverRequest.js'

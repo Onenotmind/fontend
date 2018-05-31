@@ -7,7 +7,7 @@
         <MenuGroup title="熊猫市场">
             <MenuItem name="all-panda">
                 <Icon type="grid"></Icon>
-                {{ $t("All the pandas") }}
+                {{ $t("All_the_pandas") }}
             </MenuItem>
             <MenuItem name="low-level-panda">
                 G10 ~ G6
@@ -16,13 +16,13 @@
                 G5 ~ G0
             </MenuItem>
             <MenuItem name="special-panda">
-                {{ $t("special pandas") }}
+                {{ $t("special_pandas") }}
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="我的市场">
           <MenuItem name="my-sell">
               <Icon type="heart"></Icon>
-              我的出售
+              {{ $t("my_sell") }}
           </MenuItem>
         </MenuGroup>
         <!-- <MenuGroup title="商品市场">
@@ -184,6 +184,14 @@ import waterIcon from '../../images/water-icon.png'
 import superIcon from '../../images/super-icon.png'
 import speedIcon from '../../images/speed-icon.png'
 import hungryIcon from '../../images/hungry-icon.png'
+import earthEnIcon from '../../images/earth-icon-en.png'
+import fireEnIcon from '../../images/fire-icon-en.png'
+import woodEnIcon from '../../images/wood-icon-en.png'
+import metalEnIcon from '../../images/metal-icon-en.png'
+import waterEnIcon from '../../images/water-icon-en.png'
+import superEnIcon from '../../images/super-icon-en.png'
+import speedEnIcon from '../../images/speed-icon-en.png'
+import hungryEnIcon from '../../images/hungry-icon-en.png'
 import serverRequest from '../../libs/serverRequest.js'
 import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
 import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
@@ -231,16 +239,6 @@ export default {
         special: 0
       },
       testAddr: '1234',
-      attrIconObj: { // 属性icon对象
-        'water': waterIcon,
-        'fire': fireIcon,
-        'earth': earthIcon,
-        'metal': metalIcon,
-        'wood': woodIcon,
-        'super': superIcon,
-        'speed': speedIcon,
-        'hungry': hungryIcon
-      },
       canvasArr: [], // 画布数组
       cvsBuyModal: null, // 购买面板的画布
       mySoldCanvasArr: [], // 我的售卖中的熊猫画布数组
@@ -444,7 +442,8 @@ export default {
 	},
   computed: {
     ...mapState({
-      userAddr: state => state.login.userAddr
+      userAddr: state => state.login.userAddr,
+      curLang: state => state.login.curLang
     }),
     showPanda () {
       let pandasFilterArr = []
@@ -469,6 +468,31 @@ export default {
     },
     mySoldPanda () {
       return this.showPanda.filter(panda => panda[this.PandaModel.addr] === this.userAddr)
+    },
+    attrIconObj () {
+      if (this.curLang === 'en') {
+        return {
+          'water': waterEnIcon,
+          'fire': fireEnIcon,
+          'earth': earthEnIcon,
+          'metal': metalEnIcon,
+          'wood': woodEnIcon,
+          'super': superEnIcon,
+          'speed': speedEnIcon,
+          'hungry': hungryEnIcon
+        }
+      } else {
+        return {
+          'water': waterIcon,
+          'fire': fireIcon,
+          'earth': earthIcon,
+          'metal': metalIcon,
+          'wood': woodIcon,
+          'super': superIcon,
+          'speed': speedIcon,
+          'hungry': hungryIcon
+        }
+      }
     }
   },
   watch: {

@@ -1,23 +1,22 @@
 {
   "en": {
-    "All the pandas": "All the Pandas",
-    "special pandas": "Special",
-    "All the goods": "All the Goods",
-    "Holy water": "Holy Water",
+    "All_the_pandas": "All the Pandas",
+    "special_pandas": "Special",
+    "All_the_goods": "All the Goods",
+    "Holy_water": "Holy Water",
     "backpack": "Backpack",
-    "A total of 3560 pandas": "A total of 99 Pandas",
     "Purchase": "Purchase",
-    "Cancel": "Cancel"
-
+    "Cancel": "Cancel",
+    "my_sell": "My Sold"
   },
   "cn": {
-    "All the pandas": "全部熊猫",
-    "special pandas": "特殊熊猫",
-    "All the goods": "全部商品",
-    "Holy water": "圣水",
+    "All_the_pandas": "全部熊猫",
+    "special_pandas": "特殊熊猫",
+    "All_the_goods": "全部商品",
+    "Holy_water": "圣水",
     "backpack": "背包",
-    "A total of 3560 pandas": "共 3560 熊猫",
     "Purchase": "购买",
-    "Cancel": "取消"
+    "Cancel": "取消",
+    "my_sell": "我的出售"
   }
 }

@@ -65,12 +65,12 @@
 	line-height: 26px;
 	padding-top: 25px;
 }
-@font-face {
+/*@font-face {
   font-family: FZCuYuan-M03S;
   src: url(../../images/font/FZCuYuan-M03S.ttf);
-}
+}*/
 .combo-word {
-	font-family: FZCuYuan-M03S;
+	/*font-family: FZCuYuan-M03S;*/
 	font-size: 30px;
 	line-height: 30px;
 	vertical-align: middle;

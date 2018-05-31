@@ -151,6 +151,7 @@
 </style>
 
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import loginService from './components/loginService.vue'
 import comboService from './components/comboService.vue'
 import landService from './components/landService.vue'
@@ -170,16 +171,20 @@ export default {
 		}
 	},
 	methods: {
-
+		...mapActions([
+			'changeLanguage'
+		]),
 		i18nClick (name) {
 			let self = this
 			switch(name) {
 				case 'english':
 					console.log('ens')
 					i18n.locale = 'en'
+					this.changeLanguage({ lang: 'en'})
 					break
 				case 'chinese':
 					i18n.locale = 'cn'
+					this.changeLanguage({ lang: 'cn'})
 					break
 				default:
 					break

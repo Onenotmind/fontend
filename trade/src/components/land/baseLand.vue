@@ -246,7 +246,6 @@ img {
 	z-index: -1;
 }
 .btn-wid {
-	width: 60px;
 	text-align: center;
 }
 .btn-offset {
@@ -272,10 +271,15 @@ import {getMapConfig} from '../../libs/map/mapConfig.js'
 // import waterImg from '../../images/land/water.png'
 import ethIconImg from '../../images/land/ethIcon.png'
 import woodEgg from '../../images/wood-egg.png'
+import feedEnIcon from '../../images/feed-en.png'
 import feedIcon from '../../images/feed.png'
 import beginOutIcon from '../../images/begin-out.png'
+import beginOutEnIcon from '../../images/begin-out-en.png'
 import sellIcon from '../../images/sell.png'
+import sellEnIcon from '../../images/sell-en.png'
 import dropIcon from '../../images/drop.png'
+import dropEnIcon from '../../images/drop-en.png'
+
 import waterImg from '../../images/land/water.png'
 import bambooImg from '../../images/bamboo.png'
 import earthIcon from '../../images/earth-icon.png'
@@ -286,6 +290,14 @@ import waterIcon from '../../images/water-icon.png'
 import superIcon from '../../images/super-icon.png'
 import speedIcon from '../../images/speed-icon.png'
 import hungryIcon from '../../images/hungry-icon.png'
+import earthEnIcon from '../../images/earth-icon-en.png'
+import fireEnIcon from '../../images/fire-icon-en.png'
+import woodEnIcon from '../../images/wood-icon-en.png'
+import metalEnIcon from '../../images/metal-icon-en.png'
+import waterEnIcon from '../../images/water-icon-en.png'
+import superEnIcon from '../../images/super-icon-en.png'
+import speedEnIcon from '../../images/speed-icon-en.png'
+import hungryEnIcon from '../../images/hungry-icon-en.png'
 import { alertSuccInfo, alertErrInfo, LandProductCodes, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 
 let testFinalData = [
@@ -333,22 +345,6 @@ export default {
 			starPointArr: [], // 商品产生点数组
 			starPointGeneTime: 1000 * 1000 * 24,
 			sellPandaPrice: '',
-			optionsIcon: { // 选项图标
-				feedIcon: feedIcon,
-				beginOutIcon: beginOutIcon,
-				sellIcon: sellIcon,
-				dropIcon: dropIcon
-			},
-			attrIconObj: { // 属性icon对象
-        'water': waterIcon,
-        'fire': fireIcon,
-        'earth': earthIcon,
-        'metal': metalIcon,
-        'wood': woodIcon,
-        'super': superIcon,
-        'speed': speedIcon,
-        'hungry': hungryIcon
-      },
 			canvasArr: [], // 在家时的形象画布渲染数组
 			sellCanvas: null, // 出售熊猫的画布
 			outCanvas: null, // 熊猫外出时的画布
@@ -774,7 +770,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			userAddr: state => state.login.userAddr
+			userAddr: state => state.login.userAddr,
+			curLang: state => state.login.curLang
 		}),
 		sellPandaInfo () {
 			if (this.pandasArr.length === 0) {
@@ -791,6 +788,48 @@ export default {
 	      }
 			} else {
 				return this.pandasArr[this.pandaIndex]
+			}
+		},
+		optionsIcon () {
+			if (this.curLang === 'en') {
+				return {
+					feedIcon: feedEnIcon,
+					beginOutIcon: beginOutEnIcon,
+					sellIcon: sellEnIcon,
+					dropIcon: dropEnIcon
+				}
+			} else {
+				return {
+					feedIcon: feedIcon,
+					beginOutIcon: beginOutIcon,
+					sellIcon: sellIcon,
+					dropIcon: dropIcon
+				}
+			}
+		},
+		attrIconObj () {
+			if (this.curLang === 'en') {
+				return {
+	        'water': waterEnIcon,
+	        'fire': fireEnIcon,
+	        'earth': earthEnIcon,
+	        'metal': metalEnIcon,
+	        'wood': woodEnIcon,
+	        'super': superEnIcon,
+	        'speed': speedEnIcon,
+	        'hungry': hungryEnIcon
+	      }
+			} else {
+				return {
+	        'water': waterIcon,
+	        'fire': fireIcon,
+	        'earth': earthIcon,
+	        'metal': metalIcon,
+	        'wood': woodIcon,
+	        'super': superIcon,
+	        'speed': speedIcon,
+	        'hungry': hungryIcon
+	      }
 			}
 		}
 	}

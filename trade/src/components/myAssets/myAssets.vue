@@ -19,7 +19,7 @@
             </MenuItem>
             <MenuItem name="product-exchange">
                 <Icon type="navigate"></Icon>
-                商品兑换
+                {{ $t("product_exchange")}}
             </MenuItem>
         </MenuGroup>
         <MenuGroup :title="$t('security_center')">
@@ -98,10 +98,10 @@
             <Col span="1" align="center">
               {{ asset.lock }}
             </Col>
-            <Col span="5" class="line" style="height: 15px;">
+            <Col span="3" class="line" style="height: 15px;">
               <img :src="lineImg">
             </Col>
-            <Col span="6" align="center">
+            <Col span="9" align="center">
               <Button type="success" @click="assetsRollOut(asset.label)">{{ $t("withdraw") }}</Button>
               <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">{{ $t("recharge") }}</Button>
             </Col>
