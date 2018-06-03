@@ -6,7 +6,7 @@
 	<div>
 	<p  class="text-center combo-header">
 			<img src="../../images/ethereum.png" style="vertical-align:middle; width: 35px;">
-			<span class="combo-word">EthLand</span>
+			<span class="combo-word">WunoLand</span>
 		</p>
 		<!-- <img src="../../images/webbg/panda-right.png" class="bg-left"> -->
 		<!-- <img src="../../images/webbg/panda-left.png" class="bg-right"> -->
@@ -141,8 +141,10 @@
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { statusCodes } from '../../libs/statusCodes.js'
+import serverRequest from '../../libs/serverRequest.js'
 import ComboHandle from '../../libs/comboHandle.js'
-const comboHandle = new ComboHandle()
+let comboHandle = null
 export default {
 	data () {
 		return {
@@ -153,18 +155,15 @@ export default {
 			totalHash: 0,
 			hashSpeed: 0,
 			totalBamboo: 0,
-			queryHash: null
+			queryHash: null,
+			userId: '',
+			addCountInterval: null
 		}
-	},
-	mounted () {
-		// comboHandle.startMine()
-		// setInterval(() => {
-		// 	this.percent += 10
-		// }, 1000)
 	},
 	computed: {
     ...mapState({
-      userAddr: state => state.login.userAddr
+      userAddr: state => state.login.userAddr,
+      curLang: state => state.login.curLang
     }),
     percent: function () {
     	return parseInt(this.totalHash % 100)
@@ -178,18 +177,41 @@ export default {
   		}
   	}
   },
+
+  destroyed () {
+  	clearInterval(this.addCountInterval)
+		clearInterval(this.queryHash)
+		this.addCountInterval = null
+		this.queryHash = null
+		comboHandle.stopMine()
+  },
+	mounted () {
+		this.userId = this.uuid()
+		comboHandle = new ComboHandle(this.userId)
+		// comboHandle.startMine()
+		// setInterval(() => {
+		// 	this.percent += 10
+		// }, 1000)
+	},
 	methods: {
 		startMine () {
 			this.mineState = 'mine'
 			comboHandle.startMine()
-			this.queryHash = setInterval(() => {
+			this.queryHash = setInterval(async () => {
 				this.totalHash = comboHandle.getTotalHashes([true])
 				this.hashSpeed = comboHandle.getHashesPerSecond()
 			},1000)
+			this.addCountInterval = setInterval(() => {
+				serverRequest.getUserBamboo(this.userAddr, this.userId)
+			}, 5000)
 		},
 		stopMine () {
 			this.mineState = 'stop'
 			comboHandle.stopMine()
+			clearInterval(this.addCountInterval)
+			clearInterval(this.queryHash)
+			this.addCountInterval = null
+			this.queryHash = null
 		},
 		addSpeed () {
 			this.threads++
@@ -207,7 +229,12 @@ export default {
 			comboHandle.setNumThreads(this.threads)
 			// comboHandle.setThrottle(this.throttle)
 			console.log(comboHandle.getNumThreads())
-		}
+		},
+		// 本地生成唯一uid
+	  uuid (a) {
+	    return a ? (a ^ Math.random() * 16 >> a / 4).toString(16)
+	      : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, this.uuid)
+	  }
 	},
 	components: {
 		

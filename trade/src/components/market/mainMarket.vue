@@ -4,7 +4,7 @@
 		<Row>
 			<Col span="4" class="nomal-padding">
 		<Menu  active-name="all-panda" style="width:90%;" @on-select="selectMenu">
-        <MenuGroup title="熊猫市场">
+        <MenuGroup title="唔喏市场">
             <MenuItem name="all-panda">
                 <Icon type="grid"></Icon>
                 {{ $t("All_the_pandas") }}
@@ -173,6 +173,7 @@
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { statusCodes } from '../../libs/statusCodes.js'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import waterImg from '../../images/land/water.png'
@@ -288,7 +289,7 @@ export default {
         })
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(pandas.data, succCb, errCb)
     },
@@ -328,7 +329,7 @@ export default {
         this.queryAllPandaSold()
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(unSoldPanda.data, succCb, errCb)
     },

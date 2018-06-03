@@ -46,7 +46,7 @@
             <img src="https://best.bi/assets/xx/avatars/avatar.png" class="avatar">
           </Col>
           <Col span="10" style="border-right: 1px solid #E1E2EA">
-            <p> {{ $t("my_address") }}：{{ userInfo[UserModel.addr] || ''}}</p>
+            <p> {{ $t("my_address") }}：{{ showAddr}}</p>
             <br>
             <p> {{ $t("my_email") }}：{{ userInfo[UserModel.email] || ''}}</p>
           </Col>
@@ -523,6 +523,7 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Clipboard from 'clipboard'
+import { statusCodes } from '../../libs/statusCodes.js'
 import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import lineImg from '../../images/line.png'
 // import getaddrqrImg from '../../images/webbg/getaddrqr.png'
@@ -708,7 +709,7 @@ export default {
         document.getElementById('qrImg').innerHTML = qrcodeNew
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(userInfo.data, succCb, errCb)
     },
@@ -725,7 +726,7 @@ export default {
         this.myProducts = data
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(products.data, succCb, errCb)
     },
@@ -744,7 +745,7 @@ export default {
         alertSuccInfo(this, LoginCodes.Send_Email_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
     },
@@ -774,7 +775,7 @@ export default {
         alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
       cleanInput()
@@ -803,7 +804,7 @@ export default {
         alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(loginPassChange.data, succCb, errCb)
       cleanInput()
@@ -822,7 +823,7 @@ export default {
         alertSuccInfo(this, LoginCodes.Send_Email_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
     },
@@ -844,7 +845,7 @@ export default {
         alertSuccInfo(this, LoginCodes.Set_Email_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(checkEmail.data, succCb, errCb)
     },
@@ -876,7 +877,7 @@ export default {
         alertSuccInfo(this, LandProductCodes.Exchange_Product_Succ)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(exchange.data, succCb, errCb)
       cleanInput()
@@ -901,7 +902,8 @@ export default {
 	},
   computed: {
     ...mapState({
-      userAddr: state => state.login.userAddr
+      userAddr: state => state.login.userAddr,
+      curLang: state => state.login.curLang
     }),
     productsTypeArr () { // 商品兑换列表可选项数组
       if (this.myProducts.length > 0) {
@@ -911,6 +913,9 @@ export default {
       } else {
         return []
       }
+    },
+    showAddr: function () {
+      return this.userAddr.slice(0, 6) + '****' + this.userAddr.slice(38)
     },
     myAssets () {
       if (!this.myTotalAssets) {

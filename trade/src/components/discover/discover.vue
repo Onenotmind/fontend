@@ -161,7 +161,9 @@
 }
 </style>
 <script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import serverRequest from '../../libs/serverRequest.js'
+import { statusCodes } from '../../libs/statusCodes.js'
 import { LandModel, PandaModel, AssetsModel } from '../../libs/ClientModel.js'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
 const testImg = 'https://best.bi/assets/xx/avatars/avatar.png'
@@ -192,7 +194,7 @@ export default {
         this.curProducts = data.slice(0)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(curProductsArr.data, succCb, errCb)
 			// let nextPros = document.getElementsByClassName('nextProImg')
@@ -203,6 +205,12 @@ export default {
 			// }
 		})
 	},
+  computed: {
+    ...mapState({
+      userAddr: state => state.login.userAddr,
+      curLang: state => state.login.curLang
+    })
+  },
 	methods: {
 		selectMenu(name) {
 			switch(name) {
@@ -233,7 +241,7 @@ export default {
         this.nextProducts = data.slice(0)
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(curProductsArr.data, succCb, errCb)
 		},
@@ -250,7 +258,7 @@ export default {
         this.getCurrentVotedProduct()
       }
       let errCb = (msg) => {
-        alertErrInfo(this, msg)
+        alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(vote.data, succCb, errCb)
 		}

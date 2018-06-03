@@ -7,7 +7,7 @@
 			<Menu mode="horizontal" theme="dark" active-name="1" @on-select="selectMenu">
 				<div class="layout-logo" style="background: #495060;top:5px;width:150px;">
 					<img src="./images/ethland.png" style="vertical-align:middle;">
-					<span class="logo-word">EthLand.pro</span>
+					<span class="logo-word">WunoLand</span>
 				</div>
 				<div class="layout-nav" style="width: 800px;">
 					<MenuItem name="app_bamboo_catch">

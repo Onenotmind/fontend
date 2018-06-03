@@ -4,10 +4,10 @@
 			<img src="../images/land/ethIcon.png" class="ethup1">
 		</div> -->
 		<div class="eth-logo">
-			欢迎{{ loginAddr }}来到 EthLand.pro！
+			欢迎{{ showAddr }}来到WunoLand！
 		</div>
 		<!-- 注册 地址注册-->
-		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="enterPageState === 'addrSet'">
+		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="enterPageState === 'addrSet'" @keyup.enter.native="checkAddr">
 			<Button slot="append" @click="checkAddr">
 				<Icon type="android-more-horizontal" size="14"></Icon>
 			</Button>
@@ -15,15 +15,15 @@
 		<a href="http://www.qukuaiwang.com.cn/news/3171.html" style="top:calc(48% + 10px); left: calc(50% + 240px);position: absolute;" v-show="enterPageState === 'addrSet'">没有以太坊地址?</a>
 		<!-- 登陆 -->
 		<div class="login-enter" v-show="enterPageState === 'addrLog'|| enterPageState === 'pwdLog' ">
-			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的EthLand地址">
+			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的WunoLand地址">
 			</Input>
 			<br>
 			<br v-show="enterPageState === 'addrLog' ">
-			<Input v-model="loginPwd" style="width:400px;" placeholder="请输入您的EthLand密码">
+			<Input v-model="loginPwd" style="width:400px;" placeholder="请输入您的WunoLand密码" @keyup.enter.native="userLogin">
 			</Input>
 			<br>
 			<br>
-			<Button type="primary" style="width: 400px;" @click="userLogin">进入Ethland</Button>
+			<Button type="primary" style="width: 400px;" @click="userLogin">进入WunoLand</Button>
 			<br>
 			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">注册</span>
 			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">忘记密码</span>
@@ -35,7 +35,7 @@
 			<Button type="info" style="width: 176px" @click="getCodeWhenChangePwd">获取验证码</Button>
 			<br>
 			<br>
-			<Input v-model="resetEthPwd" class="pwd-btn" placeholder="请输入您的新EthLand密码">
+			<Input v-model="resetEthPwd" class="pwd-btn" placeholder="请输入您的新WunoLand密码">
 			</Input>
 			<br>
 			<br>
@@ -43,7 +43,7 @@
 		</div>
 		<!-- 邮箱注册 -->
 		<div class="info-set" v-show="enterPageState === 'reg' || enterPageState === 'emailReg'">
-			<Input v-model="ethPwd" class="pwd-btn" placeholder="请输入您的EthLand密码">
+			<Input v-model="ethPwd" class="pwd-btn" placeholder="请输入您的WunoLand密码">
 			</Input>
 			<br>
 			<a @click="showEmailModal">
@@ -59,7 +59,7 @@
 			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode(ethEmail)">获取验证码</Button>
 			<br v-show="enterPageState === 'emailReg'">
 			<br v-show="enterPageState === 'emailReg'">
-			<Button type="primary" style="width: 400px" @click="landRegister">进入Ethland</Button>
+			<Button type="primary" style="width: 400px" @click="landRegister">进入WunoLand</Button>
 		</div>
 	</div>
 </template>
@@ -160,6 +160,7 @@ import anime from 'animejs'
 import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/statusHandle.js'
 import beginWave from '../libs/wave.js'
 import ethIcon1 from '../images/land/ethIcon.png'
+import { statusCodes } from '../libs/statusCodes.js'
 export default {
 	data () {
 		return {
@@ -181,6 +182,14 @@ export default {
 	},
 	components: {
 	},
+	computed: {
+		...mapState({
+      curLang: state => state.login.curLang
+    }),
+		showAddr: function () {
+			return this.loginAddr.slice(0, 6) + '****' + this.loginAddr.slice(38)
+		}
+	},
 	mounted () {
 		if (localStorage.getItem('EthlandAddr') !== '') {
 			this.enterPageState = 'addrLog'
@@ -199,7 +208,7 @@ export default {
 		]),
 		checkAddr () {
 			if (this.ethAddr === '') {
-				alertErrInfo(this, LoginCodes.Register_Data_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['JoiCodes_Addr_Illegal'])
 				return
 			}
 			this.enterPageState = 'reg'
@@ -234,7 +243,7 @@ export default {
 				this.$emit('switch-land')
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(registerData.data, succCb, errCb)
 		},
@@ -245,7 +254,7 @@ export default {
 			// 	return
 			// }
 			if (this.loginPwd === '' || this.loginAddr === '') {
-				alertErrInfo(this, CommonCodes.Register_Data_Null)
+				alertErrInfo(this, LoginCodes.Register_Data_Null)
 				return
 			}
 			const login = await serverRequest.userLogin(this.loginAddr, this.loginPwd)
@@ -261,7 +270,7 @@ export default {
 				this.$emit('switch-land')
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(login.data, succCb, errCb)
 		},
@@ -275,7 +284,7 @@ export default {
 				alertSuccInfo(this, LoginCodes.Send_Email_Succ)
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
 		},
@@ -302,7 +311,7 @@ export default {
 				this.enterPageState = 'addrLog'
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(setpass.data, succCb, errCb)
 		},
@@ -322,7 +331,7 @@ export default {
 				}
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(email.data, succCb, errCb)
 

@@ -259,6 +259,7 @@ img {
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import { statusCodes } from '../../libs/statusCodes.js'
 import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
 import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
 import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
@@ -407,7 +408,7 @@ export default {
 				})
 			}
 			let errCb = (msg) => {
-				alertErrInfo(this, msg)
+				alertErrInfo(this, statusCodes[this.curLang][msg])
 			}
 			serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
 		})
@@ -530,7 +531,7 @@ export default {
 				let succCb = (data) => {
 				}
 				let errCb = (msg) => {
-					alertErrInfo(this, msg)
+					alertErrInfo(this, statusCodes[this.curLang][msg])
 				}
 				serverRequest.handleRequestRes(sirePanda.data, succCb, errCb)
 				return
