@@ -279,7 +279,7 @@ export default {
     async queryAllPandaSold () {
       const pandas = await serverRequest.queryAllPandaSold()
       if (!pandas) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
@@ -321,11 +321,11 @@ export default {
     async cancelSoldPanda (gen) {
       const unSoldPanda = await serverRequest.unSoldPanda(gen, this.userAddr)
       if (!unSoldPanda) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
-        alertSuccInfo(this, LandProductCodes.Unsold_Panda_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['PandaLandCodes_Unsell_Panda_Succ'])
         this.queryAllPandaSold()
       }
       let errCb = (msg) => {

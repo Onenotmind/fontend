@@ -369,13 +369,13 @@ export default {
 		// 第一次注册赠送熊猫蛋
 		const genePanda = await serverRequest.genePandaRandom(this.ownerAddr)
 		if (!genePanda) {
-			alertErrInfo(this, CommonCodes.Service_Wrong)
+			alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			return
 		}
 		// 查询熊猫是否外出且带回物品
 		let assets = await serverRequest.getPandaBackAssets()
 		if (!assets) {
-			alertErrInfo(this, CommonCodes.Service_Wrong)
+			alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			return
 		}
 		let backAssetsSuccCb = async (data) => {
@@ -395,22 +395,7 @@ export default {
 		serverRequest.handleRequestRes(assets.data, backAssetsSuccCb, backAssetsErrCb)
 		// 查询当前地址下所有熊猫
 		this.$nextTick(async () => {
-			const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
-			console.log('allPanda', allPanda)
-			if (!allPanda) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
-				return
-			}
-			let succCb = async (data) => {
-				this.pandasArr = data.slice(0)
-				this.$nextTick(() => { // 熊猫图形渲染
-					this.updateHomeCharactor(this.pandasArr)
-				})
-			}
-			let errCb = (msg) => {
-				alertErrInfo(this, statusCodes[this.curLang][msg])
-			}
-			serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
+			await this.getAllPandasByCurrentAddr()
 		})
 		// 地图初始化
 		this.echartHandle = new EchartHandle('container')
@@ -487,12 +472,32 @@ export default {
 			this.echartHandle.resize(width, height, silent)
 		},
 
+		// 获取当前地址下的所有熊猫
+		async getAllPandasByCurrentAddr () {
+			const allPanda = await serverRequest.queryAllPandaByAddr(this.ownerAddr)
+			console.log('allPanda', allPanda)
+			if (!allPanda) {
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+				return
+			}
+			let succCb = async (data) => {
+				this.pandasArr = data.slice(0)
+				this.$nextTick(() => { // 熊猫图形渲染
+					this.updateHomeCharactor(this.pandasArr)
+				})
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, statusCodes[this.curLang][msg])
+			}
+			serverRequest.handleRequestRes(allPanda.data, succCb, errCb)
+		},
+
 		// 更新商品中心
 		async geneStarPoint () {
 			const starPoint = await serverRequest.getCurrentStarPoint()
 			console.log('starPoint', starPoint)
 			if (!starPoint) {
-				alertErrInfo(this, LandProductCodes.Get_Star_Point_Fail)
+				alertErrInfo(this, statusCodes[this.curLang]['LandProductCodes_Get_Star_Point_Fail'])
 				return
 			}
 			let starSuccCb = (data) => {
@@ -688,12 +693,13 @@ export default {
 			console.log('onSureSold')
 			const sellPanda = await serverRequest.sellPanda(this.pandaGen, parseInt(this.sellPandaPrice))
 			if (!sellPanda) {
-				alertErrInfo(CommonCodes.Net_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			}
 			console.log('sellPanda', sellPanda)
 			let succCb = (data) => {
 				this.pandasArr.splice(this.pandaIndex, 1)
 				this.sellPanda = false
+				this.pandaIndex = this.pandaIndex - 1
 			}
 			let errCb = () => { this.sellPanda = false }
 			serverRequest.handleRequestRes(sellPanda.data, succCb, errCb)
@@ -755,7 +761,7 @@ export default {
 		async onSureDrop () {
 			const dropPanda = await serverRequest.delPandaByGen(this.pandaGen)
 			if (!dropPanda) {
-				alertErrInfo(CommonCodes.Net_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			}
 			let succCb = (data) => {
 				this.dropPandaModal = false
@@ -775,7 +781,7 @@ export default {
 			curLang: state => state.login.curLang
 		}),
 		sellPandaInfo () {
-			if (this.pandasArr.length === 0) {
+			if (this.pandasArr.length === 0 || !this.pandasArr[this.pandaIndex]) {
 				return { // 初始化熊猫数据
 	        price: 0,
 	        speed: 0,

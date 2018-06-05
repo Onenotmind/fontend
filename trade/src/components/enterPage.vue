@@ -157,6 +157,7 @@ span {
 import { mapActions, mapState, mapGetters } from 'vuex'
 import serverRequest from '../libs/serverRequest.js'
 import anime from 'animejs'
+import { UserModel } from '../libs/ClientModel.js'
 import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/statusHandle.js'
 import beginWave from '../libs/wave.js'
 import ethIcon1 from '../images/land/ethIcon.png'
@@ -222,21 +223,22 @@ export default {
 		},
 		async landRegister () {
 			if (this.ethAddr === '' || this.ethPwd === '') {
-				alertErrInfo(this, LoginCodes.Register_Data_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_Login_IllegalData'])
 				return
 			}
 			if (this.ethEmail !== '' && this.ethCode === '') {
-				alertErrInfo(this, LoginCodes.Code_Not_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_Code_Error'])
 				return
 			}
 			const registerData = await serverRequest.userRegister(this.ethAddr, this.ethEmail, this.ethPwd, this.ethCode)
 			console.log('registerData', registerData)
 			if (!registerData) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 				return
 			}
 			let succCb = (data) => {
-				alertSuccInfo(this, LoginCodes.Register_Succ)
+				alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Register_Succ'])
+
 				localStorage.setItem('EthlandAddr', this.ethAddr)
 				this.changeUserAddr({ addr: this.ethAddr })
 				serverRequest.setHeader('token', data)
@@ -254,16 +256,16 @@ export default {
 			// 	return
 			// }
 			if (this.loginPwd === '' || this.loginAddr === '') {
-				alertErrInfo(this, LoginCodes.Register_Data_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_Login_IllegalData'])
 				return
 			}
 			const login = await serverRequest.userLogin(this.loginAddr, this.loginPwd)
 			if (!login) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 				return
 			}
 			let succCb = (data) => {
-				alertSuccInfo(this, LoginCodes.Login_Succ)
+				alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Login_Succ'])
 				localStorage.setItem('EthlandAddr', this.loginAddr)
 				this.changeUserAddr({ addr: this.loginAddr })
 				serverRequest.setHeader('token', data)
@@ -277,11 +279,11 @@ export default {
 		async getCode (email) {
 			const sendEmail = await serverRequest.userGeneCode(email)
 			if (!sendEmail) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 				return
 			}
 			let succCb = (data) => {
-				alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+				alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Mail_Send_Succ'])
 			}
 			let errCb = (msg) => {
 				alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -294,20 +296,20 @@ export default {
 		// 重置密码
 		async resetPass () {
 			if (!this.resetEthCode) {
-				alertErrInfo(this, LoginCodes.Code_Not_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_Code_Error'])
 				return 
 			}
 			if (!this.resetEthPwd) {
-				alertErrInfo(this, LoginCodes.Password_Not_Null)
+				alertErrInfo(this, statusCodes[this.curLang]['JoiCodes_Pwd_Illegal'])
 				return
 			}
 			const setpass = await serverRequest.changePwdWhenForget(this.loginAddr, this.resetEthPwd, this.resetEthCode)
 			if (!setpass) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 				return
 			}
 			let succCb = (data) => {
-				alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+				alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Change_Login_Pwd_Succ'])
 				this.enterPageState = 'addrLog'
 			}
 			let errCb = (msg) => {
@@ -320,14 +322,14 @@ export default {
 		async getCodeWhenChangePwd () {
 			const email = await serverRequest.queryUserEmail(this.loginAddr)
 			if (!email) {
-				alertErrInfo(this, CommonCodes.Service_Wrong)
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 				return
 			}
 			let succCb = async (data) => {
-				if (data.length > 0) {
-					await this.getCode(data[0].uemail)
+				if (data.length > 0 && data[0][UserModel.email]) {
+					await this.getCode(data[0][UserModel.email])
 				} else {
-					alertErrInfo(this, LoginCodes.Can_Not_Change_Pwd_Because_Not_Email)
+					alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_User_Not_Bind_Email'])
 				}
 			}
 			let errCb = (msg) => {

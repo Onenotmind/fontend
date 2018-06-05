@@ -185,7 +185,7 @@ export default {
 		this.$nextTick(async () => {
 			const curProductsArr = await serverRequest.getCurrentProduct()
 			if (!curProductsArr) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
 			let succCb = (data) => {
@@ -233,7 +233,7 @@ export default {
 		async getCurrentVotedProduct () {
 			const curProductsArr = await serverRequest.getCurrentVotedProduct()
 			if (!curProductsArr) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
 			let succCb = (data) => {
@@ -250,11 +250,11 @@ export default {
 		async votePro (productId) {
 			const vote = await serverRequest.voteProduct(productId, this.voteBaseCount)
 			if (!vote) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
 			let succCb = (data) => {
-        alertSuccInfo(this, LandProductCodes.Vote_Product_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LandProductCodes_Vote_Product_Succ'])
         this.getCurrentVotedProduct()
       }
       let errCb = (msg) => {

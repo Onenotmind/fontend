@@ -356,7 +356,7 @@
           </Col>
         </Row>
         </Col>
-        <Col span="20" class="rollout-card-margin" offset="4" v-show="userInfo[UserModel.email]">
+        <Col span="20" class="rollout-card-margin" offset="4" v-show="!userInfo[UserModel.email]">
           <Button type="success" style="width: 400px;" @click="bindEmail">{{ $t("submit") }}</Button>
         </Col>
       </Row>
@@ -680,10 +680,10 @@ export default {
     copyAddrBind () {
       let self = this
       clipboard.on('success', function(e) {
-        alertSuccInfo(self, LoginCodes.Copy_Addr_Succ)
+        alertSuccInfo(self, statusCodes[this.curLang]['Copy_Addr_Succ'])
       })
       clipboard.on('error', function(e) {
-        alertErrInfo(self, LoginCodes.Copy_Addr_Fail)
+        alertErrInfo(self, statusCodes[this.curLang]['Copy_Addr_Fail'])
       })
     },
 
@@ -696,7 +696,7 @@ export default {
       const userInfo = await serverRequest.getUserInfoAndAssetsByAddr(this.userAddr)
       console.log('userInfo', userInfo)
       if (!userInfo) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
@@ -718,7 +718,7 @@ export default {
       const products = await serverRequest.queryLandProductByAddr(this.userAddr)
       console.log(products)
       if (!products) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
@@ -733,12 +733,12 @@ export default {
 
     async getCode (email) {
       if (email === '') {
-        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+        alertErrInfo(this, statusCodes[this.curLang][LoginCodes_User_Not_Bind_Email])
         return
       }
       const sendEmail = await serverRequest.userGeneCode(email)
       if (!sendEmail) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
@@ -754,11 +754,11 @@ export default {
     },
     async resetLoginPass () {
       if (this.oldLoginPass === '' || this.newLoginPass === '') {
-        alertErrInfo(this, LoginCodes.Password_Not_Null)
+        alertErrInfo(this, statusCodes[this.curLang][JoiCodes_Pwd_Illegal])
         return
       }
       if (this.newLoginPass !== this.newLoginPassRepeat) {
-        alertErrInfo(this, LoginCodes.Password_Not_Repeat)
+        alertErrInfo(this, statusCodes[this.curLang][LoginCodes_Password_Not_Repeat])
         return
       }
       const cleanInput = () => {
@@ -768,11 +768,11 @@ export default {
       }
       const loginPassChange = await serverRequest.userChangeLoginPass(this.userAddr, this.oldLoginPass, this.newLoginPass)
       if (!loginPassChange) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
-        alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Reset_Pass_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -782,11 +782,11 @@ export default {
     },
     async resetTradePass () {
       if (this.newTradePass === '') {
-        alertErrInfo(this, LoginCodes.Password_Not_Null)
+        alertErrInfo(this, statusCodes[this.curLang][JoiCodes_Pwd_Illegal])
         return
       }
       if (this.newTradePass !== this.newTradePassRepeat) {
-        alertErrInfo(this, LoginCodes.Password_Not_Repeat)
+        alertErrInfo(this, statusCodes[this.curLang][LoginCodes_Password_Not_Repeat])
         return
       }
       const cleanInput = () => {
@@ -796,12 +796,12 @@ export default {
       }
       const loginPassChange = await serverRequest.userChangeTradePass(this.userAddr, this.newTradePass, this.modifyTradePassCode)
       if (!loginPassChange) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
         this.getUserInfo()
-        alertSuccInfo(this, LoginCodes.Set_New_Pwd_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Change_Trade_Pwd_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -810,17 +810,17 @@ export default {
       cleanInput()
     },
     async getTradeCode () {
-      if (!this.userInfo || this.userInfo.uemail === '') {
-        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+      if (!this.userInfo || this.userInfo[UserModel.email] === '') {
+        alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_User_Not_Bind_Email'])
         return
       } 
-      const sendEmail = await serverRequest.userGeneCode(this.userInfo.uemail)
+      const sendEmail = await serverRequest.userGeneCode(this.userInfo[UserModel.email])
       if (!sendEmail) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
-        alertSuccInfo(this, LoginCodes.Send_Email_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Mail_Send_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -829,7 +829,7 @@ export default {
     },
     async getEmailCode () {
       if (this.emailBind === '') {
-        alertErrInfo(this, CommonCodes.Please_Bind_Email_First)
+        alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_User_Not_Bind_Email'])
         return
       } 
       await this.getCode(this.emailBind)
@@ -837,12 +837,12 @@ export default {
     async bindEmail () {
       const checkEmail = await serverRequest.bindEmail(this.emailBind, this.emailBindCode)
       if (!checkEmail) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = async (data) => {
         await this.getUserInfo()
-        alertSuccInfo(this, LoginCodes.Set_Email_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Mail_Send_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -854,11 +854,11 @@ export default {
     async confirmExchange () {
       console.log('...', this.productExchangeType)
       if (!this.exchangeName || !this.exchangePhone || !this.exchangeAddr) {
-        alertErrInfo(this, LandProductCodes.Exchange_Product_Info_Not_Null)
+        alertErrInfo(this, statusCodes[this.curLang][Exchange_Product_Info_Not_Null])
         return
       }
       if (!this.exchangePass || !this.exchangeCode) {
-        alertErrInfo(this, LandProductCodes.Exchange_Product_Info_Not_Null)
+        alertErrInfo(this, statusCodes[this.curLang][Exchange_Product_Info_Not_Null])
         return
       }
       const cleanInput = () => {
@@ -870,11 +870,11 @@ export default {
       }
       const exchange = await serverRequest.exchangeProduct(this.userAddr, this.productExchangeType,this.exchangeName, this.exchangePhone, this.exchangeAddr, this.exchangePass, this.exchangeCode)
       if (!exchange) {
-        alertErrInfo(this, CommonCodes.Service_Wrong)
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
       let succCb = (data) => {
-        alertSuccInfo(this, LandProductCodes.Exchange_Product_Succ)
+        alertSuccInfo(this, statusCodes[this.curLang]['LandProductCodes_Exchange_Product_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
