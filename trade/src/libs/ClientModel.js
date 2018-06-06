@@ -7,6 +7,7 @@ const UserModel = {
 
 const PandaModel = {
 	gen: 'uk_gen',
+	addr: 'idx_addr',
 	state: 'idx_state',
 	price: 'price',
 	integral: 'integral',

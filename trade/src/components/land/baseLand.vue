@@ -243,7 +243,6 @@ img {
 	margin-left: -100px;
 	margin-top: 100px;
 	opacity: 0;
-	z-index: -1;
 }
 .btn-wid {
 	text-align: center;
@@ -701,7 +700,10 @@ export default {
 				this.sellPanda = false
 				this.pandaIndex = this.pandaIndex - 1
 			}
-			let errCb = () => { this.sellPanda = false }
+			let errCb = (msg) => {
+				this.sellPanda = false
+				alertErrInfo(this, statusCodes[this.curLang][msg])
+			}
 			serverRequest.handleRequestRes(sellPanda.data, succCb, errCb)
 		},
 
@@ -732,7 +734,9 @@ export default {
 					this.pandasArr.splice(this.pandaIndex, 1)
 					console.log('pandadata', data)
 				}
-				let errCb = () => {}
+				let errCb = (msg) => {
+					alertErrInfo(this, statusCodes[this.curLang][msg])
+				}
 				serverRequest.handleRequestRes(v.data, succCb, errCb)
 			})
 			.catch(() => {
@@ -763,10 +767,14 @@ export default {
 			if (!dropPanda) {
 				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			}
-			let succCb = (data) => {
+			let succCb = async (data) => {
 				this.dropPandaModal = false
+				await this.getAllPandasByCurrentAddr()
 			}
-			let errCb = () => { this.dropPandaModal = false }
+			let errCb = (msg) => {
+				this.dropPandaModal = false
+				alertErrInfo(this, statusCodes[this.curLang][msg])
+			}
 			serverRequest.handleRequestRes(dropPanda.data, succCb, errCb)
 		},
 

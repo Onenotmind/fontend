@@ -121,7 +121,7 @@
           <Button offset="2" @click="onCancelBuy">{{ $t("Cancel") }}</Button>
       </div>
   </Modal>
-    <Page :total="100" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange" show-sizer></Page>
+    <Page :total="totalPandas" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange"></Page>
   </Col>
 
   <!-- 我的市场 -->
@@ -199,27 +199,7 @@ import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
 export default {
 	data () {
 		return {
-			sortTypeList:[
-			{
-				value: 'speed',
-				label: '速度'
-			},
-			{
-				value: 'hungry',
-				label: '抗饥饿能力'
-			}
-			],
 			sortType: 'speed',
-			sortWayList: [
-			{
-				value: 'lowFirst',
-				label: '由低到高'
-			},
-			{
-				value: 'highFirst',
-				label: '由高到低'
-			}
-			],
       pageSize: 10, // 每一页展示数量
       pageIndex: 1, // 当前是哪一页
       filterIntegral: '', // 代数筛选
@@ -446,6 +426,96 @@ export default {
       userAddr: state => state.login.userAddr,
       curLang: state => state.login.curLang
     }),
+    sortTypeList () {
+      if (this.curLang === 'en') {
+        return [
+          {
+            value: 'speed',
+            label: 'speed'
+          },
+          {
+            value: 'hungry',
+            label: 'hungry'
+          },
+          {
+            value: 'goldCatch',
+            label: 'gold'
+          },
+          {
+            value: 'waterCatch',
+            label: 'water'
+          },
+          {
+            value: 'earthCatch',
+            label: 'earth'
+          },
+          {
+            value: 'woodCatch',
+            label: 'wood'
+          },
+          {
+            value: 'fireCatch',
+            label: 'fire'
+          }
+        ]
+      } else {
+        return [
+          {
+            value: 'speed',
+            label: '速度'
+          },
+          {
+            value: 'hungry',
+            label: '抗饥饿能力'
+          },
+          {
+            value: 'goldCatch',
+            label: '金'
+          },
+          {
+            value: 'waterCatch',
+            label: '水'
+          },
+          {
+            value: 'earthCatch',
+            label: '土'
+          },
+          {
+            value: 'woodCatch',
+            label: '木'
+          },
+          {
+            value: 'fireCatch',
+            label: '火'
+          }
+        ]
+      }
+    },
+    sortWayList () {
+      if (this.curLang === 'en') {
+        return [
+          {
+            value: 'lowFirst',
+            label: 'low to high'
+          },
+          {
+            value: 'highFirst',
+            label: 'hign to low'
+          }
+        ]
+      } else {
+        return [
+          {
+            value: 'lowFirst',
+            label: '由低到高'
+          },
+          {
+            value: 'highFirst',
+            label: '由高到低'
+          }
+        ]
+      }
+    },
     showPanda () {
       let pandasFilterArr = []
       if (this.filterIntegral === 'lowFilter') {
@@ -468,7 +538,10 @@ export default {
      }
     },
     mySoldPanda () {
-      return this.showPanda.filter(panda => panda[this.PandaModel.addr] === this.userAddr)
+      return this.showPanda.filter(panda => panda[PandaModel.addr] === this.userAddr)
+    },
+    totalPandas () {
+      return this.showPanda.length
     },
     attrIconObj () {
       if (this.curLang === 'en') {

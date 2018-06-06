@@ -1,0 +1,32 @@
+{
+  "en": {
+    "welcome": "welcome to",
+    "enter_wunoland": " wunoland!",
+    "please_enter_eth_add": "please enter your ethereum address",
+    "no_eth_addr": "no ethereum address?",
+    "please_enter_wunoland_add": "please enter your wunoland address",
+    "please_enter_wunoland_pwd": "please enter your wunoland password",
+    "go_wunoland": " go wunoland",
+    "register": "register",
+    "forget_pwd": "forget password",
+    "code": "email code",
+    "get_code": "get email code",
+    "reset_pwd": "reset password",
+    "please_enter_email": "please enter your email"
+  },
+  "cn": {
+    "welcome": "欢迎",
+    "enter_wunoland": "来到WunoLand！",
+    "please_enter_eth_add": "请输入您的ETH地址",
+    "no_eth_addr": "没有以太坊地址?",
+    "please_enter_wunoland_add": "请输入您的WunoLand地址",
+    "please_enter_wunoland_pwd": "请输入您的WunoLand密码",
+    "go_wunoland": "进入WunoLand",
+    "register": "注册",
+    "forget_pwd": "忘记密码",
+    "code": "验证码",
+    "get_code": "获取验证码",
+    "reset_pwd": "重置密码",
+    "please_enter_email": "请输入您的email地址"
+  }
+}

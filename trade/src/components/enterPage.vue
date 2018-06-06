@@ -1,66 +1,68 @@
+<i18n src='../common/i18n/enterPage.json'></i18n>
 <template>
 	<div id="fontPage">
 	<!-- 	<div class="enter-bg">
 			<img src="../images/land/ethIcon.png" class="ethup1">
 		</div> -->
 		<div class="eth-logo">
-			欢迎{{ showAddr }}来到WunoLand！
+			{{ $t("welcome") }}{{ showAddr }}{{ $t("enter_wunoland") }}
 		</div>
 		<!-- 注册 地址注册-->
-		<Input v-model="ethAddr" class="enter-btn" placeholder="请输入您的ETH地址" v-show="enterPageState === 'addrSet'" @keyup.enter.native="checkAddr">
+		<Input v-model="ethAddr" class="enter-btn" :placeholder="$t('please_enter_eth_add')" v-show="enterPageState === 'addrSet'" @keyup.enter.native="checkAddr">
 			<Button slot="append" @click="checkAddr">
 				<Icon type="android-more-horizontal" size="14"></Icon>
 			</Button>
 		</Input>
-		<a href="http://www.qukuaiwang.com.cn/news/3171.html" style="top:calc(48% + 10px); left: calc(50% + 240px);position: absolute;" v-show="enterPageState === 'addrSet'">没有以太坊地址?</a>
+		<a href="http://www.qukuaiwang.com.cn/news/3171.html" style="top:calc(48% + 10px); left: calc(50% + 240px);position: absolute;" v-show="enterPageState === 'addrSet'">{{ $t("no_eth_addr") }}</a>
 		<!-- 登陆 -->
 		<div class="login-enter" v-show="enterPageState === 'addrLog'|| enterPageState === 'pwdLog' ">
-			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" placeholder="请输入您的WunoLand地址">
+			<Input v-model="loginAddr" v-show="enterPageState === 'addrLog' " style="width:400px;" :placeholder="$t('please_enter_wunoland_add')">
 			</Input>
 			<br>
 			<br v-show="enterPageState === 'addrLog' ">
-			<Input v-model="loginPwd" style="width:400px;" placeholder="请输入您的WunoLand密码" @keyup.enter.native="userLogin">
+			<Input v-model="loginPwd" type="password" style="width:400px;" :placeholder="$t('please_enter_wunoland_pwd')" @keyup.enter.native="userLogin">
 			</Input>
 			<br>
 			<br>
-			<Button type="primary" style="width: 400px;" @click="userLogin">进入WunoLand</Button>
+			<Button type="primary" style="width: 400px;" @click="userLogin">{{ $t("go_wunoland") }}</Button>
 			<br>
-			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">注册</span>
-			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">忘记密码</span>
+			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">{{ $t("register") }}</span>
+			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">{{ $t("forget_pwd") }}</span>
 		</div>
 		<!-- 重置密码 -->
 		<div class="reset-pass" v-show="enterPageState === 'reset-pass'">
-			<Input v-model="resetEthCode" class="code-input" placeholder="验证码">
+			<Input v-model="resetEthCode" class="code-input" :placeholder="$t('code')">
 			</Input>
-			<Button type="info" style="width: 176px" @click="getCodeWhenChangePwd">获取验证码</Button>
+			<Button type="info" style="width: 176px" @click="getCodeWhenChangePwd">{{ $t("get_code") }}</Button>
 			<br>
 			<br>
-			<Input v-model="resetEthPwd" class="pwd-btn" placeholder="请输入您的新WunoLand密码">
+			<Input v-model="resetEthPwd" class="pwd-btn" type="password" :placeholder="$t('please_enter_wunoland_pwd')">
 			</Input>
 			<br>
 			<br>
-			<Button type="success" style="width: 400px" @click="resetPass">重置密码</Button>
+			<Button type="success" style="width: 400px" @click="resetPass">{{ $t("reset_pwd") }}</Button>
 		</div>
 		<!-- 邮箱注册 -->
 		<div class="info-set" v-show="enterPageState === 'reg' || enterPageState === 'emailReg'">
-			<Input v-model="ethPwd" class="pwd-btn" placeholder="请输入您的WunoLand密码">
+			<Input v-model="ethPwd" class="pwd-btn" type="password" :placeholder="$t('please_enter_wunoland_pwd')">
 			</Input>
 			<br>
 			<a @click="showEmailModal">
 				<Icon type="arrow-down-b" size="18" color="#fff" style="cursor: pointer;" ></Icon>
 			</a>
 			<br>
-			<Input v-model="ethEmail" class="pwd-btn" placeholder="请输入您的email地址" v-show="enterPageState === 'emailReg'">
+			<Input v-model="ethEmail" class="pwd-btn" type="password" :placeholder="$t('please_enter_email')" v-show="enterPageState === 'emailReg'">
 			</Input>
 			<br>
 			<br v-show="enterPageState === 'emailReg'">
-			<Input v-model="ethCode" class="code-input" placeholder="验证码" v-show="enterPageState === 'emailReg'">
+			<Input v-model="ethCode" class="code-input" :placeholder="$t('code')" v-show="enterPageState === 'emailReg'">
 			</Input>
-			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode(ethEmail)">获取验证码</Button>
+			<Button type="info" style="width: 176px" v-show="enterPageState === 'emailReg'" @click="getCode(ethEmail)">{{ $t("get_code") }}</Button>
 			<br v-show="enterPageState === 'emailReg'">
 			<br v-show="enterPageState === 'emailReg'">
-			<Button type="primary" style="width: 400px" @click="landRegister">进入WunoLand</Button>
+			<Button type="primary" style="width: 400px" @click="landRegister">{{ $t("go_wunoland") }}</Button>
 		</div>
+		<img :src="langFlagImg" class="lang-pos" @click="changeLang">
 	</div>
 </template>
 <style scoped>
@@ -76,6 +78,12 @@ span {
 	display: inline-block;
 	font-size: 16px;
 	color: #eee;
+	cursor: pointer;
+}
+.lang-pos {
+	position: fixed;
+	right: 50px;
+	top: 30px;
 	cursor: pointer;
 }
 #fontPage {
@@ -162,6 +170,8 @@ import { alertSuccInfo, alertErrInfo, LoginCodes, CommonCodes } from '../libs/st
 import beginWave from '../libs/wave.js'
 import ethIcon1 from '../images/land/ethIcon.png'
 import { statusCodes } from '../libs/statusCodes.js'
+import chinaFlag from '../images/flag_china.png'
+import usaFlag from '../images/flag_usa.png'
 export default {
 	data () {
 		return {
@@ -178,15 +188,24 @@ export default {
 			loginAddr: '',
 			resetEthPwd: '', // 重置密码模块新密码
 			resetEthCode:'', // 重置密码邮件验证码
-			enterPageState: 'addrSet' // { 'addrSet', 'reg', 'emailReg', 'addrLog', 'pwdLog'}
+			enterPageState: 'addrSet', // { 'addrSet', 'reg', 'emailReg', 'addrLog', 'pwdLog'}
+			langFlag: 'china',
+			langFlagImgObj: {
+				'china': chinaFlag,
+				'usa': usaFlag
+			}
 		}
 	},
 	components: {
+
 	},
 	computed: {
 		...mapState({
       curLang: state => state.login.curLang
     }),
+    langFlagImg: function () {
+    	return this.langFlagImgObj[this.langFlag]
+    },
 		showAddr: function () {
 			return this.loginAddr.slice(0, 6) + '****' + this.loginAddr.slice(38)
 		}
@@ -207,6 +226,18 @@ export default {
 		...mapActions([
 			'changeUserAddr'
 		]),
+
+		changeLang () {
+			if (this.langFlag === 'china') {
+				console.log('china')
+				this.langFlag = 'usa'
+				this.$emit('lang-click', 'english')
+			} else if (this.langFlag === 'usa') {
+				console.log('usa')
+				this.langFlag = 'china'
+				this.$emit('lang-click', 'china')
+			} else {}
+		},
 		checkAddr () {
 			if (this.ethAddr === '') {
 				alertErrInfo(this, statusCodes[this.curLang]['JoiCodes_Addr_Illegal'])

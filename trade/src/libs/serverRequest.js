@@ -2,7 +2,7 @@ const axios = require('axios')
 const qs = require('qs')
 axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
-  baseURL: 'http://localhost:3001/',
+  baseURL: 'http://47.88.158.254/',
   timeout: 10000
 })
 // axios.defaults.headers.common['token'] = '123'
@@ -45,7 +45,8 @@ const ssapiPath = {
   voteProduct: 'voteProduct',
   updateUserBamboo: 'updateUserBamboo',
   unSoldPanda: 'unSoldPanda',
-  getUserBamboo: 'getUserBamboo'
+  getUserBamboo: 'getUserBamboo',
+  checkUserLoginExpired: 'checkUserLoginExpired'
 }
 
 function intercept () {
@@ -281,6 +282,11 @@ function updateUserBamboo (addr) {
 // 获取用户参与挖矿得到的bamboo数量
 function getUserBamboo (addr, hash) {
   return ssapiAxios.get(ssapiPath.getUserBamboo, { params: { addr, hash } })
+}
+
+// 检测用户是否还在登陆状态,判断token
+function checkUserLoginExpired(token) {
+  return ssapiAxios.get(ssapiPath.checkUserLoginExpired, { params: { token } })
 }
 
 export default {

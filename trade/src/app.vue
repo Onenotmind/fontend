@@ -56,7 +56,7 @@
 					</MenuItem>
 					<MenuItem name="menu_lang" >
 					<Dropdown trigger="click" style="margin-left: 20px" @on-click="i18nClick">
-	        语言
+	        <img src="./images/internet.png" style="margin-bottom: -5px;">
           <Icon type="arrow-down-b" style="margin-left: 10px"></Icon>
 	        <DropdownMenu slot="list">
             <DropdownItem name="english">English</DropdownItem>
@@ -95,7 +95,7 @@
 </layout>
 <Layout v-if="currentView === 'enterPage'">
 	<Content>
-		<enterPage ref="loginPage" @switch-land="switchLand" />
+		<enterPage ref="loginPage" @switch-land="switchLand" @lang-click="i18nClick" />
 	</Content>
 </Layout>
 </div>
@@ -146,6 +146,32 @@
 }
 .layout-footer-center{
     text-align: center;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar
+{
+    width: 8px;
+    height: 7px;
+    border-radius: 40px;
+    opacity: 0.5;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+   width: 8px;
+   height: 7px;
+   border-radius: 40px;
+   opacity: 0.5;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #ccc;
 }
 
 </style>
