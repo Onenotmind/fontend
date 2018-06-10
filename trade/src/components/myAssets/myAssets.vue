@@ -72,7 +72,7 @@
   <Col span="20">
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'myAssets'">
     <p slot="title" style="height:30px;">
-      <Icon type="document-text" size="25" class="vertical"></Icon>
+      <!-- <Icon type="document-text" size="25" class="vertical"></Icon> -->
       <span class="my-assets-title">{{ $t("my_assets") }}</span>
     </p>
     <a href="#" slot="extra">
@@ -118,7 +118,7 @@
  <Col span="20">
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'myAssets'">
     <p slot="title" style="height:30px;">
-      <Icon type="ios-film-outline" size="25" class="vertical"></Icon>
+      <!-- <Icon type="ios-film-outline" size="25" class="vertical"></Icon> -->
       <span class="my-assets-title">{{ $t("my_products") }}</span>
     </p>
     <a href="#" slot="extra">

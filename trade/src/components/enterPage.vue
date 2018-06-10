@@ -27,7 +27,7 @@
 			<Button type="primary" style="width: 400px;" @click="userLogin">{{ $t("go_wunoland") }}</Button>
 			<br>
 			<span style="width:80px;float: left;margin-left: 10px;" @click="toRigister">{{ $t("register") }}</span>
-			<span style="width:80px;float: right;margin-right: 30px;" @click="toResetPass">{{ $t("forget_pwd") }}</span>
+			<span style="width:180px;text-align:right;float: right;margin-right: 30px;" @click="toResetPass">{{ $t("forget_pwd") }}</span>
 		</div>
 		<!-- 重置密码 -->
 		<div class="reset-pass" v-show="enterPageState === 'reset-pass'">
@@ -207,7 +207,12 @@ export default {
     	return this.langFlagImgObj[this.langFlag]
     },
 		showAddr: function () {
-			return this.loginAddr.slice(0, 6) + '****' + this.loginAddr.slice(38)
+			if (!this.loginAddr) return ''
+			if (this.loginAddr.length > 38) {
+				return this.loginAddr.slice(0, 6) + '****' + this.loginAddr.slice(38)
+			} else {
+				return ''
+			}
 		}
 	},
 	mounted () {
@@ -235,7 +240,7 @@ export default {
 			} else if (this.langFlag === 'usa') {
 				console.log('usa')
 				this.langFlag = 'china'
-				this.$emit('lang-click', 'china')
+				this.$emit('lang-click', 'chinese')
 			} else {}
 		},
 		checkAddr () {

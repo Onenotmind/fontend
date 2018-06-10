@@ -6,15 +6,14 @@
 		<Menu  active-name="free-activity" style="width:90%;" @on-select="selectMenu">
         <MenuGroup :title="$t('current_activity')">
             <MenuItem name="ads-list">
-                <Icon type="document-text"></Icon>
+                <!-- <Icon type="document-text"></Icon> -->
                 {{ $t("Advertise") }}
             </MenuItem>
         </MenuGroup>
         <MenuGroup :title="$t('Life_Service')">
-          <MenuItem name="call-charge">
-                <!-- <Icon type="email"></Icon> -->
+         <!--  <MenuItem name="call-charge" >
                 {{ $t("Charge") }}
-            </MenuItem>
+            </MenuItem> -->
         </MenuGroup>
         <MenuGroup :title="$t('products_center')">
         	<MenuItem name="current-product-center">
@@ -34,7 +33,7 @@
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
-          <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
+          <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{ $t("Advertise") }}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -68,7 +67,7 @@
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
-          <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
+          <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t('products_center')}}</span>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -96,7 +95,7 @@
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
-          <Icon type="ios-film-outline" size="28" class="vertical"></Icon>
+          <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t("next_products")}}</span>
           <Select v-model="voteBaseCount" style="width:120px;margin-left: 40px;">
             <Option v-for="item in [100, 1000, 10000, 100000]" :value="item" :key="item">{{ item }}</Option>

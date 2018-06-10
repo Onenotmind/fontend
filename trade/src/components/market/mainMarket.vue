@@ -4,9 +4,9 @@
 		<Row>
 			<Col span="4" class="nomal-padding">
 		<Menu  active-name="all-panda" style="width:90%;" @on-select="selectMenu">
-        <MenuGroup title="唔喏市场">
+        <MenuGroup :title="$t('wuno_market')">
             <MenuItem name="all-panda">
-                <Icon type="grid"></Icon>
+                <!-- <Icon type="grid"></Icon> -->
                 {{ $t("All_the_pandas") }}
             </MenuItem>
             <MenuItem name="low-level-panda">
@@ -19,9 +19,9 @@
                 {{ $t("special_pandas") }}
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="我的市场">
+        <MenuGroup :title="$t('my_market')">
           <MenuItem name="my-sell">
-              <Icon type="heart"></Icon>
+              <!-- <Icon type="heart"></Icon> -->
               {{ $t("my_sell") }}
           </MenuItem>
         </MenuGroup>
@@ -58,6 +58,10 @@
   		</Col>
   	</Row>
     <Row type="flex">
+      <Col span="24" class="nomal-padding tip-bg" align="center" v-if="showPanda.length === 0">
+        <Icon type="checkmark-circled" color="red" size="50"></Icon>
+        <span class="tip-word">{{ $t("no_wuno_by_filter") }}</span>
+      </Col>
     	<Col span="5" offset="1" v-for="(panda, index) in showPanda" class="nomal-padding" style="width:200px" :key="index">
     		<Card style="width: 100%;cursor:pointer;" :shadow="true">
     			<p>
@@ -121,12 +125,16 @@
           <Button offset="2" @click="onCancelBuy">{{ $t("Cancel") }}</Button>
       </div>
   </Modal>
-    <Page :total="totalPandas" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange"></Page>
+    <Page :total="totalPandas" :page-size="pageSize" class="nomal-padding" @on-page-size-change="onPageSizeChange" @on-change="pageChange" v-if="showPanda.length !== 0"></Page>
   </Col>
 
   <!-- 我的市场 -->
   <Col span="20" v-show="filterIntegral === 'mySell'">
   <Row type="flex">
+    <Col span="24" class="nomal-padding tip-bg" align="center" v-if="mySoldPanda.length === 0">
+      <Icon type="checkmark-circled" color="red" size="50"></Icon>
+      <span class="tip-word">{{ $t("no_sold_wuno") }}</span>
+    </Col>
       <Col span="5" offset="1" v-for="(panda, index) in mySoldPanda" class="nomal-padding" style="width:200px" :key="index">
         <Card style="width: 100%;cursor:pointer;" :shadow="true">
           <p>
@@ -168,6 +176,17 @@
 	line-height: 20px;
 }
 .img-vertical {
+  vertical-align: middle;
+}
+.tip-bg {
+  margin-top: 100px;
+}
+.tip-word {
+  margin-left: 15px;
+  font-size: 28px;
+  margin-top: -30px;
+  line-height: 40px;
+  display: inline-block;
   vertical-align: middle;
 }
 </style>

@@ -5,8 +5,8 @@
 	<!-- <iframe id="myiframe" class="miner_hive" name="miner_ifr" src="https://authedmine.com/media/miner.html?key=PrLp6e0z7pNu8ndGukXHl46Q7Kt7pJH5"></iframe> -->
 	<div>
 	<p  class="text-center combo-header">
-			<img src="../../images/ethereum.png" style="vertical-align:middle; width: 35px;">
-			<span class="combo-word">WunoLand</span>
+			<!-- <img src="../../images/ethereum.png" style="vertical-align:middle; width: 35px;"> -->
+			<span class="combo-word">Get Bamboo</span>
 		</p>
 		<!-- <img src="../../images/webbg/panda-right.png" class="bg-left"> -->
 		<!-- <img src="../../images/webbg/panda-left.png" class="bg-right"> -->
@@ -39,7 +39,7 @@
 	  </i-circle>
 	</div>
 	<p class="tips para-margin">
-		Mining for spins uses your CPU power. Please adjust the speed and threads according to your personal preferences. Bamboo number is updated every minute (see the progressabove).
+		Mining for bamboo uses your CPU power. Please adjust the speed and threads according to your personal preferences. Bamboo number is updated every second.
 	</p>
 	</Card>
 	</div>
@@ -166,7 +166,7 @@ export default {
       curLang: state => state.login.curLang
     }),
     percent: function () {
-    	return parseInt(this.totalHash % 100)
+    	return parseInt(this.totalHash)
     }
   },
   watch: {

@@ -1,4 +1,6 @@
 // const echarts = require('echarts')
+// require('../dist/world.js')
+// require('../dist/bmap.min.js')
 
 class EchartHandle {
 	constructor (divid) {
