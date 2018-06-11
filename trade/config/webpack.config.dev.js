@@ -3,6 +3,7 @@ const htmlWepackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
 	context: path.resolve(__dirname, '../'),
@@ -12,7 +13,7 @@ module.exports = {
 		path: path.resolve(__dirname, '../dist')
 	},
 	devServer: {
-    contentBase: path.join(__dirname, '../dist'),
+    contentBase: './src',
     compress: true,
     port: 3002
   },
@@ -75,7 +76,14 @@ module.exports = {
 			template: './src/index.html'
 		}),
 		new cleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
-    new UglifyJsPlugin()
+    new UglifyJsPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: './src/libs/dist/',
+        to: './libs/dist/',
+        toType: 'dir'
+      }
+    ])
 	],
 	resolve: {
 	  alias: {
