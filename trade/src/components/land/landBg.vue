@@ -113,6 +113,7 @@
 	width: 100%;
 	background-image: url(../../images/home-bg.png);
 	background-size: 100% 100%;
+  z-index: -1;
 }
 
 /*加载*/

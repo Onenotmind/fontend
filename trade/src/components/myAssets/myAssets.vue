@@ -128,8 +128,11 @@
       <Row span="24" type="flex" justify="center" align="middle">
         <Col span="24">
           <Row span="24" style="margin-bottom: 15px;" v-for="(asset, index) in myProducts">
-            <Col span="15" align="left">
+            <Col span="15" align="left" v-if="curLang === 'cn'">
               {{ asset[LandModel.name] }}
+            </Col>
+            <Col span="15" align="left" v-if="curLang === 'en'">
+              {{ asset[LandModel.nameEn] }}
             </Col>
             <Col span="4" class="line">
               <img :src="asset[LandModel.src]" style="height: 25px;">
@@ -248,7 +251,7 @@
           <Icon type="navigate" size="25" class="vertical"></Icon>
           <span class="my-assets-title">{{ $t("product_exchange") }}</span>
           <Select v-model="productExchangeType" style="width:420px;margin-left: 40px;">
-            <Option v-for="item in productsTypeArr" :value="item[LandModel.productId]" :key="item[LandModel.productId]">{{ item[LandModel.name] }}</Option>
+            <Option v-for="item in productsTypeArr" :value="item[LandModel.idx_productId]" :key="item[LandModel.idx_productId]">{{ item[LandModel.name] }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>

@@ -422,6 +422,7 @@ export default {
       .then(v => {
         let succCb = (data) => {
           this.pandaBuy = false
+          this.queryAllPandaSold()
         }
         let errCb = () => {
           this.pandaBuy = false

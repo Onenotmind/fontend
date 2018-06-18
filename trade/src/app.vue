@@ -91,7 +91,7 @@
 			<guideService v-if="currentView === 'guideService'" />
 			<discoverService v-if="currentView === 'discoverService'" />
 		</Content>
-		<Footer class="layout-footer-center">ethLand.best@2017-2018 All Right Resolved.</Footer>
+		<Footer v-if="currentView !== 'landService'" class="layout-footer-center" style="font-weight: 600;">Wunoland.com @ 2017-2018.</Footer>
 </layout>
 <Layout v-if="currentView === 'enterPage'">
 	<Content>

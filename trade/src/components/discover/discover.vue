@@ -190,7 +190,7 @@ export default {
 			let succCb = (data) => {
         // alertSuccInfo(this, LandProductCodes.Current_Product_Null)
         console.log('discoverdata', data)
-        this.curProducts = data.slice(0)
+        this.curProducts = data.filter(pro => pro[LandModel.productType] === 'product')
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])

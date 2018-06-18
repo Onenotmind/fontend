@@ -213,11 +213,12 @@
 }
 #pandas{
 	position: fixed;
-	width: 600px;
+	width: 750px;
 	height: 400px;
 	left: 50%;
 	top: 60%;
 	margin-left: -300px;
+	min-width: 700px;
 }
 img {
 	cursor: pointer;
@@ -252,8 +253,8 @@ img {
 	margin-bottom: 10px;
 }
 .backAssetImg {
-	width: 80%;
 	margin-left: 10%;
+	height: 30px;
 }
 </style>
 <script>
@@ -378,6 +379,9 @@ export default {
 			return
 		}
 		let backAssetsSuccCb = async (data) => {
+			if (!data) {
+				alertErrInfo(this, statusCodes[this.curLang]['PandaLandCodes_Back_Assets_Carry_Empty'])
+			}
 			if (data.backPandas.length > 0) {
 				console.log('data', data)
 				this.outBackPandas = data.backPandas.slice(0)
@@ -480,7 +484,7 @@ export default {
 				return
 			}
 			let succCb = async (data) => {
-				this.pandasArr = data.slice(0)
+				this.pandasArr = data.filter(panda => panda[PandaModel.state] === 'home')
 				this.$nextTick(() => { // 熊猫图形渲染
 					this.updateHomeCharactor(this.pandasArr)
 				})
@@ -554,23 +558,23 @@ export default {
 				y: -120
 			},
 			{
-				x: 90,
+				x: 70,
 				y: -120
 			},
 			{
-				x: 120,
+				x: 90,
 				y: -25
 			}
 			]
 			// 选项出场动画
 			for (let i = 0; i < pandaOpt; i++) {
 				let optDiv = document.getElementsByClassName(pandaClass)[0].getElementsByClassName('panda-options')[i]
+				optDiv.style.opacity = 1
 				anime({
 					targets: optDiv,
 					translateX: optOps[i].x,
 					translateY: optOps[i].y,
 					duration: 2000,
-					opacity: 1,
 					easing: 'easeOutSine'
 				})
 			}
@@ -587,13 +591,12 @@ export default {
 					targets: item,
 					translateX: 0,
 					translateY: 0,
-					duration: 2000,
 					opacity: 0,
+					duration: 2000,
 					easing: 'easeOutSine'
 				})
 				}
 			}, 500)
-				
 		},
 
 		// 熊猫操作 孵化熊猫
@@ -695,8 +698,9 @@ export default {
 				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
 			}
 			console.log('sellPanda', sellPanda)
-			let succCb = (data) => {
-				this.pandasArr.splice(this.pandaIndex, 1)
+			let succCb = async (data) => {
+				// this.pandasArr.splice(this.pandaIndex, 1)
+				this.getAllPandasByCurrentAddr()
 				this.sellPanda = false
 				this.pandaIndex = this.pandaIndex - 1
 			}
@@ -730,9 +734,9 @@ export default {
 			serverRequest.getEthlandProduct(this.pandaGen, this.bambooCount, this.direction)
 			.then((v) => {
 				this.outModel = false
-				let succCb = (data) => {
-					this.pandasArr.splice(this.pandaIndex, 1)
-					console.log('pandadata', data)
+				let succCb = async (data) => {
+					// this.pandasArr.splice(this.pandaIndex, 1)
+					await this.getAllPandasByCurrentAddr()
 				}
 				let errCb = (msg) => {
 					alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -756,9 +760,10 @@ export default {
 			this.backModel = false
 		},
 		// 丢弃熊猫
-		dropPanda () {
-			this.dropPandaModal = true
-
+		dropPanda (e) {
+			if (parseInt(e.target.style.opacity) === 1) {
+				this.dropPandaModal = true
+			}
 		},
 
 		// 确认丢弃熊猫

@@ -96,10 +96,12 @@
             <img src="../../images/guide/land/land4_en.png" v-if="curLang === 'en'"><br><br>
 
             <h3>{{ $t("start_h3_6") }}</h3><br><br>
-            <img src="../../images/guide/land/land8.png"><br>
+            <img src="../../images/guide/land/land9.png" v-if="curLang === 'cn'"><br>
+            <img src="../../images/guide/land/land9_en.png" v-if="curLang === 'en'"><br>
             <p>{{ $t("start_h3_6_p_1") }}</p><br>
             <p>{{ $t("start_h3_6_p_2") }}</p><br>
-            <img src="../../images/guide/assets/assets3.png"><br>
+            <img src="../../images/guide/assets/assets3.png" v-if="curLang === 'cn'"><br>
+            <img src="../../images/guide/assets/assets3_en.png" v-if="curLang === 'en'"><br>
             <p>{{ $t("start_h3_6_p_3") }}</p><br>
             <img src="../../images/guide/assets/assets4.png" v-if="curLang === 'cn'"><br>
             <img src="../../images/guide/assets/assets4_en.png" v-if="curLang === 'en'"><br>

@@ -63,6 +63,7 @@
 			<Button type="primary" style="width: 400px" @click="landRegister">{{ $t("go_wunoland") }}</Button>
 		</div>
 		<img :src="langFlagImg" class="lang-pos" @click="changeLang">
+		<Button type="primary" class="login-pos" size="small" v-show="enterPageState === 'addrSet'" @click="switchLogin">{{ $t("login") }}</Button>
 	</div>
 </template>
 <style scoped>
@@ -84,7 +85,17 @@ span {
 	position: fixed;
 	right: 50px;
 	top: 30px;
+	width: 31px;
 	cursor: pointer;
+}
+.login-pos {
+	position: fixed;
+	right: 95px;
+	top: 29px;
+	background: transparent;
+}
+.login-pos:hover {
+	background: #57a3f3;
 }
 #fontPage {
     position: absolute;
@@ -373,6 +384,11 @@ export default {
 			}
 			serverRequest.handleRequestRes(email.data, succCb, errCb)
 
+		},
+
+		// 点击注册页面右上角登陆按钮直接到登陆模块
+		switchLogin () {
+			this.enterPageState = 'addrLog'
 		},
 
 		// 切换到注册模块

@@ -25,9 +25,12 @@ const LandModel = {
 	src: 'imgSrc',
 	value: 'value',
 	name: 'name',
+	nameEn: 'nameEn',
 	productId: 'uk_productId',
+	idx_productId: 'idx_productId',
 	recommender: 'recommender',
-	time: 'time'
+	time: 'time',
+	productType: 'idx_productType'
 }
 
 const AssetsModel = {
