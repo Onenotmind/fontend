@@ -484,7 +484,7 @@ export default {
 				return
 			}
 			let succCb = async (data) => {
-				this.pandasArr = data.filter(panda => panda[PandaModel.state] === 'home')
+				this.pandasArr = data.filter(panda => panda[PandaModel.state] !== 'out')
 				this.$nextTick(() => { // 熊猫图形渲染
 					this.updateHomeCharactor(this.pandasArr)
 				})
@@ -581,7 +581,6 @@ export default {
 		},
 		// 熊猫失去焦点 选项消失
 		pandaBlur (e) {
-			return
 			let pandaClass = 'panda' + this.pandaIndex
 			let pandaDiv = document.getElementsByClassName(pandaClass)[0]
 			setTimeout(() => {

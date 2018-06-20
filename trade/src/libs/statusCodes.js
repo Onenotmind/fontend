@@ -6,7 +6,7 @@ const statusCodes = {
 		'CommonCodes_Request_Method_Wrong': 'request method wrong!',
 		'CommonCodes_Token_Fail': 'token fail',
 		'CommonCodes_No_Access': 'permission denied',
-		'LoginCodes_Email_Exist': 'your email is registered!',
+		'LoginCodes_Email_Exist': 'your address is registered!',
 	  'LoginCodes_Login_DataWrong': 'address or password is incorrectly!',
 	  'LoginCodes_Login_Succ': 'login successful',
 	  'LoginCodes_Login_No_Account': 'please register first',
@@ -19,6 +19,7 @@ const statusCodes = {
 	  'LoginCodes_Mail_Send_Error': 'failed to send email, please try later',
 	  'LoginCodes_User_Not_Bind_Email': 'please bind email first',
 	  'LoginCodes_Query_Email_Succ': 'query user email success',
+	  'LoginCodes_Bind_Email_Fail': 'Bind Email Failed, Please Try Later！',
 	  'LoginCodes_Code_Error': 'code wrong',
 	  'LoginCodes_Code_Correct': 'code correct',
 	  'LoginCodes_Reset_Pass_Succ': 'reset password successful',
@@ -44,6 +45,7 @@ const statusCodes = {
 		'PandaOwnerCodes_Query_Panda_By_Addr': 'query all wunos',
 		'PandaOwnerCodes_Query_Panda_In_Sold': 'query all sold wunos ',
 		'PandaOwnerCodes_Not_Out_Panda': 'user not having out wuno',
+		'PandaOwnerCodes_More_Than_Max_Panda': 'Max Wuno Is 3!',
 		'LandProductCodes_Get_Star_Point_Succ': 'get product center successful',
 		'LandProductCodes_Get_Star_Point_Fail': 'failed to query product center',
 		'LandProductCodes_Get_Prepare_Product_Fail': 'failed to get voted goods',
@@ -93,7 +95,8 @@ const statusCodes = {
 		'JoiCodes_ProductAttr_Illegal': 'product attribute is illegal',
 		'JoiCodes_Dir_Illegal': 'direction is illegal',
 		'JoiCodes_ProductId_Illegal': 'productId is illegal',
-		'JoiCodes_Phone_Illegal': 'phone number is illegal'
+		'JoiCodes_Phone_Illegal': 'phone number is illegal',
+		'Insufficient_Bamboo_Balance': 'Insufficient Bamboo Balance!'
 	},
 	'cn': {
 		'CommonCodes_Service_Wrong': '服务器忙，请稍后再试',
@@ -101,7 +104,7 @@ const statusCodes = {
 		'CommonCodes_Request_Method_Wrong': '请求方式错误！',
 		'CommonCodes_Token_Fail': 'Token失效',
 		'CommonCodes_No_Access': '没有权限',
-		'LoginCodes_Email_Exist': '你的邮件已经注册了！',
+		'LoginCodes_Email_Exist': '你的账号已经注册了！',
 	  'LoginCodes_Login_DataWrong': '账号密码输入错误',
 	  'LoginCodes_Login_Succ': '登陆成功',
 	  'LoginCodes_Login_No_Account': '请先注册',
@@ -114,6 +117,7 @@ const statusCodes = {
 	  'LoginCodes_Mail_Send_Error': '邮件发送失败,请稍后再试',
 	  'LoginCodes_User_Not_Bind_Email': '用户未绑定邮箱',
 	  'LoginCodes_Query_Email_Succ': '查询用户邮箱成功！',
+	  'LoginCodes_Bind_Email_Fail': '绑定邮箱失败, 请稍后再试！',
 	  'LoginCodes_Code_Error': '验证码错误！',
 	  'LoginCodes_Code_Correct': '验证码正确！',
 	  'LoginCodes_Reset_Pass_Succ': '重置密码成功！',
@@ -139,6 +143,7 @@ const statusCodes = {
 		'PandaOwnerCodes_Query_Panda_By_Addr': '查询地址下所有呜喏成功！',
 		'PandaOwnerCodes_Query_Panda_In_Sold': '查询所有在售是呜喏！',
 		'PandaOwnerCodes_Not_Out_Panda': '该用户没有外出的呜喏',
+		'PandaOwnerCodes_More_Than_Max_Panda': '用户所拥有呜喏不能超过三只！',
 		'LandProductCodes_Get_Star_Point_Succ': '得到商品产生中心成功！',
 		'LandProductCodes_Get_Star_Point_Fail': '商品中心获取失败',
 		'LandProductCodes_Get_Prepare_Product_Fail': '获取投票中的商品失败！',
@@ -188,7 +193,8 @@ const statusCodes = {
 		'JoiCodes_ProductAttr_Illegal': '商品属性格式不正确',
 		'JoiCodes_Dir_Illegal': '方向格式不正确',
 		'JoiCodes_ProductId_Illegal': '商品id格式不正确',
-		'JoiCodes_Phone_Illegal': '电话格式不正确'
+		'JoiCodes_Phone_Illegal': '电话格式不正确',
+		'Insufficient_Bamboo_Balance': '竹子余额不足'
 	}
 }
 

@@ -51,7 +51,7 @@
 				<Icon type="arrow-down-b" size="18" color="#fff" style="cursor: pointer;" ></Icon>
 			</a>
 			<br>
-			<Input v-model="ethEmail" class="pwd-btn" type="password" :placeholder="$t('please_enter_email')" v-show="enterPageState === 'emailReg'">
+			<Input v-model="ethEmail" class="pwd-btn" :placeholder="$t('please_enter_email')" v-show="enterPageState === 'emailReg'">
 			</Input>
 			<br>
 			<br v-show="enterPageState === 'emailReg'">

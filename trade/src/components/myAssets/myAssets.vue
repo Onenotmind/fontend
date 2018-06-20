@@ -650,6 +650,9 @@ export default {
     this.copyAddrBind()
   },
 	methods: {
+    ...mapActions([
+      'changeBambooCount'
+    ]),
     selectMenu (name) {
       console.log(name)
       switch(name) {
@@ -705,6 +708,7 @@ export default {
       let succCb = (data) => {
         this.userInfo = data
         this.myTotalAssets = data
+        this.changeBambooCount({ count: parseInt(this.myTotalAssets[AssetsModel.bamboo]) })
         const qr = qrCode.qrcode(10, 'L')
         qr.addData(this.userInfo[UserModel.account])
         qr.make()
@@ -813,10 +817,10 @@ export default {
       cleanInput()
     },
     async getTradeCode () {
-      if (!this.userInfo || this.userInfo[UserModel.email] === '') {
+      if (!this.userInfo || !this.userInfo[UserModel.email]) {
         alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_User_Not_Bind_Email'])
         return
-      } 
+      }
       const sendEmail = await serverRequest.userGeneCode(this.userInfo[UserModel.email])
       if (!sendEmail) {
         alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
@@ -845,7 +849,7 @@ export default {
       }
       let succCb = async (data) => {
         await this.getUserInfo()
-        alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Mail_Send_Succ'])
+        // alertSuccInfo(this, statusCodes[this.curLang]['LoginCodes_Mail_Send_Succ'])
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])

@@ -15,9 +15,9 @@
             <MenuItem name="high-level-panda">
                 G5 ~ G0
             </MenuItem>
-            <MenuItem name="special-panda">
+            <!-- <MenuItem name="special-panda">
                 {{ $t("special_pandas") }}
-            </MenuItem>
+            </MenuItem> -->
         </MenuGroup>
         <MenuGroup :title="$t('my_market')">
           <MenuItem name="my-sell">
@@ -424,8 +424,9 @@ export default {
           this.pandaBuy = false
           this.queryAllPandaSold()
         }
-        let errCb = () => {
+        let errCb = (msg) => {
           this.pandaBuy = false
+          alertErrInfo(this, statusCodes[this.curLang][msg])
         }
         serverRequest.handleRequestRes(v.data, succCb, errCb)
       })
@@ -444,7 +445,8 @@ export default {
   computed: {
     ...mapState({
       userAddr: state => state.login.userAddr,
-      curLang: state => state.login.curLang
+      curLang: state => state.login.curLang,
+      userBamboo: state => state.login.userBamboo
     }),
     sortTypeList () {
       if (this.curLang === 'en') {

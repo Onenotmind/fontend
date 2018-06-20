@@ -207,7 +207,8 @@ export default {
   computed: {
     ...mapState({
       userAddr: state => state.login.userAddr,
-      curLang: state => state.login.curLang
+      curLang: state => state.login.curLang,
+      userBamboo: state => state.login.userBamboo
     })
   },
 	methods: {
@@ -247,6 +248,10 @@ export default {
 
 		// 给商品投票
 		async votePro (productId) {
+      // if (this.voteBaseCount > this.userBamboo) {
+      //   alertErrInfo(this, statusCodes[this.curLang]['Insufficient_Bamboo_Balance'])
+      //   return
+      // }
 			const vote = await serverRequest.voteProduct(productId, this.voteBaseCount)
 			if (!vote) {
         alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
