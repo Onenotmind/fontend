@@ -4,9 +4,12 @@ const statusCodes = {
 		'CommonCodes_Service_Wrong': 'service is busy, please try again!',
 		'CommonCodes_Params_Check_Fail': 'params check fail!',
 		'CommonCodes_Request_Method_Wrong': 'request method wrong!',
+		'CommonCodes_Response_Succ': 'Response successful!',
 		'CommonCodes_Token_Fail': 'token fail',
 		'CommonCodes_No_Access': 'permission denied',
+		'CommonCodes_Assets_Not_Enought': 'Not Enought Asset!',
 		'LoginCodes_Email_Exist': 'your address is registered!',
+		'LoginCodes_Email_Already_Exist': 'your email is registered!',
 	  'LoginCodes_Login_DataWrong': 'address or password is incorrectly!',
 	  'LoginCodes_Login_Succ': 'login successful',
 	  'LoginCodes_Login_No_Account': 'please register first',
@@ -77,7 +80,7 @@ const statusCodes = {
 		'PandaLandCodes_Panda_Not_Sold': 'wuno is unsold',
 		'PandaLandCodes_Sell_Panda_Succ': 'sell wuno successful',
 		'PandaLandCodes_Unsell_Panda_Succ': 'unsold wuno successful',
-		'PandaLandCodes_Only_One_Unsold_Panda': 'at least unsold wuno',
+		'PandaLandCodes_Only_One_Unsold_Panda': 'at least one unsold wuno!',
 		'PandaLandCodes_Buy_Panda_Fail': 'fail to buy wuno',
 		'PandaLandCodes_Buy_Panda_Succ': 'buy wuno successful',
 		'PandaLandCodes_Back_Assets_Carry_Succ': 'carry back successful',
@@ -96,15 +99,22 @@ const statusCodes = {
 		'JoiCodes_Dir_Illegal': 'direction is illegal',
 		'JoiCodes_ProductId_Illegal': 'productId is illegal',
 		'JoiCodes_Phone_Illegal': 'phone number is illegal',
-		'Insufficient_Bamboo_Balance': 'Insufficient Bamboo Balance!'
+		'Insufficient_Bamboo_Balance': 'Insufficient Bamboo Balance!',
+		'Information_Not_Completed': 'Please Fill All Need Information!',
+		'LandProductCodes_Roll_Out_Succ': 'Assets Withdraw successful!',
+		'Recharge_Info_Not_Null': 'Recharge Information Not null!',
+		'Recharge_Assets_Succ': 'Recharge Order Create successful!'
 	},
 	'cn': {
 		'CommonCodes_Service_Wrong': '服务器忙，请稍后再试',
 		'CommonCodes_Params_Check_Fail': '参数校验失败',
 		'CommonCodes_Request_Method_Wrong': '请求方式错误！',
+		'CommonCodes_Response_Succ': '成功返回！',
 		'CommonCodes_Token_Fail': 'Token失效',
 		'CommonCodes_No_Access': '没有权限',
-		'LoginCodes_Email_Exist': '你的账号已经注册了！',
+		'CommonCodes_Assets_Not_Enought': '资产不足!',
+		'LoginCodes_Email_Exist': '你的账号已经注册了！', // TODO
+		'LoginCodes_Email_Already_Exist': '你的邮件已经被注册过！',
 	  'LoginCodes_Login_DataWrong': '账号密码输入错误',
 	  'LoginCodes_Login_Succ': '登陆成功',
 	  'LoginCodes_Login_No_Account': '请先注册',
@@ -175,7 +185,7 @@ const statusCodes = {
 		'PandaLandCodes_Panda_Not_Sold': '呜喏并非出售',
 		'PandaLandCodes_Sell_Panda_Succ': '出售呜喏成功！',
 		'PandaLandCodes_Unsell_Panda_Succ': '取消出售呜喏成功！',
-		'PandaLandCodes_Only_One_Unsold_Panda': '只有一只没出售的呜喏',
+		'PandaLandCodes_Only_One_Unsold_Panda': '必须保留一只没出售的呜喏!',
 		'PandaLandCodes_Buy_Panda_Fail': '购买呜喏失败',
 		'PandaLandCodes_Buy_Panda_Succ': '购买呜喏成功',
 		'PandaLandCodes_Back_Assets_Carry_Succ': '呜喏带回商品成功!',
@@ -194,7 +204,11 @@ const statusCodes = {
 		'JoiCodes_Dir_Illegal': '方向格式不正确',
 		'JoiCodes_ProductId_Illegal': '商品id格式不正确',
 		'JoiCodes_Phone_Illegal': '电话格式不正确',
-		'Insufficient_Bamboo_Balance': '竹子余额不足'
+		'Insufficient_Bamboo_Balance': '竹子余额不足',
+		'Information_Not_Completed': '信息未填完！',
+		'LandProductCodes_Roll_Out_Succ': '提现订单提交成功！',
+		'Recharge_Info_Not_Null': '充值信息不为空',
+		'Recharge_Assets_Succ': '资产充值订单发起成功！'
 	}
 }
 

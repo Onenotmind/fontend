@@ -116,7 +116,7 @@
           <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.woodCatch]}}</Col>
           <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo[PandaModel.fireCatch]}}</Col>
           <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.earthCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.special]}} </Col>
+          <Col span="4"><img v-if="initPandaBuyInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
       </p>

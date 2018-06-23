@@ -94,7 +94,7 @@ let mapConfig  = {
     ]
 };
 
-function getMapConfig (val) {
+function getMapConfig (val, location) {
   return {
     backgroundColor: '#13194b',
     title: {},
@@ -151,7 +151,7 @@ function getMapConfig (val) {
     {
       type: 'scatter',
       coordinateSystem: 'geo',
-      data: [{ value : [142.5, 1.5, 20] }],
+      data: [{ value : location }],
       large: true,
       // largeThreshold: 100,
       symbolSize: 25,

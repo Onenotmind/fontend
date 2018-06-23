@@ -34,12 +34,19 @@ const ssapiPath = {
   queryAllPandaSold: 'queryAllPandaSold',
   buyPanda: 'buyPanda',
   sellPanda: 'sellPanda',
+  feedPanda: 'feedPanda',
   delPandaByGen: 'delPandaByGen',
   getUserInfoAndAssetsByAddr: 'getUserInfoAndAssetsByAddr',
   sirePanda: 'sirePanda',
   getCurrentStarPoint: 'getCurrentStarPoint',
   queryLandProductByAddr: 'queryLandProductByAddr',
+
   exchangeProduct: 'exchangeProduct',
+  queryUserAllProduct: 'queryUserAllProduct',
+
+  insertAssetsRollOutOrder: 'insertAssetsRollOutOrder',
+  insertAssetsRollInOrder: 'insertAssetsRollInOrder',
+
   getCurrentProduct: 'getCurrentProduct',
   getCurrentVotedProduct: 'getCurrentVotedProduct',
   voteProduct: 'voteProduct',
@@ -179,6 +186,16 @@ function deleteRollOutOrder (assetsData) {
   return ssapiAxios.post(ssapiPath.deleteRollOutOrder, qs.stringify({ assetsData }))
 }
 
+// 新增一个提现订单
+function insertAssetsRollOutOrder (addr, type, amount, pwd) {
+  return ssapiAxios.get(ssapiPath.insertAssetsRollOutOrder, { params: { addr, type, amount, pwd }})
+}
+
+// 新增一个充值订单
+function insertAssetsRollInOrder (userAddr, addr, type, amount) {
+  return ssapiAxios.get(ssapiPath.insertAssetsRollInOrder, { params: { userAddr, addr, type, amount }})
+}
+
 // 查询某地址下所有熊猫
 function queryAllPandaByAddr (addr) {
   return ssapiAxios.get(ssapiPath.queryAllPandaByAddr, { params: { addr }})
@@ -229,6 +246,11 @@ function sellPanda (pandaGen, price) {
   return ssapiAxios.get(ssapiPath.sellPanda, { params: { pandaGen, price }})
 }
 
+// 喂养熊猫
+function feedPanda (pandaGen, account) {
+  return ssapiAxios.get(ssapiPath.feedPanda, { params: { pandaGen, account }})
+}
+
 // 取消出售熊猫
 function unSoldPanda (pandaGen, addr) {
   return ssapiAxios.get(ssapiPath.unSoldPanda, { params: { pandaGen, addr }})
@@ -257,6 +279,11 @@ function queryLandProductByAddr (addr) {
 // 兑换商品
 function exchangeProduct (addr, productId, userName, userPhone, userRealAddr, pwd, code) {
   return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, userName, userPhone, userRealAddr, pwd, code }})
+}
+
+// 获取用户所有的兑换商品
+function queryUserAllProduct (addr) {
+  return ssapiAxios.get(ssapiPath.queryUserAllProduct, { params: { addr }})
 }
 
 // 获取正在活动中的商品
@@ -317,6 +344,7 @@ export default {
   queryAllPandaSold,
   buyPanda,
   sellPanda,
+  feedPanda,
   unSoldPanda,
   delPandaByGen,
   getUserInfoAndAssetsByAddr,
@@ -330,5 +358,8 @@ export default {
   getCurrentVotedProduct,
   voteProduct,
   updateUserBamboo,
-  getUserBamboo
+  getUserBamboo,
+  queryUserAllProduct,
+  insertAssetsRollOutOrder,
+  insertAssetsRollInOrder
 }

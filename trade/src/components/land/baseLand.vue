@@ -11,7 +11,7 @@
 					:gen="panda[PandaModel.gen]" >
 					<canvas v-show="panda[PandaModel.state] === 'home'" :id=" 'homecvs' + index" width="200" height="200" class="nomal-padding" tabindex="0" @click="showPandaPanel(index)" @blur="pandaBlur"></canvas>
 				<!-- </Tooltip> -->
-				<img :src="optionsIcon.feedIcon" class="panda-options">
+				<img :src="optionsIcon.feedIcon" class="panda-options" @click="feedWuno">
 				<img :src="optionsIcon.beginOutIcon" class="panda-options" @click="startOut">
 				<img :src="optionsIcon.sellIcon" class="panda-options" @click="soldPanda">
 				<img :src="optionsIcon.dropIcon" class="panda-options" @click="dropPanda">
@@ -129,10 +129,10 @@
           </Col>
         </Row>
         <Row span="24">
-          <Col span="12" align="center">
+          <!-- <Col span="12" align="center">
             <Icon type="social-yen"></Icon>
               {{sellPandaInfo[PandaModel.price]}}
-          </Col>
+          </Col> -->
           <Col span="12" align="center">
           <a href="#">
               G{{ 10 - parseInt(sellPandaInfo[PandaModel.integral] / 100)}}
@@ -151,7 +151,7 @@
           <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo[PandaModel.woodCatch]}}</Col>
           <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo[PandaModel.fireCatch]}}</Col>
           <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo[PandaModel.earthCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo[PandaModel.special]}} </Col>
+          <Col span="4"><img v-if="sellPandaInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
        <Row type="flex" justify="center">
@@ -508,7 +508,7 @@ export default {
 				for (let item of data) {
 					this.starPointArr.push({ value: item })
 				}
-				this.echartHandle.setOption(getMapConfig(this.starPointArr))
+				this.echartHandle.setOption(getMapConfig(this.starPointArr, this.location))
 			}
 			let starErrCb = () => {
 			}
@@ -674,6 +674,22 @@ export default {
 		  });
 		},
 
+		// 喂养熊猫
+		async feedWuno () {
+			const account = parseInt(Math.random() * 50)
+			const feedPanda = await serverRequest.feedPanda(this.pandaGen, account)
+			if (!feedPanda) {
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+			}
+			let succCb = async (data) => {
+				alertSuccInfo(this, 'i love you...emmm....')
+			}
+			let errCb = (msg) => {
+				alertErrInfo(this, statusCodes[this.curLang][msg])
+			}
+			serverRequest.handleRequestRes(feedPanda.data, succCb, errCb)
+		},
+
 		// 售卖熊猫
 		async soldPanda () {
 			this.sellPanda = true
@@ -790,7 +806,8 @@ export default {
 	computed: {
 		...mapState({
 			userAddr: state => state.login.userAddr,
-			curLang: state => state.login.curLang
+			curLang: state => state.login.curLang,
+			location: state => state.login.location
 		}),
 		sellPandaInfo () {
 			if (this.pandasArr.length === 0 || !this.pandasArr[this.pandaIndex]) {

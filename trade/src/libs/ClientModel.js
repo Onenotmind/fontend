@@ -2,7 +2,9 @@ const UserModel = {
 	addr: 'uk_addr',
 	email: 'uk_email',
 	tradePwd: 'utradePwd',
-	account: 'uk_account'
+	account: 'uk_account',
+	latitude: 'latitude',
+	longitude: 'longitude'
 }
 
 const PandaModel = {
@@ -27,6 +29,11 @@ const LandModel = {
 	name: 'name',
 	nameEn: 'nameEn',
 	productId: 'uk_productId',
+	id: 'pk_id',
+	product_addr: 'userRealAddr',
+	product_name: 'userName',
+	product_phone: 'userPhone',
+	state: 'state',
 	idx_productId: 'idx_productId',
 	recommender: 'recommender',
 	time: 'time',
@@ -42,9 +49,20 @@ const AssetsModel = {
 	bambooLock: 'bambooLock'
 }
 
+const OrderModel = {
+	id: 'pk_id',
+	addr: 'idx_addr',
+	type: 'assetsType',
+	amount: 'amount',
+	state: 'state',
+	create: 'gmt_create',
+	receiver: 'receiver'
+}
+
 module.exports = {
 	UserModel: UserModel,
 	PandaModel: PandaModel,
 	LandModel: LandModel,
-	AssetsModel: AssetsModel
+	AssetsModel: AssetsModel,
+	OrderModel: OrderModel
 }

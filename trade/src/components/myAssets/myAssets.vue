@@ -43,15 +43,17 @@
       <p>
         <Row span="24" type="flex" justify="center" align="middle">
           <Col span="3" align="center" style="min-width: 55px;" >
-            <img src="https://best.bi/assets/xx/avatars/avatar.png" class="avatar">
+            <img src="../../images/user_default.png" class="avatar">
           </Col>
           <Col span="10" style="border-right: 1px solid #E1E2EA">
             <p> {{ $t("my_address") }}：{{ showAddr}}</p>
             <br>
+            <p> {{ $t("my_location") }}：[ {{ userInfo[UserModel.longitude]}}, {{ userInfo[UserModel.latitude] }} ] </p>
+            <br>
             <p> {{ $t("my_email") }}：{{ userInfo[UserModel.email] || ''}}</p>
           </Col>
           <Col span="11" style="padding-left: 100px;">
-            <img src="https://best.bi/id1.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">{{ $t("authentication") }}：</span>
+            <img src="../../images/id.png" style="width: 40px;margin-right: 10px;" class="vertical"> <span class="verify-word">{{ $t("authentication") }}：</span>
             <br>
             <br>
             <Icon type="checkmark-circled" color="green" size="25" class="vertical" v-show="userInfo[UserModel.email]"></Icon>
@@ -102,8 +104,8 @@
               <img :src="lineImg">
             </Col>
             <Col span="9" align="center">
-              <Button type="success" @click="assetsRollOut(asset.label)">{{ $t("withdraw") }}</Button>
-              <Button type="warning" style="margin-left: 8px;" @click="assetsRollIn(asset.label)">{{ $t("recharge") }}</Button>
+              <Button type="success" @click="assetsRollOut(asset.label)" :disabled="asset.label === 'BAMBOO'">{{ $t("withdraw") }}</Button>
+              <Button type="warning" style="margin-left: 8px;" :disabled="asset.label === 'BAMBOO'" @click="assetsRollIn(asset.label)">{{ $t("recharge") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -158,7 +160,7 @@
           <Icon type="forward" size="25" class="vertical"></Icon>
           <span class="my-assets-title">{{ $t("assets_withdraw") }}</span>
           <Select v-model="assetsRollOutType" style="width:120px;margin-left: 40px;">
-            <Option v-for="item in assetsTypeArr" :value="item" :key="item">{{ item }}</Option>
+            <Option v-for="item in assetsTypeArr" :value="item" :key="item" :disabled="item === 'BAMBOO'">{{ item }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -192,7 +194,7 @@
             </Col>
           </Row>
         </Col>
-        <Col span="24" class="rollout-card-margin">
+        <!-- <Col span="24" class="rollout-card-margin">
           <Row>
             <Col span="6"  align="right">
               <span class="rollout-card-word">{{ $t("verification_code") }}：</span>
@@ -202,13 +204,13 @@
               <Button type="info" style="width: 150px;" @click="getCode(userInfo[UserModel.email] || '')">{{ $t("Get_verification_code") }}</Button>
             </Col>
           </Row>
-        </Col>
+        </Col> -->
         <Col span="20" class="rollout-card-margin" offset="4">
-          <Button type="success" style="width: 400px;" @click="AssetsRollOut">{{ $t("assets_withdraw") }}</Button>
+          <Button type="success" style="width: 400px;" @click="landAssetsRollOut">{{ $t("assets_withdraw") }}</Button>
         </Col>
       </Row>
       <Col span="24" class="rollout-card-margin">
-        <Table :columns="rollOutColumns" :data="rollOutData"></Table>
+        <Table :columns="rollOutColumns" :data="rollOutTableData"></Table>
       </Col>
     </p>
     </Card>
@@ -223,7 +225,7 @@
           <Icon type="reply" size="25" class="vertical"></Icon>
           <span class="my-assets-title">{{ $t("assets_recharge") }}</span>
           <Select v-model="assetsRollInType" style="width:120px;margin-left: 40px;">
-            <Option v-for="item in assetsTypeArr" :value="item" :key="item">{{ item }}</Option>
+            <Option v-for="item in assetsTypeArr" :value="item" :key="item" :disabled="item === 'BAMBOO'">{{ item }}</Option>
         </Select>
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
@@ -234,13 +236,67 @@
           <Button type="success" class="copy-btn" style="width: 80px;margin-right: 15px;"  data-clipboard-target="#copyInput">{{ $t("Copy_the_address") }}</Button>
           <Input :value="userInfo[UserModel.account]" placeholder="" style="width: 350px;pointer-events:none;height: 30px;" id="copyInput"></Input>
         </Col>
+        <Col span="24" class="rollout-card-margin" align="center">
+        <Button type="success" class="copy-btn" style="width: 445px;margin-right: 15px;" @click="showRollInModal">{{ $t("Copy_the_address") }}</Button>
+        </Col>
         <Col span="24" class="rollout-card-margin">
-          <Table :columns="rollOutColumns" :data="rollOutData"></Table>
+          <Table :columns="rollInColumns" :data="rollInTableData"></Table>
         </Col>
       </Row>
     </p>
   </Card>
 </Col>
+
+<!-- 资产充值订单发起面板 -->
+<Modal
+    v-model="rollInModal"
+    :title="$t('assets_recharge_modal')"
+    style="text-align:center">
+    <p>
+      <Row span="24">
+        <!-- 充值类型 -->
+        <Col span="24" class="rollout-card-margin" style="text-align:left">
+          <Row>
+            <Col span="6"  align="right">
+          <span class="rollout-card-word">{{ $t("coin_type") }}:</span>
+        </Col>
+        <Col span="18">
+        <Select v-model="rechargeCoinType" style="width:120px;margin-left: 40px;">
+            <Option v-for="item in assetsTypeArr" :value="item" :key="item" :disabled="item === 'BAMBOO'">{{ item }}</Option>
+        </Select>
+        </Col>
+          </Row>
+        </Col>
+        <!-- 充值数量 -->
+        <Col span="24" class="rollout-card-margin" style="text-align:left">
+          <Row>
+            <Col span="6"  align="right">
+          <span class="rollout-card-word">{{ $t("withdrawal_amount") }}:</span>
+        </Col>
+        <Col span="18">
+          <Input v-model="rechargeAmount" placeholder="" style="width: 300px"></Input>
+        </Col>
+          </Row>
+        </Col>
+        <!-- 你的地址 -->
+        <Col span="24" class="rollout-card-margin" style="text-align:left">
+          <Row>
+            <Col span="6"  align="right">
+          <span class="rollout-card-word">{{ $t("your_address") }}:</span>
+        </Col>
+        <Col span="18">
+          <Input v-model="rechargeAddress" placeholder="" style="width: 300px"></Input>
+        </Col>
+          </Row>
+        </Col>
+    </Row>
+    </p>
+    <!-- 底部button -->
+    <div slot="footer" align="center">
+      <Button type="success" @click="onSureRecharge">{{ $t("confirm") }}</Button>
+      <Button offset="2" @click="onCancelRecharge">{{ $t("cancel") }}</Button>
+  </div>
+</Modal>
 
 <!-- 商品兑换 -->
 <Col span="20">
@@ -295,7 +351,7 @@
               <span class="rollout-card-word">{{ $t("trade_password") }}:</span>
             </Col>
             <Col span="18">
-              <Input v-model="exchangePass" placeholder="" style="width: 300px"></Input>
+              <Input v-model="exchangePass" type="password" placeholder="" style="width: 300px"></Input>
             </Col>
           </Row>
         </Col>
@@ -527,7 +583,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Clipboard from 'clipboard'
 import { statusCodes } from '../../libs/statusCodes.js'
-import { LandModel, PandaModel, AssetsModel, UserModel } from '../../libs/ClientModel.js'
+import { LandModel, PandaModel, AssetsModel, UserModel, OrderModel } from '../../libs/ClientModel.js'
 import lineImg from '../../images/line.png'
 // import getaddrqrImg from '../../images/webbg/getaddrqr.png'
 import serverRequest from '../../libs/serverRequest.js'
@@ -552,32 +608,6 @@ export default {
       rollOutCount: '',
       rollOutCode: '',
       rollOutPass: '',
-      rollOutColumns: [
-        {
-          title: '流水号',
-          key: 'seriesNum'
-        },
-        {
-          title: '币种',
-          key: 'type'
-        },
-        {
-          title: '地址',
-          key: 'rollOutAddr'
-        },
-        {
-          title: '提现数量',
-          key: 'rollOutCount'
-        },
-        {
-          title: '申请时间',
-          key: 'serveTime'
-        },
-        {
-          title: '当前状态',
-          key: 'state'
-        }
-      ],
       rollOutData: [],
       oldLoginPass: '', // 旧登陆密码
       newLoginPass: '', // 新登陆密码
@@ -609,38 +639,21 @@ export default {
       exchangeAddr:'', // 商品兑换联系人地址
       exchangePass: '', // 商品兑换交易密码
       exchangeCode: '', // 商品兑换验证码
-      exchangeColumns: [ // 兑换历史列表
-        {
-          title: '流水号',
-          key: 'seriesNum'
-        },
-        {
-          title: '商品名称',
-          key: 'type'
-        },
-        {
-          title: '联系人',
-          key: 'contactPerson'
-        },
-        {
-          title: '联系电话',
-          key: 'contactPhone'
-        },
-        {
-          title: '联系人地址',
-          key: 'contactAddr'
-        },
-        {
-          title: '当前状态',
-          key: 'state'
-        }
-      ],
       exchangeData: [], // 商品兑换列表内容
       // 服务端对接字段
       UserModel: UserModel,
-      LandModel: LandModel
+      LandModel: LandModel,
+      rollInData: [], // 充值订单数组
+      rollInModal: false, // 充值面板
+      rechargeCoinType: 'ETH', // 充值面板默认类型
+      rechargeAmount: '', // 充值面板充值数量
+      rechargeAddress: '', // 充值面板充值地址
     }
 	},
+
+  watch: {
+    
+  },
   mounted () {
     // this.userAddr = localStorage.getItem('EthlandAddr')
     // this.userAddr = '123'
@@ -651,7 +664,8 @@ export default {
   },
 	methods: {
     ...mapActions([
-      'changeBambooCount'
+      'changeBambooCount',
+      'changeUserLocation'
     ]),
     selectMenu (name) {
       console.log(name)
@@ -661,12 +675,15 @@ export default {
           break
         case 'assets-rollout':
           this.assetState = 'assets-rollout'
+          this.getUserRollOutOrder()
           break
         case 'assets-recharge':
           this.assetState = 'assets-rollin'
+          this.queryRollInAssetsByAddr()
           break
         case 'product-exchange':
           this.assetState = 'product-exchange'
+          this.queryUserAllProduct()
           break
         case 'modify-bind-email':
           this.assetState = 'modify-bind-email'
@@ -709,6 +726,7 @@ export default {
         this.userInfo = data
         this.myTotalAssets = data
         this.changeBambooCount({ count: parseInt(this.myTotalAssets[AssetsModel.bamboo]) })
+        this.changeUserLocation({ loc: [data[UserModel.longitude], data[UserModel.latitude]] })
         const qr = qrCode.qrcode(10, 'L')
         qr.addData(this.userInfo[UserModel.account])
         qr.make()
@@ -756,8 +774,30 @@ export default {
       }
       serverRequest.handleRequestRes(sendEmail.data, succCb, errCb)
     },
-    AssetsRollOut () {
-
+    async landAssetsRollOut () {
+      if (this.assetsRollOutType === '' || this.rollOutAddr === '' || this.rollOutCount === '' || this.rollOutPass === '') {
+        alertErrInfo(this, statusCodes[this.curLang]['Information_Not_Completed'])
+        return
+      }
+      const cleanInput = () => {
+        this.rollOutAddr = ''
+        this.rollOutCount = ''
+        this.rollOutPass = ''
+      }
+      const rollOut = await serverRequest.insertAssetsRollOutOrder(this.userAddr, this.assetsRollOutType, this.rollOutCount, this.rollOutPass)
+      if (!rollOut) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        alertSuccInfo(this, statusCodes[this.curLang]['LandProductCodes_Roll_Out_Succ'])
+        cleanInput()
+        this.getUserRollOutOrder()
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(rollOut.data, succCb, errCb)
     },
     async resetLoginPass () {
       if (this.oldLoginPass === '' || this.newLoginPass === '') {
@@ -880,8 +920,9 @@ export default {
         alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
       }
-      let succCb = (data) => {
+      let succCb = async (data) => {
         alertSuccInfo(this, statusCodes[this.curLang]['LandProductCodes_Exchange_Product_Succ'])
+        await this.queryUserAllProduct()
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -889,19 +930,135 @@ export default {
       serverRequest.handleRequestRes(exchange.data, succCb, errCb)
       cleanInput()
     },
+
+    // 获取用户所有的兑换商品
+    async queryUserAllProduct () {
+      const allProduct = await serverRequest.queryUserAllProduct(this.userAddr)
+      if (!allProduct) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.exchangeData = []
+        data.forEach(pro => {
+          this.exchangeData.push({
+            seriesNum: pro[LandModel.id],
+            type: pro[LandModel.idx_productId],
+            contactPerson: pro[LandModel.product_name],
+            contactPhone: pro[LandModel.product_phone],
+            contactAddr: pro[LandModel.product_addr],
+            state: pro[LandModel.state]
+          })
+        })
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(allProduct.data, succCb, errCb)
+    },
+
+
+    // 获取用户所有的提现记录
+    async getUserRollOutOrder () {
+      const allProduct = await serverRequest.queryRollOutAssetsByAddr(this.userAddr)
+      if (!allProduct) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        console.log('res', data)
+        this.rollOutData = []
+        data.forEach(pro => {
+          this.rollOutData.push({
+            seriesNum: pro[OrderModel.id],
+            type: pro[OrderModel.type],
+            rollOutAddr: pro[OrderModel.addr].slice(0, 6) + '****' + pro[OrderModel.addr].slice(38),
+            rollOutCount: pro[OrderModel.amount],
+            serveTime: pro[OrderModel.create],
+            state: pro[OrderModel.state]
+          })
+        })
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(allProduct.data, succCb, errCb)
+    },
+
     // 资产提现点击
     assetsRollOut (type) {
       this.assetState = 'assets-rollout'
       this.assetsRollOutType = type
+      this.getUserRollOutOrder()
     },
     // 资产充值
     assetsRollIn (type) {
       this.assetState = 'assets-rollin'
       this.assetsRollInType = type
+      this.queryRollInAssetsByAddr()
     },
     // 商品兑换按钮点击
     exchangeProductClick (type) {
       this.assetState = 'product-exchange'
+    },
+
+    // 资产充值面板展示
+    showRollInModal () {
+      this.rollInModal = true
+    },
+
+    // 确认发起充值订单
+    async onSureRecharge () {
+      if (!this.rechargeCoinType || !this.rechargeAddress || !this.rechargeAmount) {
+        alertErrInfo(this, statusCodes[this.curLang][Recharge_Info_Not_Null])
+        return
+      }
+      const recharge = await serverRequest.insertAssetsRollInOrder(this.userAddr, this.rechargeAddress, this.rechargeCoinType, this.rechargeAmount)
+      if (!recharge) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = async (data) => {
+        alertSuccInfo(this, statusCodes[this.curLang]['Recharge_Assets_Succ'])
+        this.rollInModal = false
+        await this.queryRollInAssetsByAddr()
+      }
+      let errCb = (msg) => {
+        this.rollInModal = false
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(recharge.data, succCb, errCb)
+    },
+
+    // 取消充值订单
+    onCancelRecharge () {
+      this.rollInModal = false
+    },
+
+    // 查询某用户所有的转入订单
+    async queryRollInAssetsByAddr () {
+      const allProduct = await serverRequest.queryRollInAssetsByAddr(this.userAddr)
+      if (!allProduct) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.rollInData = []
+        data.forEach(pro => {
+          this.rollInData.push({
+            seriesNum: pro[OrderModel.id],
+            type: pro[OrderModel.type],
+            rollInAddr: pro[OrderModel.receiver].slice(0, 6) + '****' + pro[OrderModel.receiver].slice(38),
+            rollInCount: pro[OrderModel.amount],
+            serveTime: pro[OrderModel.create],
+            state: pro[OrderModel.state]
+          })
+        })
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(allProduct.data, succCb, errCb)
     }
 	},
 	components: {
@@ -923,6 +1080,183 @@ export default {
     },
     showAddr: function () {
       return this.userAddr.slice(0, 6) + '****' + this.userAddr.slice(38)
+    },
+    exchangeColumns: function () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum'
+          },
+          {
+            title: '商品名称',
+            key: 'type'
+          },
+          {
+            title: '联系人',
+            key: 'contactPerson'
+          },
+          {
+            title: '联系电话',
+            key: 'contactPhone'
+          },
+          {
+            title: '联系人地址',
+            key: 'contactAddr'
+          },
+          {
+            title: '当前状态',
+            key: 'state'
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        [
+          {
+            title: 'order id',
+            key: 'seriesNum'
+          },
+          {
+            title: 'product name',
+            key: 'type'
+          },
+          {
+            title: 'contact name',
+            key: 'contactPerson'
+          },
+          {
+            title: 'telephone',
+            key: 'contactPhone'
+          },
+          {
+            title: 'address',
+            key: 'contactAddr'
+          },
+          {
+            title: 'state',
+            key: 'state'
+          }
+        ]
+      } else {
+        return []
+      }
+    },
+    rollOutColumns () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum'
+          },
+          {
+            title: '币种',
+            key: 'type'
+          },
+          {
+            title: '地址',
+            key: 'rollOutAddr'
+          },
+          {
+            title: '提现数量',
+            key: 'rollOutCount'
+          },
+          {
+            title: '申请时间',
+            key: 'serveTime'
+          },
+          {
+            title: '当前状态',
+            key: 'state'
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        return [
+          {
+            title: 'order id',
+            key: 'seriesNum'
+          },
+          {
+            title: 'coin',
+            key: 'type'
+          },
+          {
+            title: 'address',
+            key: 'rollOutAddr'
+          },
+          {
+            title: 'count',
+            key: 'rollOutCount'
+          },
+          {
+            title: 'time',
+            key: 'serveTime'
+          },
+          {
+            title: 'state',
+            key: 'state'
+          }
+        ]
+      } else {
+        return []
+      }
+    },
+    rollInColumns () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum'
+          },
+          {
+            title: '币种',
+            key: 'type'
+          },
+          {
+            title: '你的地址',
+            key: 'rollInAddr'
+          },
+          {
+            title: '数量',
+            key: 'rollInCount'
+          },
+          {
+            title: '申请时间',
+            key: 'serveTime'
+          },
+          {
+            title: '当前状态',
+            key: 'state'
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        return [
+          {
+            title: 'order id',
+            key: 'seriesNum'
+          },
+          {
+            title: 'coin',
+            key: 'type'
+          },
+          {
+            title: 'your address',
+            key: 'rollInAddr'
+          },
+          {
+            title: 'count',
+            key: 'rollInCount'
+          },
+          {
+            title: 'time',
+            key: 'serveTime'
+          },
+          {
+            title: 'state',
+            key: 'state'
+          }
+        ]
+      } else {
+        return []
+      }
     },
     myAssets () {
       if (!this.myTotalAssets) {
@@ -962,6 +1296,20 @@ export default {
           }
         ]
       }
+    },
+    rollOutTableData () {
+      if (!this.rollOutData) return []
+      const self = this
+      return this.rollOutData.filter(d => {
+        return d.type === self.assetsRollOutType.toLowerCase() 
+      })
+    },
+    rollInTableData () {
+      if (!this.rollInData) return []
+      const self = this
+      return this.rollInData.filter(d => {
+        return d.type === self.assetsRollInType.toLowerCase() 
+      })
     }
   }
 }
