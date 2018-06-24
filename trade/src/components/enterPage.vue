@@ -235,7 +235,7 @@ export default {
 		}
 		this.$nextTick(() => {
 			beginWave()
-			this.createEnterBg()
+			// this.createEnterBg()
 		})
 	},
 	methods: {
