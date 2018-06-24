@@ -61,7 +61,7 @@ function getBrowser() {
     type: btypeInfo, //浏览器
     pc: pc,
     prefix: prefix, //前缀
-    isMobile: true //是否是移动端
+    isMobile: (pc == "pc") ? false : true //是否是移动端
   };
 };
 

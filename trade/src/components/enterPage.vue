@@ -234,8 +234,8 @@ export default {
 			this.enterPageState = 'addrSet'
 		}
 		this.$nextTick(() => {
-			// beginWave()
-			// this.createEnterBg()
+			beginWave()
+			this.createEnterBg()
 		})
 	},
 	methods: {

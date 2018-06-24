@@ -82,7 +82,7 @@
   </Layout>
   <!--  登陆模块 -->
   <layout v-if="currentView !== 'enterPage'">
-		<!-- <Content :style="{ padding: '0 50px' }" v-if="true">
+		<Content :style="{ padding: '0 50px' }" v-if="true">
 			<loginService  v-if="currentView === 'loginService'" @login-succ="loginSucc" />
 			<comboService v-if="currentView === 'comboService'" />
 			<landService v-if="currentView === 'landService'" />
@@ -90,7 +90,7 @@
 			<myAssetsService ref="myAssetsService" v-if="currentView === 'myAssetsService'" />
 			<guideService v-if="currentView === 'guideService'" />
 			<discoverService v-if="currentView === 'discoverService'" />
-		</Content> -->
+		</Content>
 		<Footer v-if="currentView !== 'landService'" class="layout-footer-center" style="font-weight: 600;">Wunoland.com @ 2017-2018.</Footer>
 </layout>
 <Layout v-if="currentView === 'enterPage'">
