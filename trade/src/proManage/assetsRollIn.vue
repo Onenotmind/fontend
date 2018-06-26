@@ -29,30 +29,30 @@ import serverRequest from '../libs/serverRequest.js'
           },
           {
             title: 'OrderId',
-            key: 'orderId',
-            width: '100'
+            key: 'orderId'
           },
           {
             title: 'Address',
             key: 'address'
           },
           {
+            title: 'receiver',
+            key: 'receiver'
+          },
+          {
             title: 'type',
             key: 'assetsType',
-            sortable: true,
-            width: '100'
+            sortable: true
           },
           {
             title: 'Amount',
             key: 'amount',
-            sortable: true,
-            width: '100'
+            sortable: true
           },
           {
             title: 'State',
             key: 'state',
-            sortable: true,
-            width: '100'
+            sortable: true
           },
           {
             title: 'Action',
@@ -63,7 +63,7 @@ import serverRequest from '../libs/serverRequest.js'
                     props: {
                         type: 'primary',
                         size: 'small',
-                        disabled: this.assetsRollInData[params.index].state !== 'uncheck'
+                        disabled: this.assetsRollInData[params.index].state === 'pending'
                     },
                     style: {
                         marginRight: '5px'
@@ -78,7 +78,7 @@ import serverRequest from '../libs/serverRequest.js'
                     props: {
                         type: 'primary',
                         size: 'small',
-                        disabled: this.assetsRollInData[params.index].state !== 'uncheck'
+                        disabled: this.assetsRollInData[params.index].state !== 'pending'
                     },
                     style: {
                         marginRight: '5px'
@@ -93,7 +93,7 @@ import serverRequest from '../libs/serverRequest.js'
                     props: {
                         type: 'error',
                         size: 'small',
-                        disabled: this.assetsRollInData[params.index].state !== 'uncheck'
+                        disabled: this.assetsRollInData[params.index].state !== 'pending'
                     },
                     on: {
                         click: () => {
@@ -142,7 +142,9 @@ import serverRequest from '../libs/serverRequest.js'
         }
         serverRequest.deleteRollInOrder(assetsData)
         .then(v => {
-          let succCb = () => {}
+          let succCb = () => {
+            this.alertSuccInfo('operate success.')
+          }
           let errCb = () => {
             this.alertErrInfo(v.data)
           }
@@ -160,11 +162,15 @@ import serverRequest from '../libs/serverRequest.js'
           count: item.amount,
           addr: item.address,
           type: item.assetsType,
-          state: 'done'
+          receiver: item.receiver,
+          state: 'success'
         }
+        console.log('checkOver')
         serverRequest.checkOverRollInOrder(assetsData)
         .then(v => {
-          let succCb = () => {}
+          let succCb = () => {
+            this.alertSuccInfo('operate success.')
+          }
           let errCb = () => {
             this.alertErrInfo(v.data)
           }
@@ -216,11 +222,12 @@ import serverRequest from '../libs/serverRequest.js'
         let formatData = []
         data.forEach((item) => {
           formatData.push({
-            orderId: item.orderId,
-            address: item.uaddr,
-            assetsType: item.uassetsType,
-            amount: item.uamount,
-            state: item.ustate
+            orderId: item.pk_id,
+            address: item.idx_addr,
+            receiver: item.receiver,
+            assetsType: item.assetsType,
+            amount: item.amount,
+            state: item.state
           })
         })
         return formatData

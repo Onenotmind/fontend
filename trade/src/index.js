@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './app.vue'
-import proManage from './proManage/proManage.vue'
+// import App from './proManage/proManage.vue'
 // import router from './router'
 import iview from 'iview/dist/iview.min.js'
 import VueI18n from 'vue-i18n'

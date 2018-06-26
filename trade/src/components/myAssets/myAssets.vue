@@ -237,7 +237,7 @@
           <Input :value="userInfo[UserModel.account]" placeholder="" style="width: 350px;pointer-events:none;height: 30px;" id="copyInput"></Input>
         </Col>
         <Col span="24" class="rollout-card-margin" align="center">
-        <Button type="success" class="copy-btn" style="width: 445px;margin-right: 15px;" @click="showRollInModal">{{ $t("Copy_the_address") }}</Button>
+        <Button type="success" class="copy-btn" style="width: 445px;margin-right: 15px;" @click="showRollInModal">{{ $t("assets_recharge") }}</Button>
         </Col>
         <Col span="24" class="rollout-card-margin">
           <Table :columns="rollInColumns" :data="rollInTableData"></Table>
@@ -784,7 +784,7 @@ export default {
         this.rollOutCount = ''
         this.rollOutPass = ''
       }
-      const rollOut = await serverRequest.insertAssetsRollOutOrder(this.userAddr, this.assetsRollOutType, this.rollOutCount, this.rollOutPass)
+      const rollOut = await serverRequest.insertAssetsRollOutOrder(this.rollOutAddr, this.assetsRollOutType, this.rollOutCount, this.rollOutPass)
       if (!rollOut) {
         alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
         return
