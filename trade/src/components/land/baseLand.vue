@@ -746,6 +746,10 @@ export default {
 		// 熊猫外出
 		onSureOut () {
 			// this.pandasArr.splice(this.pandaIndex, 1)
+			if (parseInt(this.bambooCount) < 50) {
+				alertErrInfo(this, statusCodes[this.curLang]['At_Least_50_Bamboo_For_Out'])
+				return
+			}
 			serverRequest.getEthlandProduct(this.pandaGen, this.bambooCount, this.direction)
 			.then((v) => {
 				this.outModel = false
