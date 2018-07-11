@@ -104,7 +104,8 @@ const statusCodes = {
 		'LandProductCodes_Roll_Out_Succ': 'Assets Withdraw successful!',
 		'Recharge_Info_Not_Null': 'Recharge Information Not null!',
 		'Recharge_Assets_Succ': 'Recharge Order Create successful!',
-		'At_Least_50_Bamboo_For_Out': 'At Least 50 Bamboo For Out!'
+		'At_Least_50_Bamboo_For_Out': 'At Least 50 Bamboo For Out!',
+		'Vote_Experied': 'Voting is Not Starting Or Experied!'
 	},
 	'cn': {
 		'CommonCodes_Service_Wrong': '服务器忙，请稍后再试',
@@ -210,7 +211,8 @@ const statusCodes = {
 		'LandProductCodes_Roll_Out_Succ': '提现订单提交成功！',
 		'Recharge_Info_Not_Null': '充值信息不为空',
 		'Recharge_Assets_Succ': '资产充值订单发起成功！',
-		'At_Least_50_Bamboo_For_Out': '外出至少需要50个竹子！'
+		'At_Least_50_Bamboo_For_Out': '外出至少需要50个竹子！',
+		'Vote_Experied': '本此投票未开始或者已经过期！'
 	}
 }
 

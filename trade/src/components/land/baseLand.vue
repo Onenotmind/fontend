@@ -350,6 +350,7 @@ export default {
 			sellCanvas: null, // 出售熊猫的画布
 			outCanvas: null, // 熊猫外出时的画布
 			backCanvasArr: [], // 外出回来时画布渲染数组
+			leftProductObj: {}, // 剩余的商品对象
 			// 服务端对接字段
       PandaModel: PandaModel,
       LandModel: LandModel
@@ -365,6 +366,7 @@ export default {
 		}
 		this.ownerAddr = this.userAddr
 		console.log('userAddr', this.userAddr)
+		this.getCurrentLeftProduct() // 测试
 		// this.ownerAddr = localStorage.getItem('EthlandAddr')
 		// 第一次注册赠送熊猫蛋
 		const genePanda = await serverRequest.genePandaRandom(this.ownerAddr)
@@ -473,6 +475,22 @@ export default {
 		// 地图操作 改变地图尺寸
 		resize(width, height, silent) {
 			this.echartHandle.resize(width, height, silent)
+		},
+
+		// 获取当前剩余的商品详细信息
+		async getCurrentLeftProduct () {
+			const products = await serverRequest.getCurrentLeftProduct()
+      if (!products) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.leftProductObj = data
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(products.data, succCb, errCb)
 		},
 
 		// 获取当前地址下的所有熊猫

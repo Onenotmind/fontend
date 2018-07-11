@@ -5,6 +5,8 @@
     "Advertise": "Advertise",
     "current_products": "Current Products",
     "next_products": "Next Products Vote",
+    "next_products_attr": "Products Attribute Vote",
+    "products_catagory": "Catagory",
     "Life_Service": "Life Service",
     "products_center": "Products Center",
     "current_activity": "Current Activity",
@@ -13,7 +15,13 @@
     "Cosmetics": "Cosmetics",
     "price": "price",
     "total_vote": "Voted Number",
-    "vote": "Vote"
+    "vote": "Vote",
+    "fire": "fire",
+    "water": "water",
+    "wood": "wood",
+    "gold": "gold",
+    "earth": "earth",
+    "vote_not_begin": "Vote Has Not Started!"
   },
   "cn": {
     "Charge": "充值话费",
@@ -21,6 +29,8 @@
     "Advertise": "广告活动",
     "current_products": "当前商品",
     "next_products": "下期商品投票",
+    "next_products_attr": "下期商品属性投票",
+    "products_catagory": "商品类别",
     "Life_Service": "生活服务",
     "products_center": "商品中心",
     "current_activity": "当前活动",
@@ -29,6 +39,12 @@
     "Cosmetics": "化妆品",
     "price": "市价",
     "total_vote": "总票数",
-    "vote": "投票"
+    "vote": "投票",
+    "fire": "火",
+    "water": "水",
+    "wood": "木",
+    "gold": "金",
+    "earth": "土",
+    "vote_not_begin": "投票未开始"
   }
 }

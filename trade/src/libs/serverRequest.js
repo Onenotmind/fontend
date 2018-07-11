@@ -29,7 +29,10 @@ const ssapiPath = {
   queryPandaInfo: 'queryPandaInfo',
   genePandaRandom: 'genePandaRandom',
   getEthlandProduct: 'getEthlandProduct',
+
   serverTime: 'serverTime',
+  getNextVoteStartTime: 'getNextVoteStartTime',
+
   getPandaBackAssets: 'getPandaBackAssets',
   queryAllPandaSold: 'queryAllPandaSold',
   buyPanda: 'buyPanda',
@@ -50,6 +53,10 @@ const ssapiPath = {
   getCurrentProduct: 'getCurrentProduct',
   getCurrentVotedProduct: 'getCurrentVotedProduct',
   voteProduct: 'voteProduct',
+  voteProductAttr: 'voteProductAttr',
+  queryCountOfProductId: 'queryCountOfProductId',
+  getCurrentLeftProduct: 'getCurrentLeftProduct',
+
   updateUserBamboo: 'updateUserBamboo',
   unSoldPanda: 'unSoldPanda',
   getUserBamboo: 'getUserBamboo',
@@ -226,6 +233,11 @@ function serverTime () {
   return ssapiAxios.get(ssapiPath.serverTime, { params: {}})
 }
 
+// 获取下期商品投票开始时间
+function getNextVoteStartTime () {
+  return ssapiAxios.get(ssapiPath.getNextVoteStartTime, { params: {}})
+}
+
 // 获取熊猫外出回归的商品
 function getPandaBackAssets () {
   return ssapiAxios.get(ssapiPath.getPandaBackAssets, { params: {}})
@@ -301,6 +313,21 @@ function voteProduct (productId, num) {
   return ssapiAxios.get(ssapiPath.voteProduct, { params: { productId, num }})
 }
 
+// 给商品属性投票
+function voteProductAttr (productId, attr, period, num) {
+  return ssapiAxios.get(ssapiPath.voteProductAttr, { params: { productId, attr, period, num }})
+}
+
+// 获取商品属性值投票
+function queryCountOfProductId () {
+  return ssapiAxios.get(ssapiPath.queryCountOfProductId, { params: {}})
+}
+
+// 获取当前剩余的商品详细信息
+function getCurrentLeftProduct () {
+  return ssapiAxios.get(ssapiPath.getCurrentLeftProduct, { params: {}})
+}
+
 // 更新用户的竹子数量
 function updateUserBamboo (addr) {
   return ssapiAxios.get(ssapiPath.updateUserBamboo, { params: { addr }})
@@ -340,6 +367,7 @@ export default {
   genePandaRandom,
   getEthlandProduct,
   serverTime,
+  getNextVoteStartTime,
   getPandaBackAssets,
   queryAllPandaSold,
   buyPanda,
@@ -357,6 +385,9 @@ export default {
   getCurrentProduct,
   getCurrentVotedProduct,
   voteProduct,
+  voteProductAttr,
+  queryCountOfProductId,
+  getCurrentLeftProduct,
   updateUserBamboo,
   getUserBamboo,
   queryUserAllProduct,
