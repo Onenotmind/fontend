@@ -319,7 +319,7 @@ export default {
       }
     },
     curAttrVoteDisable: function () {
-      if ((this.nextVoteStartTime + 36 < this.currentServerTime) && (this.nextVoteStartTime + 48 * 3600 > this.currentServerTime)) {
+      if ((this.nextVoteStartTime + 36 * 3600 < this.currentServerTime) && (this.nextVoteStartTime + 48 * 3600 > this.currentServerTime)) {
         return true
       } else {
         return false

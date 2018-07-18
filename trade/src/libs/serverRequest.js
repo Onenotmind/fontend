@@ -224,8 +224,8 @@ function sirePanda (pandaGen) {
 }
 
 // 熊猫外出获取宝物
-function getEthlandProduct (pandaGen, bamboo, direction) {
-  return ssapiAxios.get(ssapiPath.getEthlandProduct, { params: { pandaGen, bamboo, direction }})
+function getEthlandProduct (pandaGen, bamboo, direction, tagsStr) {
+  return ssapiAxios.get(ssapiPath.getEthlandProduct, { params: { pandaGen, bamboo, direction, tagsStr }})
 }
 
 // 获取服务器当前时间

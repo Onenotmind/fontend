@@ -203,7 +203,7 @@ export default {
 			},1000)
 			this.addCountInterval = setInterval(() => {
 				serverRequest.getUserBamboo(this.userAddr, this.userId)
-			}, 5000)
+			}, 1000)
 		},
 		stopMine () {
 			this.mineState = 'stop'

@@ -19,7 +19,12 @@
     "confirm": "Confirm",
     "concel": "Cancel",
     "sell_price": "Price",
-    "drop_panda_tips": "Do master really drop cute me?"
+    "drop_panda_tips": "Do master really drop cute me?",
+    "category": "category",
+    "digital": "digital",
+    "clothing": "clothing",
+    "cosmetic": "cosmetic",
+    "food": "food"
   },
   "cn": {
     "feed": "喂养",
@@ -41,6 +46,11 @@
     "confirm": "确认",
     "concel": "取消",
     "sell_price": "售价",
-    "drop_panda_tips": "确定要丢弃萌萌哒的熊猫吗？"
+    "drop_panda_tips": "确定要丢弃萌萌哒的熊猫吗？",
+    "category": "类别",
+    "digital": "数码产品",
+    "clothing": "衣服",
+    "cosmetic": "美妆",
+    "food": "食品"
   }
 }

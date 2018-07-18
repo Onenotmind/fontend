@@ -56,6 +56,21 @@
 	    	</RadioGroup>
 	    	</Col>
 	    </Row>
+	    <br>
+	    <Row>
+	    	<Col span="6" align="right" style="font-size: 14px;">
+	    		{{ $t("category") }}：
+	    	</Col>
+	    	<Col span="18">
+	    	<CheckboxGroup v-model="proCatagory">
+	        <Checkbox  label='product' class="btn-wid btn-offset">{{ $t("digital") }}</Checkbox>
+	        <Checkbox  label='clothing' class="btn-wid btn-offset">{{ $t("clothing") }}</Checkbox>
+	        <Checkbox  label='cosmetic' class="btn-wid btn-offset">{{ $t("cosmetic") }}</Checkbox>
+	        <Checkbox  label='food' class="btn-wid btn-offset">{{ $t("food") }}</Checkbox>
+	    	</CheckboxGroup>
+	    	</Col>
+	    </Row>
+	    <br>
 	    </p>
 	    <div slot="footer" align="center">
 	        <Button type="success" @click="onSureOut">{{ $t("confirm") }}</Button>
@@ -332,6 +347,7 @@ export default {
 			waterCount: 0,
 			backModel: false,
 			direction: '', // 外出方向变量
+			proCatagory: [], // 外出的tag选择
 			pandaGen: '',
 			ownerAddr: '123', // 主人的地址
 			outBackPandas: [2,3],
@@ -351,6 +367,7 @@ export default {
 			outCanvas: null, // 熊猫外出时的画布
 			backCanvasArr: [], // 外出回来时画布渲染数组
 			leftProductObj: {}, // 剩余的商品对象
+			queryPandaBackInterval: null, // 定时查询熊猫回归定时器
 			// 服务端对接字段
       PandaModel: PandaModel,
       LandModel: LandModel
@@ -375,39 +392,22 @@ export default {
 			return
 		}
 		// 查询熊猫是否外出且带回物品
-		let assets = await serverRequest.getPandaBackAssets()
-		if (!assets) {
-			alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
-			return
-		}
-		let backAssetsSuccCb = async (data) => {
-			if (!data) {
-				alertErrInfo(this, statusCodes[this.curLang]['PandaLandCodes_Back_Assets_Carry_Empty'])
-			}
-			if (data.backPandas.length > 0) {
-				console.log('data', data)
-				this.outBackPandas = data.backPandas.slice(0)
-				this.backAssets['carry'] = data.resProducts.slice(0)
-				this.backAssets['drop'] = data.dropProducts.slice(0)
-				this.$nextTick(() => { // 熊猫图形渲染
-					this.updateBackHomeCharactor(this.outBackPandas)
-					this.backModel = true
-				})
-			}
-		}
-		let backAssetsErrCb = async () => {
-		}
-		serverRequest.handleRequestRes(assets.data, backAssetsSuccCb, backAssetsErrCb)
-		// 查询当前地址下所有熊猫
-		this.$nextTick(async () => {
-			await this.getAllPandasByCurrentAddr()
-		})
+		await this.pandaBackHome()
 		// 地图初始化
 		this.echartHandle = new EchartHandle('container')
 		this.geneStarPoint()
 		setInterval(() => {
 			this.geneStarPoint()
 		}, this.starPointGeneTime)
+		this.queryPandaBackInterval = setInterval(async () => {
+			await this.pandaBackHome()
+		}, 1000 * 60)
+	},
+	destroyed () {
+			if (this.queryPandaBackInterval) {
+				clearInterval(this.queryPandaBackInterval)
+				this.queryPandaBackInterval = null
+			}
 	},
 	methods: {
 		// 渲染在家时的熊猫画布
@@ -475,6 +475,37 @@ export default {
 		// 地图操作 改变地图尺寸
 		resize(width, height, silent) {
 			this.echartHandle.resize(width, height, silent)
+		},
+
+		// 查询熊猫是否外出且带回物品
+		async pandaBackHome () {
+			let assets = await serverRequest.getPandaBackAssets()
+			if (!assets) {
+				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+				return
+			}
+			let backAssetsSuccCb = async (data) => {
+				if (!data) {
+					alertErrInfo(this, statusCodes[this.curLang]['PandaLandCodes_Back_Assets_Carry_Empty'])
+				}
+				if (data.backPandas.length > 0) {
+					console.log('data', data)
+					this.outBackPandas = data.backPandas.slice(0)
+					this.backAssets['carry'] = data.resProducts.slice(0)
+					this.backAssets['drop'] = data.dropProducts.slice(0)
+					this.$nextTick(() => { // 熊猫图形渲染
+						this.updateBackHomeCharactor(this.outBackPandas)
+						this.backModel = true
+					})
+				}
+			}
+			let backAssetsErrCb = async () => {
+			}
+			serverRequest.handleRequestRes(assets.data, backAssetsSuccCb, backAssetsErrCb)
+			// 查询当前地址下所有熊猫
+			this.$nextTick(async () => {
+				await this.getAllPandasByCurrentAddr()
+			})
 		},
 
 		// 获取当前剩余的商品详细信息
@@ -768,7 +799,11 @@ export default {
 				alertErrInfo(this, statusCodes[this.curLang]['At_Least_50_Bamboo_For_Out'])
 				return
 			}
-			serverRequest.getEthlandProduct(this.pandaGen, this.bambooCount, this.direction)
+			if (this.proCatagory.length !== 3) {
+				alertErrInfo(this, statusCodes[this.curLang]['Only_Choose_3_Tag'])
+				return
+			}
+			serverRequest.getEthlandProduct(this.pandaGen, this.bambooCount, this.direction,this.proCatagory.join())
 			.then((v) => {
 				this.outModel = false
 				let succCb = async (data) => {
