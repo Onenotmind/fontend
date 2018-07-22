@@ -1,4 +1,4 @@
-<!-- <i18n src='../../common/i18n/ethcombo/combo.json'></i18n> -->
+<i18n src='../../common/i18n/ethcombo/combo.json'></i18n>
 <template>
 	<div id="combo">
 	<Card :bordered="false">
@@ -6,7 +6,7 @@
 	<div>
 	<p  class="text-center combo-header">
 			<!-- <img src="../../images/ethereum.png" style="vertical-align:middle; width: 35px;"> -->
-			<span class="combo-word">Get Bamboo</span>
+			<span class="combo-word">{{ $t("bamboo_title") }}</span>
 		</p>
 		<!-- <img src="../../images/webbg/panda-right.png" class="bg-left"> -->
 		<!-- <img src="../../images/webbg/panda-left.png" class="bg-right"> -->
@@ -14,21 +14,27 @@
 			<!-- <Icon type="home" size="25"></Icon> -->
 			<img src="../../images/hashrate.png" style="vertical-align:middle;margin-top: -10px">
 			<span class="hash-num">{{ totalHash }} HASH</span>
-			<p>Total Hash You Mined</p>
+			<p>{{ $t("total_hash") }}</p>
+		</div>
+		<div class="text-center accept-hash" >
+			<!-- <Icon type="home" size="25"></Icon> -->
+			<!-- <img src="../../images/hashrate.png" style="vertical-align:middle;margin-top: -10px"> -->
+			<span class="hash-num">{{ acceptHash > totalHash ? totalHash: acceptHash  }} HASH</span>
+			<p>{{ $t("accept_hash") }}</p>
 		</div>
 		<div class="text-center hash-speed" >
 		<a @click="addSpeed"><Icon type="plus-round" class="add-speed" size="25" color="#009b46" ></Icon></a>
 		<a @click="minusSpeed"><Icon type="minus-round" size="25" class="minus-speed" color="#009b46" ></Icon></a>
 			<!-- <Icon type="home" size="25"></Icon> -->
 			<span class="hash-num">{{ parseInt(hashSpeed) }} HASH/S</span>
-			<p>Current Hash Speed</p>
+			<p>{{ $t("hash_rate") }}</p>
 			
 		</div>
 		<div class="text-center total-bamboo" >
 			<!-- <Icon type="home" size="25"></Icon> -->
 			<img src="../../images/bamboo.png" style="vertical-align:middle;height:20px;margin-top:-5px;">
-			<span class="hash-num">{{ parseInt(totalHash / 100) }}</span>
-			<p>Bamboo You Get</p>
+			<span class="hash-num">{{ parseInt(minerBamboo /100) }}</span>
+			<p>{{ $t("bamboo_get") }}</p>
 		</div>
 	</div>
 	<div class="text-center circle-container para-margin">
@@ -39,7 +45,7 @@
 	  </i-circle>
 	</div>
 	<p class="tips para-margin">
-		Mining for bamboo uses your CPU power. Please adjust the speed and threads according to your personal preferences. Bamboo number is updated every second.
+		{{ $t("tip") }}
 	</p>
 	</Card>
 	</div>
@@ -103,6 +109,14 @@
 	height: 40px;
 	float: left;
 }
+.accept-hash {
+	position: absolute;
+	top: 120px;
+	left: 360px;
+	width: 200px;
+	height: 40px;
+	float: left;
+}
 .hash-num {
 	line-height: 15px;
 	font-size: 20px;
@@ -111,11 +125,11 @@
 .hash-speed {
 	position: absolute;
 	top: 120px;
-	left: 50%;
+	right: 360px;
 	width: 200px;
 	height: 40px;
 	margin-left: -100px;
-	float: left;
+	float: right;
 }
 .total-bamboo {
 	position: absolute;
@@ -135,8 +149,8 @@
 	width: 100%;
 	padding-left: 5%;
 	padding-right: 5%;
-	font-size: 16px;
-	line-height: 20px;
+	font-size: 15px;
+	line-height: 25px;
 }
 </style>
 <script>
@@ -148,26 +162,26 @@ let comboHandle = null
 export default {
 	data () {
 		return {
-			// percent: 0,
+			percent: 0,
 			mineState: 'start',
 			threads: 3,
 			throttle: 0.3,
 			totalHash: 0,
 			hashSpeed: 0,
+			acceptHash: 0,
 			totalBamboo: 0,
 			queryHash: null,
 			userId: '',
-			addCountInterval: null
+			minerBamboo: 0, // 用户挖矿的bamboo
+			addCountInterval: null,
+			addCircleInterval: null // 进度条
 		}
 	},
 	computed: {
     ...mapState({
       userAddr: state => state.login.userAddr,
       curLang: state => state.login.curLang
-    }),
-    percent: function () {
-    	return parseInt(this.totalHash)
-    }
+    })
   },
   watch: {
   	totalHash: function (val) {
@@ -179,39 +193,38 @@ export default {
   },
 
   destroyed () {
-  	clearInterval(this.addCountInterval)
-		clearInterval(this.queryHash)
-		this.addCountInterval = null
-		this.queryHash = null
+  	this.clearComboInterval()
 		comboHandle.stopMine()
   },
 	mounted () {
 		this.userId = this.uuid()
 		comboHandle = new ComboHandle(this.userId)
+		serverRequest.resetUserHash(this.userAddr)
 		// comboHandle.startMine()
-		// setInterval(() => {
-		// 	this.percent += 10
-		// }, 1000)
 	},
 	methods: {
 		startMine () {
 			this.mineState = 'mine'
 			comboHandle.startMine()
 			this.queryHash = setInterval(async () => {
-				this.totalHash = comboHandle.getTotalHashes([true])
+				this.totalHash = comboHandle.getTotalHashes()
+				this.acceptHash = comboHandle.getAcceptedHashes()
 				this.hashSpeed = comboHandle.getHashesPerSecond()
 			},1000)
-			this.addCountInterval = setInterval(() => {
-				serverRequest.getUserBamboo(this.userAddr, this.userId)
-			}, 1000)
+			// this.addCountInterval = setInterval(async () => {
+			// 	await this.updateUserBamboo()
+			// }, 1000 * 60)
+			this.addCircleInterval = setInterval(async () => {
+				this.percent += 1
+				if (this.percent % 100 === 0) {
+					await this.updateUserBamboo()
+				}
+			}, 600)
 		},
 		stopMine () {
 			this.mineState = 'stop'
 			comboHandle.stopMine()
-			clearInterval(this.addCountInterval)
-			clearInterval(this.queryHash)
-			this.addCountInterval = null
-			this.queryHash = null
+			this.clearComboInterval()
 		},
 		addSpeed () {
 			this.threads++
@@ -234,6 +247,41 @@ export default {
 	  uuid (a) {
 	    return a ? (a ^ Math.random() * 16 >> a / 4).toString(16)
 	      : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, this.uuid)
+	  },
+
+	  // 更新用户竹子
+	  async updateUserBamboo () {
+	  	let asHash = this.acceptHash > this.totalHash ? this.totalHash: this.acceptHash
+	  	const updateBamboo = await serverRequest.getUserBamboo(this.userAddr, this.userId, asHash)
+	  	if (!updateBamboo) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+      	console.warn('data', data)
+        if (!data || data.length === 0) return
+        this.minerBamboo = data
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(updateBamboo.data, succCb, errCb)
+	  },
+
+	  // 清除所有interval
+	  clearComboInterval () {
+	  	if (this.addCountInterval) {
+	  		clearInterval(this.addCountInterval)
+	  		this.addCountInterval = null
+	  	}
+	    if (this.queryHash) {
+	    	clearInterval(this.queryHash)
+				this.queryHash = null
+	    }
+			if (this.addCircleInterval) {
+				clearInterval(this.addCircleInterval)
+				this.addCircleInterval = null
+			}
 	  }
 	},
 	components: {

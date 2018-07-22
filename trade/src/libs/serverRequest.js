@@ -2,7 +2,7 @@ const axios = require('axios')
 const qs = require('qs')
 axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
-  baseURL: 'http://47.88.158.254/',
+  baseURL: 'http://localhost:3001/',
   timeout: 10000
 })
 // axios.defaults.headers.common['token'] = '123'
@@ -58,6 +58,8 @@ const ssapiPath = {
   getCurrentLeftProduct: 'getCurrentLeftProduct',
 
   updateUserBamboo: 'updateUserBamboo',
+  resetUserHash: 'resetUserHash',
+
   unSoldPanda: 'unSoldPanda',
   getUserBamboo: 'getUserBamboo',
   checkUserLoginExpired: 'checkUserLoginExpired'
@@ -333,9 +335,14 @@ function updateUserBamboo (addr) {
   return ssapiAxios.get(ssapiPath.updateUserBamboo, { params: { addr }})
 }
 
+// 重置cookie hash值
+function resetUserHash (addr) {
+return ssapiAxios.get(ssapiPath.resetUserHash, { params: { addr }})
+}
+
 // 获取用户参与挖矿得到的bamboo数量
-function getUserBamboo (addr, hash) {
-  return ssapiAxios.get(ssapiPath.getUserBamboo, { params: { addr, hash } })
+function getUserBamboo (addr, hash, acceptHash) {
+  return ssapiAxios.get(ssapiPath.getUserBamboo, { params: { addr, hash, acceptHash } })
 }
 
 // 检测用户是否还在登陆状态,判断token
@@ -389,6 +396,7 @@ export default {
   queryCountOfProductId,
   getCurrentLeftProduct,
   updateUserBamboo,
+  resetUserHash,
   getUserBamboo,
   queryUserAllProduct,
   insertAssetsRollOutOrder,
