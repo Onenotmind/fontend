@@ -25,20 +25,28 @@
 						用户管理
 					</MenuItem>
 					<MenuItem name="app_activity">
-					<Icon type="fireball"></Icon>
-					活动管理
+						<Dropdown trigger="click" @on-click="activityClick">
+						<Icon type="fireball"></Icon>
+						活动管理
+						<DropdownMenu slot="list">
+	            <DropdownItem name="cur_product_center">当前商品中心</DropdownItem>
+	            <DropdownItem name="next_product_center">下期商品中心</DropdownItem>
+		        </DropdownMenu>
+		        </Dropdown>
 					</MenuItem>
 				</div>
 			</Menu>
 		</Header>
   </Layout>
-	<Layout :style="{padding: '0 100px 100px'}">
+	<Layout :style="{padding: '0 20px 20px'}">
     <!-- 主体内容 -->
-    <Content :style="{padding: '24px', minHeight: '280px',background: '#fff', marginTop: '50px'}">
+    <Content :style="{minHeight: '280px',background: '#fff', marginTop: '50px'}">
       <!-- <Table stripe :columns="titles" :data="assetsData"></Table> -->
       <assets v-if="assetsFlag === 'assets'" />
       <assetsRollIn v-if="assetsFlag === 'assetsRollIn'" />
       <assetsRollOut v-if="assetsFlag === 'assetsRollOut'" />
+      <curProductCenter v-if="assetsFlag === 'curProductCenter'" />
+      <nextProductCenter v-if="assetsFlag === 'nextProductCenter' " />
     </Content>
   </Layout>
 </div>
@@ -90,6 +98,8 @@
 import assets from './assets.vue'
 import assetsRollIn from './assetsRollIn.vue'
 import assetsRollOut from './assetsRollOut.vue'
+import curProductCenter from './curProductCenter.vue'
+import nextProductCenter from './nextProductCenter.vue'
 
 export default {
 	data () {
@@ -107,12 +117,22 @@ export default {
 			} else if (name === 'transation_out') {
 				this.assetsFlag = 'assetsRollOut'
 			} else {}
+		},
+
+		activityClick (name) {
+			if (name === 'cur_product_center') {
+				this.assetsFlag = 'curProductCenter'
+			} else if (name === 'next_product_center') {
+				this.assetsFlag = 'nextProductCenter'
+			} else {}
 		}
 	},
 	components: {
 		assets,
 		assetsRollIn,
-		assetsRollOut
+		assetsRollOut,
+		curProductCenter,
+		nextProductCenter
 	}
 }
 

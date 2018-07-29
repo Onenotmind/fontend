@@ -2,7 +2,7 @@ const axios = require('axios')
 const qs = require('qs')
 axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
-  baseURL: 'http://localhost:3001/',
+  baseURL: 'http://47.88.158.254/',
   timeout: 10000
 })
 // axios.defaults.headers.common['token'] = '123'
@@ -56,6 +56,9 @@ const ssapiPath = {
   voteProductAttr: 'voteProductAttr',
   queryCountOfProductId: 'queryCountOfProductId',
   getCurrentLeftProduct: 'getCurrentLeftProduct',
+  addVoteProduct: 'addVoteProduct',
+  deleteProduct: 'deleteProduct',
+  productVotedOver: 'productVotedOver',
 
   updateUserBamboo: 'updateUserBamboo',
   resetUserHash: 'resetUserHash',
@@ -330,6 +333,23 @@ function getCurrentLeftProduct () {
   return ssapiAxios.get(ssapiPath.getCurrentLeftProduct, { params: {}})
 }
 
+// 新增一个待投票的商品
+function addVoteProduct (proInfo) {
+  return ssapiAxios.post(ssapiPath.addVoteProduct, qs.stringify(proInfo) )
+}
+
+// 删除商品
+function deleteProduct (productId) {
+  const authPwd = 'chenye1234'
+  return ssapiAxios.get(ssapiPath.deleteProduct, { params: { productId, authPwd }})
+}
+
+// 商品投票结束
+function productVotedOver () {
+  const authPwd = 'chenye1234'
+  return ssapiAxios.get(ssapiPath.productVotedOver, { params: { authPwd }})
+}
+
 // 更新用户的竹子数量
 function updateUserBamboo (addr) {
   return ssapiAxios.get(ssapiPath.updateUserBamboo, { params: { addr }})
@@ -395,6 +415,9 @@ export default {
   voteProductAttr,
   queryCountOfProductId,
   getCurrentLeftProduct,
+  addVoteProduct,
+  deleteProduct,
+  productVotedOver,
   updateUserBamboo,
   resetUserHash,
   getUserBamboo,

@@ -273,6 +273,7 @@ export default {
 	mounted () {
 		this.$nextTick(async () => {
       await this.getNextVoteStartTime()
+      await this.getCurServerTime()
       const serverTimeInterval = setInterval(async () => {
         await this.getCurServerTime()
       }, 60 * 1000)
@@ -312,13 +313,14 @@ export default {
       userBamboo: state => state.login.userBamboo
     }),
     curVoteDisable: function () {
-      if ((this.nextVoteStartTime < this.currentServerTime) && (this.nextVoteStartTime + 36 * 3600 > this.currentServerTime)) {
+      if ((parseInt(this.nextVoteStartTime) < parseInt(this.currentServerTime)) && (parseInt(this.nextVoteStartTime) + 36 * 3600 > parseInt(this.currentServerTime))) {
         return true
       } else {
         return false
       }
     },
     curAttrVoteDisable: function () {
+      return true
       if ((this.nextVoteStartTime + 36 * 3600 < this.currentServerTime) && (this.nextVoteStartTime + 48 * 3600 > this.currentServerTime)) {
         return true
       } else {

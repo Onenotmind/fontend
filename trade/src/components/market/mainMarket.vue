@@ -106,17 +106,17 @@
         </Row>
         <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.speed]}}</Col>
-          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.hungry]}}</Col>
-          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.goldCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.waterCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['speed']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.speed]}}</Col>
+          <Col span="5"><img :src="attrIconObj['hungry']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.hungry]}}</Col>
+          <Col span="5"><img :src="attrIconObj['metal']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.goldCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['water']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.waterCatch]}}</Col>
         </Row>
         <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.woodCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo[PandaModel.fireCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.earthCatch]}}</Col>
-          <Col span="4"><img v-if="initPandaBuyInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.special]}} </Col>
+          <Col span="5"><img :src="attrIconObj['wood']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.woodCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['fire']" class="img-vertical" > {{initPandaBuyInfo[PandaModel.fireCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['earth']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.earthCatch]}}</Col>
+          <Col span="5"><img v-if="initPandaBuyInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{initPandaBuyInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
       </p>
@@ -177,6 +177,7 @@
 }
 .img-vertical {
   vertical-align: middle;
+  margin-right: 3px;
 }
 .tip-bg {
   margin-top: 100px;

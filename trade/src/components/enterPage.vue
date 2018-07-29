@@ -227,7 +227,7 @@ export default {
 		}
 	},
 	mounted () {
-		if (localStorage.getItem('EthlandAddr') !== '') {
+		if (localStorage.getItem('EthlandAddr')) {
 			this.enterPageState = 'addrLog'
 			this.loginAddr = localStorage.getItem('EthlandAddr')
 		} else {

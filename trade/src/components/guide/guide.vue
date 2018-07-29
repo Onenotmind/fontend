@@ -32,6 +32,11 @@
                 {{ $t("discover") }}
             </MenuItem> -->
         </MenuGroup>
+        <MenuGroup :title="$t('others')">
+          <MenuItem name="feedback">
+              {{ $t("feedback") }}
+          </MenuItem>
+        </MenuGroup>
         <!-- <MenuGroup :title="$t('question_center')">
           <MenuItem name="question_center">
               {{ $t("question_center") }}
@@ -235,20 +240,20 @@
       <Row span="24" type="flex" justify="center" align="middle">
         <Col span="24">
           <Row span="24" style="margin-bottom: 15px;">
-            <h3>{{ $t("combo_h3_1") }}</h3><br>
-            <p>{{ $t("combo_h3_1_p_1") }}</p><br>
+            <h3>{{ $t("assets_h3_1") }}</h3><br>
+            <p>{{ $t("assets_h3_1_p_1") }}</p><br>
             <img src="../../images/guide/assets/assets2.png" v-if="curLang === 'cn'"><br>
             <img src="../../images/guide/assets/assets2_en.png" v-if="curLang === 'en'"><br>
-            <h3>{{ $t("combo_h3_2") }}</h3><br>
-            <p>{{ $t("combo_h3_2_p_1") }}</p><br>
+            <h3>{{ $t("assets_h3_2") }}</h3><br>
+            <p>{{ $t("assets_h3_2_p_1") }}</p><br>
             <img src="../../images/guide/assets/assets1.png" v-if="curLang === 'cn'"><br>
             <img src="../../images/guide/assets/assets1_en.png" v-if="curLang === 'en'"><br>
-            <h3>{{ $t("combo_h3_3") }}</h3><br>
-            <p>{{ $t("combo_h3_3_p_1") }}</p><br>
+            <h3>{{ $t("assets_h3_3") }}</h3><br>
+            <p>{{ $t("assets_h3_3_p_1") }}</p><br>
             <img src="../../images/guide/assets/assets5.png" v-if="curLang === 'cn'"><br>
             <img src="../../images/guide/assets/assets5_en.png" v-if="curLang === 'en'"><br>
-            <h3>{{ $t("combo_h3_4") }}</h3><br>
-            <p>{{ $t("combo_h3_4_p_1") }}</p><br>
+            <h3>{{ $t("assets_h3_4") }}</h3><br>
+            <p>{{ $t("assets_h3_4_p_1") }}</p><br>
             <img src="../../images/guide/assets/assets4.png" v-if="curLang === 'cn'"><br>
             <img src="../../images/guide/assets/assets4_en.png" v-if="curLang === 'en'"><br>
           </Row>
@@ -258,6 +263,34 @@
   </Card>
 </Col>
 
+
+<!-- 反哺计划 -->
+  <Col span="20">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="guideState === 'feedback'">
+    <p slot="title" style="height:30px;">
+      <!-- <Icon type="ios-film-outline" size="25" class="vertical"></Icon> -->
+      <span class="title">{{ $t("feedback") }}</span>
+    </p>
+    <a href="#" slot="extra">
+      <Icon type="ios-loop-strong"></Icon>
+    </a>
+    <p>
+      <Row span="24" type="flex" justify="center" align="middle">
+        <Col span="24">
+          <Row span="24" style="margin-bottom: 15px;">
+            <h3>{{ $t("feedback_h3_1") }}</h3><br>
+            <p>{{ $t("feedback_p_1") }}</p><br>
+            <p>{{ $t("feedback_p_2") }}</p><br>
+            <p>{{ $t("feedback_p_3") }}</p><br>
+            <p>{{ $t("feedback_p_4") }}</p><br>
+            <p>{{ $t("feedback_p_5") }}</p><br><br>
+            <p>{{ $t("feedback_p_6") }}</p><br>
+          </Row>
+        </Col>
+      </Row>
+    </p>
+  </Card>
+</Col>
 
 </Row>
 	</div>
@@ -325,6 +358,9 @@ export default {
           break
         case 'discover':
           this.guideState = 'discover'
+          break
+        case 'feedback':
+          this.guideState = 'feedback'
           break
         default:
           break

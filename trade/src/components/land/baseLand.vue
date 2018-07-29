@@ -156,17 +156,17 @@
         </Row>
         <br>
         <Row type="flex" justify="center" >
-          <Col span="4"><img :src="attrIconObj['speed']" class="img-vertical" >{{sellPandaInfo[PandaModel.speed]}}</Col>
-          <Col span="4"><img :src="attrIconObj['hungry']" class="img-vertical" >{{sellPandaInfo[PandaModel.hungry]}}</Col>
-          <Col span="4"><img :src="attrIconObj['metal']" class="img-vertical" >{{sellPandaInfo[PandaModel.goldCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['water']" class="img-vertical" >{{sellPandaInfo[PandaModel.waterCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['speed']" class="img-vertical" >{{sellPandaInfo[PandaModel.speed]}}</Col>
+          <Col span="5"><img :src="attrIconObj['hungry']" class="img-vertical" >{{sellPandaInfo[PandaModel.hungry]}}</Col>
+          <Col span="5"><img :src="attrIconObj['metal']" class="img-vertical" >{{sellPandaInfo[PandaModel.goldCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['water']" class="img-vertical" >{{sellPandaInfo[PandaModel.waterCatch]}}</Col>
         </Row>
         <br>
         <Row type="flex" justify="center">
-          <Col span="4"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo[PandaModel.woodCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo[PandaModel.fireCatch]}}</Col>
-          <Col span="4"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo[PandaModel.earthCatch]}}</Col>
-          <Col span="4"><img v-if="sellPandaInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo[PandaModel.special]}} </Col>
+          <Col span="5"><img :src="attrIconObj['wood']" class="img-vertical" >{{sellPandaInfo[PandaModel.woodCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['fire']" class="img-vertical" > {{sellPandaInfo[PandaModel.fireCatch]}}</Col>
+          <Col span="5"><img :src="attrIconObj['earth']" class="img-vertical" >{{sellPandaInfo[PandaModel.earthCatch]}}</Col>
+          <Col span="5"><img v-if="sellPandaInfo[PandaModel.special]" :src="attrIconObj['super']" class="img-vertical" >{{sellPandaInfo[PandaModel.special]}} </Col>
       </Row>
        <br>
        <Row type="flex" justify="center">
@@ -211,6 +211,7 @@
 }
 .img-vertical {
 	vertical-align: middle;
+	margin-right: 3px;
 }
 .landScaleLarger {
 	height: 600px;

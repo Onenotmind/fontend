@@ -4,7 +4,7 @@
     "total_hash": "Total Hash You Mined",
     "accept_hash": "Accept Hash You Mined",
     "hash_rate": "Current Hash Speed",
-    "bamboo_get": "Current Hash Speed",
+    "bamboo_get": "Bamboo You Get",
     "tip": "Mining for bamboo uses your CPU power. Please adjust the speed and threads according to your personal preferences. Bamboo number is updated every minute.Due to local hash synchronization with the server, there be some data mistake in the first few minute.But they will be normal gradually."
   },
   "cn": {
