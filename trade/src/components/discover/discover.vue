@@ -35,7 +35,14 @@
   <Col span="20">
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="currentCard === 'ads-list'">
     <p>
-      <Row span="24">
+      <!-- 当前暂无广告 -->
+      <Row span="24" v-if="!adsProducts || adsProducts.length < 1">
+        <Col span="24" class="nomal-padding tip-bg" align="center">
+          <Icon type="checkmark-circled" color="red" size="50"></Icon>
+          <span class="tip-word">{{ $t("cur_no_ads") }}</span>
+        </Col>
+      </Row>
+      <Row span="24" v-if="adsProducts.length > 0">
         <Col span="24" align="left" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{ $t("Advertise") }}</span>
@@ -43,10 +50,10 @@
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="20" class="card-margin" offset="2">
         	<Carousel autoplay v-model="adIndex">
-		        <CarouselItem v-for="(product, index) in curProducts" :key="index">
+		        <CarouselItem v-for="(product, index) in adsProducts" :key="index">
 		            <div class="ad-image">
 		            	<!-- <a :href="product.link"> -->
-		            		<img :src="product[LandModel.src]" class="ad-img">
+		            		<img :src="product[LandModel.src]" class="ad-img" @click="openHref(product[LandModel.proSrc])">
 		            	<!-- </a> -->
 		          	</div>
 		        </CarouselItem>
@@ -69,7 +76,14 @@
 <Col span="20">
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="currentCard === 'current-product-center'">
     <p>
-      <Row span="24">
+      <!-- 当前暂无商品进行中 -->
+      <Row span="24" v-if="!curProductsList || curProductsList.length < 1">
+        <Col span="24" class="nomal-padding tip-bg" align="center">
+          <Icon type="checkmark-circled" color="red" size="50"></Icon>
+          <span class="tip-word">{{ $t("cur_no_product") }}</span>
+        </Col>
+      </Row>
+      <Row span="24" v-if="curProductsList.length > 0">
         <Col span="12" align="left" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t('products_center')}}</span>
@@ -85,7 +99,7 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in curProductsList" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img :src="product[LandModel.src]" class="productImg">
+	    					<img :src="product[LandModel.src]" class="productImg" @click="openHref(product[LandModel.proSrc])">
 	    				</p>
 	    				<p>{{product[LandModel.name]}}</p>
 	    				<br>
@@ -123,7 +137,9 @@
         	<Row type="flex">
 	    			<Col span="5" offset="1" v-for="(product, index) in nextProductsList" class="nomal-padding" style="width:200px" :key="index">
 	    				<p class="text-center">
-	    					<img :src="product[LandModel.src]" class="productImg">
+                <!-- <a :href="product[LandModel.proSrc]"> -->
+	    					  <img :src="product[LandModel.src]" class="productImg" @click="openHref(product[LandModel.proSrc])">
+                <!-- </a> -->
 	    				</p>
 	    				<br>
 	    				<span style="float: left">{{$t("total_vote")}}：{{product[LandModel.time]}}</span>
@@ -170,7 +186,7 @@
           <Row type="flex">
             <Col span="5" offset="1" v-for="(product, index) in nextProductsAttrList" class="nomal-padding" style="width:200px" :key="index">
               <p class="text-center">
-                <img :src="product[LandModel.src]" class="productImg">
+                <img :src="product[LandModel.src]" class="productImg" @click="openHref(product[LandModel.proSrc])">
               </p>
               <br>
               <span style="float: left">{{$t("total_vote")}}：{{product[LandModel.time]}}</span>
@@ -199,6 +215,9 @@
 </template>
 </template>
 <style scoped>
+img {
+  cursor: pointer;
+}
 .text-center {
 	text-align: center;
 }
@@ -262,8 +281,8 @@ export default {
       LandModel,
       proCatagory: [], // 商品类别
       soldCata: 'product', // 当前售卖商品中默认分类
-      proCata: 'product', // 商品投票默认分类
-      proAttrCata: 'product', // 商品属性投票默认分类
+      proCata: 'clothing', // 商品投票默认分类
+      proAttrCata: 'clothing', // 商品属性投票默认分类
       currentServerTime: 0, // 当前服务端时间
       nextVoteStartTime: 0, // 下期商品投票时间
       serverTimeInterval: null, // 当前服务端时间更新interval
@@ -292,6 +311,7 @@ export default {
         alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(curProductsArr.data, succCb, errCb)
+      await this.getCurrentVotedProduct()
 			// let nextPros = document.getElementsByClassName('nextProImg')
 			// for (let item of nextPros) {
 			// 	this.$nextTick(() => {
@@ -320,7 +340,6 @@ export default {
       }
     },
     curAttrVoteDisable: function () {
-      return true
       if ((this.nextVoteStartTime + 36 * 3600 < this.currentServerTime) && (this.nextVoteStartTime + 48 * 3600 > this.currentServerTime)) {
         return true
       } else {
@@ -336,7 +355,16 @@ export default {
     nextProductsAttrList: function () {
       return this.nextProducts.filter(pro => pro[LandModel.productType] === this.proAttrCata).sort((a, b) => {
         return b.time - a.time
-      }).slice(0, 3)
+      }).slice(0, 5)
+    },
+    adsProducts: function () {
+      if (this.curProductsList && this.curProductsList.length > 0) {
+        return this.curProductsList
+      }
+      if (this.nextProductsList && this.nextProductsList.length > 0) {
+        return this.nextProductsList
+      }
+      return []
     },
     proCatagoryList: function () {
       if (this.curLang === 'cn') {
@@ -346,8 +374,20 @@ export default {
             label: '衣服'
           },
           {
-            key: 'product',
-            label: '商品'
+            key: 'food',
+            label: '食品'
+          },
+          {
+            key: 'digital',
+            label: '电子产品'
+          },
+          {
+            key: 'cosmetic',
+            label: '美妆'
+          },
+          {
+            key: 'other',
+            label: '其他'
           }
         ]
       } else if (this.curLang === 'en') {
@@ -357,8 +397,20 @@ export default {
             label: 'clothing'
           },
           {
-            key: 'product',
-            label: 'product'
+            key: 'food',
+            label: 'food'
+          },
+          {
+            key: 'digital',
+            label: 'digital'
+          },
+          {
+            key: 'cosmetic',
+            label: 'cosmetic'
+          },
+          {
+            key: 'other',
+            label: 'other'
           }
         ]
       } else {
@@ -496,7 +548,7 @@ export default {
         // TODO
       }
       let errCb = (msg) => {
-        alertErrInfo(this, statusCodes[this.curLang][msg])
+        // alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(vote.data, succCb, errCb)
     },
@@ -511,6 +563,11 @@ export default {
         count += parseInt(vote[LandModel.amount])
       })
       return count
+    },
+
+    // 点击图片打开图片链接
+    openHref (href) {
+      window.open(href)
     }
 	}
 }

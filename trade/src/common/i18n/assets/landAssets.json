@@ -18,7 +18,7 @@
       "withdraw": "Withdraw",
       "recharge": "Recharge",
       "wallet_address": "Wallet Address",
-      "withdrawal_amount": "Withdrawal Amount",
+      "withdrawal_amount": "Amount",
       "trade_password": "Trade Password",
       "verification_code": "Verification Code",
       "Get_verification_code": "Get Verification Code",
@@ -43,10 +43,12 @@
       "confirm_order": "Confirm Order",
       "email_bind_succ": "Email Bind Successful!",
       "assets_recharge_modal": "Recharge Modal",
-      "your_address": "Your Address",
+      "your_address": "Address",
       "coin_type": "Type",
       "confirm": "ok",
-      "cancel": "cancel"
+      "cancel": "cancel",
+      "assets_recharge_submit": "Initate recharge order",
+      "assets_recharge_tips": "Submit an order is not necessary, but will accelerate order check speed!"
         },
     "cn": {
       "assets_list": "资产列表",
@@ -95,7 +97,9 @@
       "your_address": "你的钱包地址",
       "coin_type": "类型",
       "confirm": "确认",
-      "cancel": "取消"
+      "cancel": "取消",
+      "assets_recharge_submit": "发起充值订单",
+      "assets_recharge_tips": "充值虚拟资产时不一定要提交充值订单，提交订单会加快系统审核速度！"
 
     }
   }

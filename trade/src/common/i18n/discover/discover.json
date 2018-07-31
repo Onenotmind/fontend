@@ -21,7 +21,9 @@
     "wood": "wood",
     "gold": "gold",
     "earth": "earth",
-    "vote_not_begin": "Vote Has Not Started!"
+    "vote_not_begin": "Vote Has Not Started!",
+    "cur_no_product": "No product in activity!",
+    "cur_no_ads": "No advitise currently！"
   },
   "cn": {
     "Charge": "充值话费",
@@ -45,6 +47,8 @@
     "wood": "木",
     "gold": "金",
     "earth": "土",
-    "vote_not_begin": "投票未开始"
+    "vote_not_begin": "投票未开始",
+    "cur_no_product": "当前没有商品在活动中！",
+    "cur_no_ads": "当前暂无广告！"
   }
 }

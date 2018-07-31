@@ -237,7 +237,10 @@
           <Input :value="userInfo[UserModel.account]" placeholder="" style="width: 350px;pointer-events:none;height: 30px;" id="copyInput"></Input>
         </Col>
         <Col span="24" class="rollout-card-margin" align="center">
-        <Button type="success" class="copy-btn" style="width: 445px;margin-right: 15px;" @click="showRollInModal">{{ $t("assets_recharge") }}</Button>
+        <Button type="success" class="copy-btn" style="width: 445px;margin-right: 15px;" @click="showRollInModal">{{ $t("assets_recharge_submit") }}</Button>
+        </Col>
+        <Col span="24" class="rollout-card-margin" align="center">
+        <span style="color:#e58383;font-size:12px;">{{ $t("assets_recharge_tips") }}</span>
         </Col>
         <Col span="24" class="rollout-card-margin">
           <Table :columns="rollInColumns" :data="rollInTableData"></Table>
@@ -250,8 +253,9 @@
 <!-- 资产充值订单发起面板 -->
 <Modal
     v-model="rollInModal"
+    class="rollInModal"
     :title="$t('assets_recharge_modal')"
-    style="text-align:center">
+    style="text-align:center;font-size:14px;">
     <p>
       <Row span="24">
         <!-- 充值类型 -->
@@ -261,7 +265,7 @@
           <span class="rollout-card-word">{{ $t("coin_type") }}:</span>
         </Col>
         <Col span="18">
-        <Select v-model="rechargeCoinType" style="width:120px;margin-left: 40px;">
+        <Select v-model="rechargeCoinType" style="width:120px;margin-left: 40px;margin-top:-5px;">
             <Option v-for="item in assetsTypeArr" :value="item" :key="item" :disabled="item === 'BAMBOO'">{{ item }}</Option>
         </Select>
         </Col>
@@ -271,10 +275,10 @@
         <Col span="24" class="rollout-card-margin" style="text-align:left">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">{{ $t("withdrawal_amount") }}:</span>
+          <span class="rollout-card-word" style="font-size:14px;margin-right:10px;">{{ $t("withdrawal_amount") }}:</span>
         </Col>
         <Col span="18">
-          <Input v-model="rechargeAmount" placeholder="" style="width: 300px"></Input>
+          <Input v-model="rechargeAmount" placeholder="" style="width: 300px;height:26px;margin-top:-5px;"></Input>
         </Col>
           </Row>
         </Col>
@@ -282,10 +286,10 @@
         <Col span="24" class="rollout-card-margin" style="text-align:left">
           <Row>
             <Col span="6"  align="right">
-          <span class="rollout-card-word">{{ $t("your_address") }}:</span>
+          <span class="rollout-card-word" style="font-size:14px;margin-right:10px;">{{ $t("your_address") }}:</span>
         </Col>
         <Col span="18">
-          <Input v-model="rechargeAddress" placeholder="" style="width: 300px"></Input>
+          <Input v-model="rechargeAddress" placeholder="" style="width: 300px;height:26px;margin-top:-5px;"></Input>
         </Col>
           </Row>
         </Col>
@@ -577,6 +581,9 @@
 }
 .rollout-card-margin {
   margin-top: 35px;
+}
+.rollInModal input {
+  height: 26px;
 }
 </style>
 <script>
