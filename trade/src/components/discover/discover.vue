@@ -88,12 +88,12 @@
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t('products_center')}}</span>
         </Col>
-        <Col span="12" align="right" class="nomal-padding">
+        <!-- <Col span="12" align="right" class="nomal-padding">
           <span class="discover-card-title">{{$t("products_catagory")}}</span>
           <Select v-model="soldCata" style="width:120px;margin-left: 40px;">
             <Option v-for="item in proCatagoryList" :value="item.key" :key="item.key">{{ item.label }}</Option>
         </Select>
-        </Col>
+        </Col> -->
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="24" class="card-margin">
         	<Row type="flex">
@@ -170,9 +170,9 @@
         <Col span="12" align="left" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t("next_products")}}</span>
-          <Select v-model="voteAttrCount" style="width:120px;margin-left: 40px;">
+          <!-- <Select v-model="voteAttrCount" style="width:120px;margin-left: 40px;">
             <Option v-for="item in [100, 1000, 10000, 100000]" :value="item" :key="item">{{ item }}</Option>
-        </Select>
+        </Select> -->
         </Col>
         <Col span="12" align="right" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
@@ -347,13 +347,13 @@ export default {
       }
     },
     curProductsList: function () {
-      return this.curProducts.filter(pro => pro[LandModel.productType] === this.soldCata)
+      return this.curProducts
     },
     nextProductsList: function () {
       return this.nextProducts.filter(pro => pro[LandModel.productType] === this.proCata)
     },
     nextProductsAttrList: function () {
-      return this.nextProducts.filter(pro => pro[LandModel.productType] === this.proAttrCata).sort((a, b) => {
+      return this.nextProducts.sort((a, b) => {
         return b.time - a.time
       }).slice(0, 5)
     },
@@ -361,8 +361,8 @@ export default {
       if (this.curProductsList && this.curProductsList.length > 0) {
         return this.curProductsList
       }
-      if (this.nextProductsList && this.nextProductsList.length > 0) {
-        return this.nextProductsList
+      if (this.nextProductsAttrList && this.nextProductsAttrList.length > 0) {
+        return this.nextProductsAttrList
       }
       return []
     },

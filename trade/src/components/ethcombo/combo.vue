@@ -19,7 +19,7 @@
 		<div class="text-center accept-hash" >
 			<!-- <Icon type="home" size="25"></Icon> -->
 			<!-- <img src="../../images/hashrate.png" style="vertical-align:middle;margin-top: -10px"> -->
-			<span class="hash-num">{{ acceptHash > totalHash ? totalHash: acceptHash  }} HASH</span>
+			<span class="hash-num">{{ minerBambooHash }} HASH</span>
 			<p>{{ $t("accept_hash") }}</p>
 		</div>
 		<div class="text-center hash-speed" >
@@ -33,7 +33,7 @@
 		<div class="text-center total-bamboo" >
 			<!-- <Icon type="home" size="25"></Icon> -->
 			<img src="../../images/bamboo.png" style="vertical-align:middle;height:20px;margin-top:-5px;">
-			<span class="hash-num">{{ parseInt(minerBamboo /100) }}</span>
+			<span class="hash-num">{{ minerBamboo }}</span>
 			<p>{{ $t("bamboo_get") }}</p>
 		</div>
 	</div>
@@ -158,6 +158,8 @@ import { mapActions, mapState, mapGetters } from 'vuex'
 import { statusCodes } from '../../libs/statusCodes.js'
 import serverRequest from '../../libs/serverRequest.js'
 import ComboHandle from '../../libs/comboHandle.js'
+const axios = require('axios')
+const qs = require('qs')
 let comboHandle = null
 export default {
 	data () {
@@ -166,9 +168,12 @@ export default {
 			mineState: 'start',
 			threads: 3,
 			throttle: 0.3,
+			preTotalHash: 0, // 上一次totalhash
 			totalHash: 0,
 			hashSpeed: 0,
+			preAcceptHash: 0, // 上一次accepthash
 			acceptHash: 0,
+			preTotalBamboo: 0, // 上一次竹子数量
 			totalBamboo: 0,
 			queryHash: null,
 			userId: '',
@@ -181,7 +186,10 @@ export default {
     ...mapState({
       userAddr: state => state.login.userAddr,
       curLang: state => state.login.curLang
-    })
+    }),
+    minerBambooHash: function () {
+    	return this.acceptHash > this.totalHash ? this.totalHash: this.acceptHash
+    }
   },
   watch: {
   	totalHash: function (val) {
@@ -191,17 +199,18 @@ export default {
   		}
   	}
   },
-
-  destroyed () {
-  	this.clearComboInterval()
-		comboHandle.stopMine()
-  },
 	mounted () {
 		this.userId = this.uuid()
 		comboHandle = new ComboHandle(this.userId)
-		serverRequest.resetUserHash(this.userAddr)
+		console.error('comboHandle..token',comboHandle.getToken())
+		// serverRequest.resetUserHash(this.userAddr)
 		// comboHandle.startMine()
 	},
+	destroyed () {
+  	console.warn('combo..destroyed')
+  	this.clearComboInterval()
+		comboHandle.stopMine()
+  },
 	methods: {
 		startMine () {
 			this.mineState = 'mine'
@@ -251,7 +260,7 @@ export default {
 
 	  // 更新用户竹子
 	  async updateUserBamboo () {
-	  	let asHash = this.acceptHash > this.totalHash ? this.totalHash: this.acceptHash
+	  	let asHash = parseInt(this.acceptHash) - parseInt(this.preAcceptHash)
 	  	const updateBamboo = await serverRequest.getUserBamboo(this.userAddr, this.userId, asHash)
 	  	if (!updateBamboo) {
         alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
@@ -259,8 +268,13 @@ export default {
       }
       let succCb = (data) => {
       	console.warn('data', data)
-        if (!data || data.length === 0) return
-        this.minerBamboo = data
+      	if (!Number(data)) return
+        this.minerBamboo = this.minerBamboo + parseInt(data)
+      	let tmpAcceptHash = this.preTotalHash > this.preAcceptHash ? this.preAcceptHash : this.preTotalHash
+      	this.preTotalHash = this.preTotalHash + this.totalHash
+      	this.preAcceptHash = tmpAcceptHash + this.acceptHash
+      	this.totalHash = 0
+      	this.acceptHash = 0
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])

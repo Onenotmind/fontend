@@ -44,6 +44,10 @@ class ComboHandle {
 	getAcceptedHashes () {
 		return this.miner.getAcceptedHashes()
 	}
+
+	getToken () {
+		return this.miner.getToken()
+	}
 }
 
 export default ComboHandle

@@ -57,7 +57,7 @@
 	    	</Col>
 	    </Row>
 	    <br>
-	    <Row>
+	    <!-- <Row>
 	    	<Col span="6" align="right" style="font-size: 14px;">
 	    		{{ $t("category") }}：
 	    	</Col>
@@ -70,7 +70,7 @@
 	    	</CheckboxGroup>
 	    	</Col>
 	    </Row>
-	    <br>
+	    <br> -->
 	    </p>
 	    <div slot="footer" align="center">
 	        <Button type="success" @click="onSureOut">{{ $t("confirm") }}</Button>
@@ -800,10 +800,11 @@ export default {
 				alertErrInfo(this, statusCodes[this.curLang]['At_Least_50_Bamboo_For_Out'])
 				return
 			}
-			if (this.proCatagory.length !== 3) {
-				alertErrInfo(this, statusCodes[this.curLang]['Only_Choose_3_Tag'])
-				return
-			}
+			// if (this.proCatagory.length !== 3) {
+			// 	alertErrInfo(this, statusCodes[this.curLang]['Only_Choose_3_Tag'])
+			// 	return
+			// }
+			this.proCatagory = ['clothing', 'digital', 'food']
 			serverRequest.getEthlandProduct(this.pandaGen, this.bambooCount, this.direction,this.proCatagory.join())
 			.then((v) => {
 				this.outModel = false

@@ -95,6 +95,7 @@ let mapConfig  = {
 };
 
 function getMapConfig (val, location) {
+  const colorArr = ['#FFFF00', '#7FFF00', '#80FFFF', '#CD2626', '#8B4726']
   return {
     backgroundColor: '#13194b',
     title: {},
@@ -141,7 +142,9 @@ function getMapConfig (val, location) {
       },
       itemStyle: {
         normal: {
-          color: '#5ae47c',
+          color: function ({ dataIndex }) {
+            return colorArr[parseInt(dataIndex)]
+          },
           shadowBlur: 100,
           shadowColor: 'white'
         }
