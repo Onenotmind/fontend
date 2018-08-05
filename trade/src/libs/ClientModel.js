@@ -41,7 +41,8 @@ const LandModel = {
 	recommender: 'recommender',
 	time: 'time',
 	productType: 'idx_productType',
-	proSrc: 'productSrc'
+	proSrc: 'productSrc',
+	leftCount: 'leftCount'
 }
 
 const AssetsModel = {

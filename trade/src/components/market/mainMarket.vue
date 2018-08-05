@@ -220,7 +220,7 @@ export default {
 	data () {
 		return {
 			sortType: 'speed',
-      pageSize: 10, // 每一页展示数量
+      pageSize: 12, // 每一页展示数量
       pageIndex: 1, // 当前是哪一页
       filterIntegral: '', // 代数筛选
       waterImg: waterImg,
@@ -548,12 +548,12 @@ export default {
       } else {
         pandasFilterArr = this.pandas
       }
-      let pandasCountArr = pandasFilterArr.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize)
-      let finalArr = pandasCountArr.sort((a, b) => {
+      let pandasCountArr = pandasFilterArr.sort((a, b) => {
         let aVal = a[this.sortType]
         let bVal = b[this.sortType]
         return aVal - bVal
       })
+      let finalArr = pandasFilterArr.slice((this.pageIndex - 1) * this.pageSize, this.pageIndex * this.pageSize)
      if (this.sortWay === 'highFirst') {
       return finalArr.reverse()
      } else {
@@ -564,7 +564,7 @@ export default {
       return this.showPanda.filter(panda => panda[PandaModel.addr] === this.userAddr)
     },
     totalPandas () {
-      return this.showPanda.length
+      return this.pandas.length
     },
     attrIconObj () {
       if (this.curLang === 'en') {

@@ -1,0 +1,24 @@
+{
+	"en": {
+		"invite_name": "Invite Friend",
+		"invite_text_1": "The most fun land in ethereum world",
+		"invite_text_2": "You can get unique wuno to search product free for you",
+		"invite_text_3": "Get money free, get product free",
+		"invite_text_4": "Join us quickly, click the link below.",
+		"invite_count": "invite amount",
+		"invite_valid": "invite valid",
+		"get_bamboo": "get bamboo",
+		"copy": "copy"
+	},
+	"cn": {
+		"invite_name": "邀请好友",
+		"invite_text_1": "全球有趣的基于数字货币区块链应用。",
+		"invite_text_2": "现在注册，每位用户都能免费获取一只呜喏，用户能通过呜喏进行外出寻宝。",
+		"invite_text_3": "寻到的商品或者宝物都归用户所有，免费提现。",
+		"invite_text_4": "快快加入我们，点击下方的链接即可进行注册，越早注册优惠越多。",
+		"invite_count": "已邀请",
+		"invite_valid": "已认证",
+		"get_bamboo": "获取竹子",
+		"copy": "复制"
+	}
+}

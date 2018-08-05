@@ -2,7 +2,7 @@ const axios = require('axios')
 const qs = require('qs')
 axios.defaults.withCredentials = true
 const ssapiAxios = axios.create({
-  baseURL: 'http://47.88.158.254/',
+  baseURL: 'http://localhost:3001/',
   timeout: 10000
 })
 // axios.defaults.headers.common['token'] = '123'
@@ -17,6 +17,8 @@ const ssapiPath = {
   changePwdWhenForget: 'changePwdWhenForget',
   userChangeTradePass: 'userChangeTradePass',
   queryAllAssets: 'queryAllAssets',
+  queryRegisterByAddr: 'queryRegisterByAddr',
+
   queryAllRollInAssets: 'queryAllRollInAssets',
   queryRollInAssetsByAddr: 'queryRollInAssetsByAddr',
   checkOverRollInOrder: 'checkOverRollInOrder',
@@ -59,6 +61,7 @@ const ssapiPath = {
   addVoteProduct: 'addVoteProduct',
   deleteProduct: 'deleteProduct',
   productVotedOver: 'productVotedOver',
+  getLeftProductInCurActivity: 'getLeftProductInCurActivity',
 
   updateUserBamboo: 'updateUserBamboo',
   resetUserHash: 'resetUserHash',
@@ -121,8 +124,8 @@ function userGeneCode (email) {
 }
 
 // 用户注册
-function userRegister (addr, email, pwd, code) {
-  return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ addr, email, pwd, code }))
+function userRegister (addr, email, pwd, code, invite) {
+  return ssapiAxios.post(ssapiPath.userRegister, qs.stringify({ addr, email, pwd, code, invite }))
 }
 
 // 检测验证码
@@ -156,6 +159,11 @@ function userChangeTradePass (addr, newPwd, code) {
 // 查询未确定资产
 function queryAllAssets () {
   return ssapiAxios.get(ssapiPath.queryAllAssets, { params: {}})
+}
+
+// 根据地址查询被邀请的数量
+function queryRegisterByAddr (addr) {
+  return ssapiAxios.get(ssapiPath.queryRegisterByAddr, { params: { addr }})
 }
 
 // 查询转入的订单
@@ -350,6 +358,11 @@ function productVotedOver () {
   return ssapiAxios.get(ssapiPath.productVotedOver, { params: { authPwd }})
 }
 
+// 查看当前活动中剩余的商品列表
+function getLeftProductInCurActivity () {
+  return ssapiAxios.get(ssapiPath.getLeftProductInCurActivity, { params: { }})
+}
+
 // 更新用户的竹子数量
 function updateUserBamboo (addr) {
   return ssapiAxios.get(ssapiPath.updateUserBamboo, { params: { addr }})
@@ -381,6 +394,8 @@ export default {
   queryUserEmail,
   changePwdWhenForget,
   queryAllAssets,
+  queryRegisterByAddr,
+  
   queryAllRollInAssets,
   queryRollInAssetsByAddr,
   checkOverRollInOrder,
@@ -418,6 +433,7 @@ export default {
   addVoteProduct,
   deleteProduct,
   productVotedOver,
+  getLeftProductInCurActivity,
   updateUserBamboo,
   resetUserHash,
   getUserBamboo,

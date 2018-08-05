@@ -36,6 +36,12 @@
                 {{ $t("transaction_password") }}
             </MenuItem>
         </MenuGroup>
+        <MenuGroup :title="$t('assets-activity')">
+          <MenuItem name="invite">
+              <Icon type="fireball"></Icon>
+              {{ $t("invite_name") }}
+          </MenuItem>
+        </MenuGroup>
     </Menu>
   </Col>
   <Col span="20">
@@ -476,7 +482,7 @@
 </Col>
 
 <!-- 更改交易密码 -->
-  <Col span="20">
+<Col span="20">
   <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-if="assetState === 'modify-trade-pass'">
     <p>
       <Row span="24">
@@ -533,6 +539,13 @@
     </p>
   </Card>
 </Col>
+
+<!-- 邀请好友 -->
+<Col span="20">
+  <invite :asset-state="assetState" />
+</Col>
+
+
     </Row>
 	</div>
 </template>
@@ -595,9 +608,13 @@ import lineImg from '../../images/line.png'
 // import getaddrqrImg from '../../images/webbg/getaddrqr.png'
 import serverRequest from '../../libs/serverRequest.js'
 import { alertSuccInfo, LandProductCodes, alertErrInfo, LoginCodes, CommonCodes } from '../../libs/statusHandle.js'
+import invite from './Invite.vue'
 const qrCode = require('qrcode-npm')
 const clipboard = new Clipboard('.copy-btn')
 export default {
+  components: {
+    invite
+  },
 	data () {
 		return {
       assetState: 'modify-login-pass',
@@ -700,6 +717,9 @@ export default {
           break
         case 'modify-trade-pass':
           this.assetState = 'modify-trade-pass'
+          break
+        case 'invite':
+          this.assetState = 'invite'
           break
         default:
           break
@@ -1067,9 +1087,6 @@ export default {
       }
       serverRequest.handleRequestRes(allProduct.data, succCb, errCb)
     }
-	},
-	components: {
-		
 	},
   computed: {
     ...mapState({

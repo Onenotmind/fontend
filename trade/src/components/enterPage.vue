@@ -277,7 +277,13 @@ export default {
 				alertErrInfo(this, statusCodes[this.curLang]['LoginCodes_Code_Error'])
 				return
 			}
-			const registerData = await serverRequest.userRegister(this.ethAddr, this.ethEmail, this.ethPwd, this.ethCode)
+			// 查询邀请人
+			const urlParams = this.getUrlParam()
+			let inviteAddr = ''
+			if (urlParams['invite']) {
+				inviteAddr = urlParams['invite']
+			}
+			const registerData = await serverRequest.userRegister(this.ethAddr, this.ethEmail, this.ethPwd, this.ethCode, inviteAddr)
 			console.log('registerData', registerData)
 			if (!registerData) {
 				alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
@@ -427,6 +433,19 @@ export default {
 		    loop: true
 		  })
 			}
+		},
+
+		// url地址获取参数
+		getUrlParam () {
+		  let urlSearchKV = {}
+		  const query = window.location.search.substr(1)
+		  const pairs = query.split('&')
+		  for (let i = 0; i < pairs.length; ++i) {
+		    const item = pairs[i].split('=')
+		    urlSearchKV[item[0]] = decodeURIComponent(item[1])
+		  }
+		  console.error('urlSearchKV:', urlSearchKV)
+		  return urlSearchKV
 		}
 	}
 }

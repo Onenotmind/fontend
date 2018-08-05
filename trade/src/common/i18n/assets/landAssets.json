@@ -48,7 +48,9 @@
       "confirm": "ok",
       "cancel": "cancel",
       "assets_recharge_submit": "Initate recharge order",
-      "assets_recharge_tips": "Submit an order is not necessary, but will accelerate order check speed!"
+      "assets_recharge_tips": "Submit an order is not necessary, but will accelerate order check speed!",
+      "invite_name": "Invite Friend",
+      "assets-activity": "Hot Activity"
         },
     "cn": {
       "assets_list": "资产列表",
@@ -99,7 +101,9 @@
       "confirm": "确认",
       "cancel": "取消",
       "assets_recharge_submit": "发起充值订单",
-      "assets_recharge_tips": "充值虚拟资产时不一定要提交充值订单，提交订单会加快系统审核速度！"
+      "assets_recharge_tips": "充值虚拟资产时不一定要提交充值订单，提交订单会加快系统审核速度！",
+      "invite_name": "邀请好友",
+      "assets-activity": "资产活动"
 
     }
   }

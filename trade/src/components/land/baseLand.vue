@@ -1,8 +1,11 @@
 <i18n src='../../common/i18n/land/baseLand.json'></i18n>
 <template>
 	<div id="baseLand">
-		<!-- <div class="baseLand-bg"></div> -->
+		<!-- 背景 -->
 		<landBg />
+		<!-- 右侧图标 -->
+		<img src="../../images/menu-active.png" class="menu-pos" @click="showLeftProModal">
+		<!-- 主体内容 -->
 		<div id="container" :class="{ 'landScaleLarger': scale==='larger', 'landScaleSmall': scale==='small'}" @click="changeScale" @blur="mapBlur" tabindex="0"></div>
 		<Row id="pandas" type="flex" justify="center">
 			<Col v-for="(panda, index) in pandasArr" :key="index" :span="24 / pandasArr.length" align="center" :class="'panda' + index ">
@@ -188,6 +191,7 @@
           <Button offset="2" @click="onCancelDrop">{{ $t("cancel") }}</Button>
       </div>
   </Modal>
+  <leftProductModal ref="leftProductModal" />
 	</div>
 </template>
 <style scoped>
@@ -272,6 +276,12 @@ img {
 	margin-left: 10%;
 	height: 30px;
 }
+.menu-pos {
+	position: fixed;
+	right: 35px;
+	width: 30px;
+	top: 25%;
+}
 </style>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
@@ -281,6 +291,7 @@ import BaseCanvas from '../../libs/charactor/BaseCanvas.js'
 import CanvasImgTypes from '../../libs/charactor/CanvasImgTypes.js'
 import landBg from './landBg.vue'
 import anime from 'animejs'
+import leftProductModal from './leftProductModal.vue'
 import serverRequest from '../../libs/serverRequest.js'
 import EchartHandle from '../../libs/map/EchartHandle.js'
 import {getMapConfig} from '../../libs/map/mapConfig.js'
@@ -375,7 +386,8 @@ export default {
 		}
 	},
 	components: {
-		landBg
+		landBg,
+		leftProductModal
 	},
 	async mounted () {
 		this.backAssetsType = {
@@ -860,6 +872,11 @@ export default {
 		// 取消丢弃熊猫
 		onCancelDrop () {
 			this.dropPandaModal = false
+		},
+
+		// 点击展示活动中剩余的商品
+		showLeftProModal () {
+			this.$refs.leftProductModal.showModal()
 		}
 	},
 	computed: {
