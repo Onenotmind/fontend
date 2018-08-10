@@ -106,7 +106,6 @@ const clipboard = new Clipboard('.copy')
 				inviteValiNum: 0, // 已认证数量
 				inviteNum: 0, // 邀请数量
 				bambooCount: 0, // 获取竹子数量
-				myInviteLink: 'http://wunoland.com',
 				alertToastInfo: {
 					en: {
 						'copy_text_succ': 'Copy Success',
@@ -123,7 +122,10 @@ const clipboard = new Clipboard('.copy')
 	    ...mapState({
 	      userAddr: state => state.login.userAddr,
 	      curLang: state => state.login.curLang
-	    })
+	    }),
+	    myInviteLink: function () {
+	    	return 'http://wunoland?invite=' + this.userAddr
+	    }
 	  },
 		props: {
 			assetState: {

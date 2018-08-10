@@ -400,10 +400,10 @@ export default {
 		// this.ownerAddr = localStorage.getItem('EthlandAddr')
 		// 第一次注册赠送熊猫蛋
 		const genePanda = await serverRequest.genePandaRandom(this.ownerAddr)
-		if (!genePanda) {
-			alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
-			return
-		}
+		// if (!genePanda) {
+		// 	alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+		// 	return
+		// }
 		// 查询熊猫是否外出且带回物品
 		await this.pandaBackHome()
 		// 地图初始化

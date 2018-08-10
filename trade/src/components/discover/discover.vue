@@ -170,16 +170,16 @@
         <Col span="12" align="left" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
           <span class="discover-card-title">{{$t("next_products")}}</span>
-          <!-- <Select v-model="voteAttrCount" style="width:120px;margin-left: 40px;">
+          <Select v-model="voteAttrCount" style="width:120px;margin-left: 40px;">
             <Option v-for="item in [100, 1000, 10000, 100000]" :value="item" :key="item">{{ item }}</Option>
-        </Select> -->
+        </Select>
         </Col>
         <Col span="12" align="right" class="nomal-padding">
           <!-- <Icon type="ios-film-outline" size="28" class="vertical"></Icon> -->
-          <span class="discover-card-title">{{$t("products_catagory")}}</span>
+          <!-- <span class="discover-card-title">{{$t("products_catagory")}}</span>
           <Select v-model="proAttrCata" style="width:120px;margin-left: 40px;">
             <Option v-for="item in proCatagoryList" :value="item.key" :key="item.key">{{ item.label }}</Option>
-        </Select>
+        </Select> -->
         </Col>
         <Col span="24" style="border-bottom: 1px solid #ccc;color: green;"></Col>
         <Col span="24" class="card-margin">
@@ -332,6 +332,7 @@ export default {
       curLang: state => state.login.curLang,
       userBamboo: state => state.login.userBamboo
     }),
+    
     curVoteDisable: function () {
       if ((parseInt(this.nextVoteStartTime) < parseInt(this.currentServerTime)) && (parseInt(this.nextVoteStartTime) + 36 * 3600 > parseInt(this.currentServerTime))) {
         return true

@@ -27,6 +27,8 @@ const ssapiPath = {
   queryRollOutAssetsByAddr: 'queryRollOutAssetsByAddr',
   checkOverRollOutOrder: 'checkOverRollOutOrder',
   deleteRollOutOrder: 'deleteRollOutOrder',
+  clientCancelRollOutOrder: 'clientCancelRollOutOrder',
+  clientCancelRollInOrder: 'clientCancelRollInOrder',
   queryAllPandaByAddr: 'queryAllPandaByAddr',
   queryPandaInfo: 'queryPandaInfo',
   genePandaRandom: 'genePandaRandom',
@@ -47,6 +49,7 @@ const ssapiPath = {
   queryLandProductByAddr: 'queryLandProductByAddr',
 
   exchangeProduct: 'exchangeProduct',
+  deleteAssetsRollOutOrder: 'deleteAssetsRollOutOrder',
   queryUserAllProduct: 'queryUserAllProduct',
 
   insertAssetsRollOutOrder: 'insertAssetsRollOutOrder',
@@ -206,6 +209,16 @@ function deleteRollOutOrder (assetsData) {
   return ssapiAxios.post(ssapiPath.deleteRollOutOrder, qs.stringify({ assetsData }))
 }
 
+// 用户手动取消订单
+function clientCancelRollOutOrder (orderId, addr) {
+  return ssapiAxios.get(ssapiPath.clientCancelRollOutOrder, { params: { orderId, addr }})
+}
+
+// 用户手动取消充值订单
+function clientCancelRollInOrder (orderId, addr) {
+  return ssapiAxios.get(ssapiPath.clientCancelRollInOrder, { params: { orderId, addr }})
+}
+
 // 新增一个提现订单
 function insertAssetsRollOutOrder (addr, type, amount, pwd) {
   return ssapiAxios.get(ssapiPath.insertAssetsRollOutOrder, { params: { addr, type, amount, pwd }})
@@ -306,6 +319,11 @@ function exchangeProduct (addr, productId, userName, userPhone, userRealAddr, pw
   return ssapiAxios.get(ssapiPath.exchangeProduct, { params: { addr, productId, userName, userPhone, userRealAddr, pwd, code }})
 }
 
+// 取消商品订单
+function deleteAssetsRollOutOrder (addr, productId) {
+  return ssapiAxios.get(ssapiPath.deleteAssetsRollOutOrder, { params: { addr, productId }})
+}
+
 // 获取用户所有的兑换商品
 function queryUserAllProduct (addr) {
   return ssapiAxios.get(ssapiPath.queryUserAllProduct, { params: { addr }})
@@ -404,6 +422,8 @@ export default {
   queryRollOutAssetsByAddr,
   checkOverRollOutOrder,
   deleteRollOutOrder,
+  clientCancelRollOutOrder,
+  clientCancelRollInOrder,
   queryAllPandaByAddr,
   queryPandaInfo,
   genePandaRandom,
@@ -423,8 +443,11 @@ export default {
   sirePanda,
   getCurrentStarPoint,
   queryLandProductByAddr,
+
   exchangeProduct,
+  deleteAssetsRollOutOrder,
   getCurrentProduct,
+
   getCurrentVotedProduct,
   voteProduct,
   voteProductAttr,

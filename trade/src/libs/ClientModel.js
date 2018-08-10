@@ -64,10 +64,41 @@ const OrderModel = {
 	receiver: 'receiver'
 }
 
+const UserProductManagerClientModel = {
+	id: 'pk_id',
+	addr: 'idx_addr',
+	productId: 'idx_productId',
+	userRealAddr: 'userRealAddr',
+	userName: 'userName',
+	userPhone: 'userPhone',
+	express: 'express',
+	expressId: 'expressId',
+	state: 'state'
+}
+
+const LandProductClientModel = {
+	id: 'pk_id',
+	productId: 'uk_productId',
+	type: 'idx_type',
+	productType: 'idx_productType',
+	state: 'state',
+	time: 'time',
+	leftCount: 'leftCount',
+	period: 'period',
+	imgSrc: 'imgSrc',
+	name: 'name',
+	nameEn: 'nameEn',
+	value: 'value',
+	productSrc: 'productSrc',
+	recommender: 'recommender'
+}
+
 module.exports = {
 	UserModel: UserModel,
 	PandaModel: PandaModel,
 	LandModel: LandModel,
 	AssetsModel: AssetsModel,
-	OrderModel: OrderModel
+	OrderModel: OrderModel,
+	UserProductManagerClientModel: UserProductManagerClientModel,
+	LandProductClientModel: LandProductClientModel
 }

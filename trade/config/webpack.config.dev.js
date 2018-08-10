@@ -76,7 +76,7 @@ module.exports = {
 			template: './src/index.html'
 		}),
 		new cleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
-    new UglifyJsPlugin(),
+    // new UglifyJsPlugin(),
     new CopyWebpackPlugin([
       {
         from: './src/libs/dist/',

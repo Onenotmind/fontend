@@ -3,9 +3,9 @@
 	<div id="myAssets">
 		<Row>
 			<Col span="4" class="nomal-padding">
-		<Menu  active-name="my-assets" style="width:90%;" @on-select="selectMenu">
+		<Menu :active-name="assetState" style="width:90%;" @on-select="selectMenu">
         <MenuGroup :title="$t('my_assets')">
-            <MenuItem name="assets-list">
+            <MenuItem name="myAssets">
                 <Icon type="document-text"></Icon>
                 {{ $t("assets_list") }}
             </MenuItem>
@@ -149,7 +149,7 @@
               {{ asset[LandModel.value] }}
             </Col>
             <Col span="3" align="center" v-show="asset[LandModel.value] > 2">
-              <Button type="success" @click="exchangeProductClick">{{ $t("withdraw") }}</Button>
+              <Button type="success" @click="exchangeProductClick(asset[LandModel.idx_productId])">{{ $t("withdraw") }}</Button>
             </Col>
           </Row>
         </Col>
@@ -215,7 +215,7 @@
           <Button type="success" style="width: 400px;" @click="landAssetsRollOut">{{ $t("assets_withdraw") }}</Button>
         </Col>
       </Row>
-      <Col span="24" class="rollout-card-margin">
+      <Col span="24" class="rollout-card-margin" v-if="rollOutTableData && rollOutTableData.length > 0">
         <Table :columns="rollOutColumns" :data="rollOutTableData"></Table>
       </Col>
     </p>
@@ -224,7 +224,7 @@
 
   <!-- 资产充值模块 -->
   <Col span="20">
-  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'assets-rollin'">
+  <Card style="width: 100%;margin-top:15px;" :shadow="true"  v-show="assetState === 'assets-recharge'">
     <p>
       <Row span="24">
         <Col span="24" align="left" class="nomal-padding">
@@ -381,8 +381,8 @@
           <Button type="success" style="width: 400px;" @click="confirmExchange">{{ $t("confirm_order") }}</Button>
         </Col>
       </Row>
-      <Col span="24" class="rollout-card-margin">
-        <Table :columns="exchangeColumns" :data="exchangeData"></Table>
+      <Col span="24" class="rollout-card-margin" v-if="exchangeData && exchangeData.length >0">
+        <Table :columns="exchangeColumns" :data="exchangeData" align="center"></Table>
       </Col>
     </p>
     </Card>
@@ -603,7 +603,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex'
 import Clipboard from 'clipboard'
 import { statusCodes } from '../../libs/statusCodes.js'
-import { LandModel, PandaModel, AssetsModel, UserModel, OrderModel } from '../../libs/ClientModel.js'
+import { LandModel, UserProductManagerClientModel, PandaModel, AssetsModel, UserModel, OrderModel, LandProductClientModel } from '../../libs/ClientModel.js'
 import lineImg from '../../images/line.png'
 // import getaddrqrImg from '../../images/webbg/getaddrqr.png'
 import serverRequest from '../../libs/serverRequest.js'
@@ -674,7 +674,422 @@ export default {
       rechargeAddress: '', // 充值面板充值地址
     }
 	},
-
+  computed: {
+    ...mapState({
+      userAddr: state => state.login.userAddr,
+      curLang: state => state.login.curLang
+    }),
+    productsTypeArr () { // 商品兑换列表可选项数组
+      if (this.myProducts.length > 0) {
+        return this.myProducts.filter(pro => {
+          return pro.value > 2
+        })
+      } else {
+        return []
+      }
+    },
+    showAddr: function () {
+      return this.userAddr.slice(0, 6) + '****' + this.userAddr.slice(38)
+    },
+    exchangeColumns: function () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: '商品名称',
+            key: 'name',
+            width: 300
+          },
+          {
+            title: '联系人',
+            key: 'contactPerson',
+            width: 100
+          },
+          {
+            title: '联系电话',
+            key: 'contactPhone',
+            width: 130
+          },
+          {
+            title: '联系人地址',
+            key: 'contactAddr',
+            width: 300
+          },
+          {
+            title: '当前状态',
+            key: 'stateCn',
+            width: 100
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+                return h('div', [
+                    h('Button', {
+                        props: {
+                            type: 'error',
+                            size: 'small',
+                            disabled: this.exchangeData[params.index]['stateEn'] !== 'pending'
+                        },
+                        on: {
+                            click: () => {
+                              this.deleteExchangeOrder(params.index)
+                            }
+                        }
+                    }, '删除')
+                ]);
+            }
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        [
+          {
+            title: 'order id',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: 'product name',
+            key: 'nameEn',
+            width: 300
+          },
+          {
+            title: 'contact name',
+            key: 'contactPerson',
+            width: 100
+          },
+          {
+            title: 'telephone',
+            key: 'contactPhone',
+            width: 130
+          },
+          {
+            title: 'address',
+            key: 'contactAddr',
+            width: 300
+          },
+          {
+            title: 'state',
+            key: 'stateEn',
+            width: 100
+          },
+          {
+            title: 'Action',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                  h('Button', {
+                      props: {
+                          type: 'error',
+                          size: 'small',
+                          disabled: this.exchangeData[params.index]['stateEn'] !== 'pending'
+                      },
+                      on: {
+                          click: () => {
+                            this.deleteExchangeOrder(params.index)
+                          }
+                      }
+                  }, 'cancel')
+              ]);
+            }
+          }
+        ]
+      } else {
+        return []
+      }
+    },
+    rollOutColumns () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: '币种',
+            key: 'type',
+            width: 150
+          },
+          {
+            title: '地址',
+            key: 'rollOutAddr',
+            width: 300
+          },
+          {
+            title: '提现数量',
+            key: 'rollOutCount',
+            width: 150
+          },
+          {
+            title: '申请时间',
+            key: 'serveTime',
+            width: 250
+          },
+          {
+            title: '当前状态',
+            key: 'stateCn',
+            width: 100
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+                return h('div', [
+                    h('Button', {
+                        props: {
+                            type: 'error',
+                            size: 'small',
+                            disabled: this.rollOutTableData[params.index]['stateEn'] !== 'pending'
+                        },
+                        on: {
+                            click: () => {
+                              this.clientCancelRollOutOrder(params.index)
+                            }
+                        }
+                    }, '删除')
+                ]);
+            }
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        return [
+          {
+            title: 'order id',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: 'coin',
+            key: 'type',
+            width: 150
+          },
+          {
+            title: 'address',
+            key: 'rollOutAddr',
+            width: 300
+          },
+          {
+            title: 'count',
+            key: 'rollOutCount',
+            width: 150
+          },
+          {
+            title: 'time',
+            key: 'serveTime',
+            width: 250
+          },
+          {
+            title: 'state',
+            key: 'stateEn',
+            width: 100
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+                return h('div', [
+                    h('Button', {
+                        props: {
+                            type: 'error',
+                            size: 'small',
+                            disabled: this.rollOutTableData[params.index]['stateEn'] !== 'pending'
+                        },
+                        on: {
+                            click: () => {
+                              this.clientCancelRollOutOrder(params.index)
+                            }
+                        }
+                    }, '删除')
+                ]);
+            }
+          }
+        ]
+      } else {
+        return []
+      }
+    },
+    rollInColumns () {
+      if (this.curLang === 'cn') {
+        return [
+          {
+            title: '流水号',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: '币种',
+            key: 'type',
+            width: 150
+          },
+          {
+            title: '你的地址',
+            key: 'rollInAddr',
+            width: 200
+          },
+          {
+            title: '数量',
+            key: 'rollInCount',
+            width: 100
+          },
+          {
+            title: '申请时间',
+            key: 'serveTime',
+            width: 250
+          },
+          {
+            title: '当前状态',
+            key: 'stateCn',
+            width: 150
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                  h('Button', {
+                      props: {
+                          type: 'error',
+                          size: 'small',
+                          disabled: this.rollInTableData[params.index]['stateEn'] !== 'pending'
+                      },
+                      on: {
+                          click: () => {
+                            this.clientCancelRollInOrder(params.index)
+                          }
+                      }
+                  }, '删除')
+              ]);
+            }
+          }
+        ]
+      } else if (this.curLang === 'en') {
+        return [
+          {
+            title: 'order id',
+            key: 'seriesNum',
+            width: 100
+          },
+          {
+            title: 'coin',
+            key: 'type',
+            width: 150
+          },
+          {
+            title: 'your address',
+            key: 'rollInAddr',
+            width: 200
+          },
+          {
+            title: 'count',
+            key: 'rollInCount',
+            width: 100
+          },
+          {
+            title: 'time',
+            key: 'serveTime',
+            width: 250
+          },
+          {
+            title: 'state',
+            key: 'stateEn',
+            width: 150
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 100,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                  h('Button', {
+                      props: {
+                          type: 'error',
+                          size: 'small',
+                          disabled: this.rollInTableData[params.index]['stateEn'] !== 'pending'
+                      },
+                      on: {
+                          click: () => {
+                            this.clientCancelRollInOrder(params.index)
+                          }
+                      }
+                  }, 'delete')
+              ]);
+            }
+          }
+        ]
+      } else {
+        return []
+      }
+    },
+    myAssets () {
+      if (!this.myTotalAssets) {
+        return [
+          {
+            label: 'ETH',
+            value: 0,
+            lock: 0
+          },
+          {
+            label: 'EOS',
+            value: 0,
+            lock: 0
+          },
+          {
+            label: 'BAMBOO',
+            value: 0,
+            lock: 0
+          }
+        ]
+      } else {
+        return [
+          {
+            label: 'ETH',
+            value: this.myTotalAssets[AssetsModel.eth] || 0,
+            lock: this.myTotalAssets[AssetsModel.ethLock] || 0
+          },
+          {
+            label: 'EOS',
+            value: this.myTotalAssets[AssetsModel.eos] || 0,
+            lock: this.myTotalAssets[AssetsModel.eosLock] || 0
+          },
+          {
+            label: 'BAMBOO',
+            value: this.myTotalAssets[AssetsModel.bamboo] || 0,
+            lock: this.myTotalAssets[AssetsModel.bambooLock] || 0
+          }
+        ]
+      }
+    },
+    rollOutTableData () {
+      if (!this.rollOutData) return []
+      const self = this
+      return this.rollOutData.filter(d => {
+        return d.type === self.assetsRollOutType.toLowerCase() 
+      })
+    },
+    rollInTableData () {
+      if (!this.rollInData) return []
+      const self = this
+      return this.rollInData.filter(d => {
+        return d.type === self.assetsRollInType.toLowerCase() 
+      })
+    }
+  },
   watch: {
     
   },
@@ -694,15 +1109,17 @@ export default {
     selectMenu (name) {
       console.log(name)
       switch(name) {
-        case 'assets-list': 
+        case 'myAssets': 
           this.assetState = 'myAssets'
+          this.getUserInfo()
+          this.getUserProduct()
           break
         case 'assets-rollout':
           this.assetState = 'assets-rollout'
           this.getUserRollOutOrder()
           break
         case 'assets-recharge':
-          this.assetState = 'assets-rollin'
+          this.assetState = 'assets-recharge'
           this.queryRollInAssetsByAddr()
           break
         case 'product-exchange':
@@ -926,7 +1343,6 @@ export default {
 
     // 确认商品兑换订单
     async confirmExchange () {
-      console.log('...', this.productExchangeType)
       if (!this.exchangeName || !this.exchangePhone || !this.exchangeAddr) {
         alertErrInfo(this, statusCodes[this.curLang][Exchange_Product_Info_Not_Null])
         return
@@ -969,14 +1385,21 @@ export default {
         this.exchangeData = []
         data.forEach(pro => {
           this.exchangeData.push({
-            seriesNum: pro[LandModel.id],
-            type: pro[LandModel.idx_productId],
-            contactPerson: pro[LandModel.product_name],
-            contactPhone: pro[LandModel.product_phone],
-            contactAddr: pro[LandModel.product_addr],
-            state: pro[LandModel.state]
+            seriesNum: pro[UserProductManagerClientModel.id],
+            type: pro[UserProductManagerClientModel.productId],
+            name: pro[LandProductClientModel.name],
+            nameEn: pro[LandProductClientModel.nameEn],
+            productId: pro[UserProductManagerClientModel.productId],
+            contactPerson: pro[UserProductManagerClientModel.userName],
+            contactPhone: pro[UserProductManagerClientModel.userPhone],
+            contactAddr: pro[UserProductManagerClientModel.userRealAddr],
+            stateCn: this.getCnStateByOrderState(pro[UserProductManagerClientModel.state]),
+            stateEn: pro[UserProductManagerClientModel.state]
           })
         })
+        if (this.productsTypeArr && this.productsTypeArr.length > 0) {
+          this.productExchangeType = this.productsTypeArr[0][LandModel.idx_productId]
+        }
       }
       let errCb = (msg) => {
         alertErrInfo(this, statusCodes[this.curLang][msg])
@@ -1002,7 +1425,8 @@ export default {
             rollOutAddr: pro[OrderModel.addr].slice(0, 6) + '****' + pro[OrderModel.addr].slice(38),
             rollOutCount: pro[OrderModel.amount],
             serveTime: pro[OrderModel.create],
-            state: pro[OrderModel.state]
+            stateCn: this.getCnStateByOrderState(pro[OrderModel.state]),
+            stateEn: pro[OrderModel.state]
           })
         })
       }
@@ -1020,13 +1444,15 @@ export default {
     },
     // 资产充值
     assetsRollIn (type) {
-      this.assetState = 'assets-rollin'
+      this.assetState = 'assets-recharge'
       this.assetsRollInType = type
       this.queryRollInAssetsByAddr()
     },
     // 商品兑换按钮点击
     exchangeProductClick (type) {
       this.assetState = 'product-exchange'
+      this.productExchangeType = type
+      this.queryUserAllProduct()
     },
 
     // 资产充值面板展示
@@ -1078,7 +1504,8 @@ export default {
             rollInAddr: pro[OrderModel.receiver].slice(0, 6) + '****' + pro[OrderModel.receiver].slice(38),
             rollInCount: pro[OrderModel.amount],
             serveTime: pro[OrderModel.create],
-            state: pro[OrderModel.state]
+            stateCn: this.getCnStateByOrderState(pro[OrderModel.state]),
+            stateEn: pro[OrderModel.state]
           })
         })
       }
@@ -1086,255 +1513,75 @@ export default {
         alertErrInfo(this, statusCodes[this.curLang][msg])
       }
       serverRequest.handleRequestRes(allProduct.data, succCb, errCb)
+    },
+    // 根据返回订单返回字段输出当前状态
+    // pending 处理中 cancel 订单取消 success 成功 fail 失败
+    getCnStateByOrderState (state) {
+      if (state === 'cancel') {
+        return '订单取消'
+      }
+      if (state === 'success') {
+        return '处理成功'
+      }
+      if (state === 'fail') {
+        return '处理失败'
+      }
+      if (state === 'pending') {
+        return '处理中'
+      }
+      return '处理中'
+    },
+
+    // 取消商品提现
+    async deleteExchangeOrder (orderIndex) {
+      const productId = this.exchangeData[orderIndex]['productId']
+      const request = await serverRequest.deleteAssetsRollOutOrder(this.userAddr, productId)
+      if (!request) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.queryUserAllProduct()
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(request.data, succCb, errCb)
+    },
+
+    // 用户手动取消提现订单
+    async clientCancelRollOutOrder (orderIndex) {
+      const productId = this.rollOutTableData[orderIndex]['seriesNum']
+      const request = await serverRequest.clientCancelRollOutOrder(productId, this.userAddr)
+      if (!request) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.getUserRollOutOrder()
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(request.data, succCb, errCb)
+    },
+
+    // 手动取消充值订单
+    async clientCancelRollInOrder (orderIndex) {
+      const productId = this.rollInTableData[orderIndex]['seriesNum']
+      const request = await serverRequest.clientCancelRollInOrder(productId, this.userAddr)
+      if (!request) {
+        alertErrInfo(this, statusCodes[this.curLang]['CommonCodes_Service_Wrong'])
+        return
+      }
+      let succCb = (data) => {
+        this.queryRollInAssetsByAddr()
+      }
+      let errCb = (msg) => {
+        alertErrInfo(this, statusCodes[this.curLang][msg])
+      }
+      serverRequest.handleRequestRes(request.data, succCb, errCb)
     }
-	},
-  computed: {
-    ...mapState({
-      userAddr: state => state.login.userAddr,
-      curLang: state => state.login.curLang
-    }),
-    productsTypeArr () { // 商品兑换列表可选项数组
-      if (this.myProducts.length > 0) {
-        return this.myProducts.filter(pro => {
-          return pro.value > 2
-        })
-      } else {
-        return []
-      }
-    },
-    showAddr: function () {
-      return this.userAddr.slice(0, 6) + '****' + this.userAddr.slice(38)
-    },
-    exchangeColumns: function () {
-      if (this.curLang === 'cn') {
-        return [
-          {
-            title: '流水号',
-            key: 'seriesNum'
-          },
-          {
-            title: '商品名称',
-            key: 'type'
-          },
-          {
-            title: '联系人',
-            key: 'contactPerson'
-          },
-          {
-            title: '联系电话',
-            key: 'contactPhone'
-          },
-          {
-            title: '联系人地址',
-            key: 'contactAddr'
-          },
-          {
-            title: '当前状态',
-            key: 'state'
-          }
-        ]
-      } else if (this.curLang === 'en') {
-        [
-          {
-            title: 'order id',
-            key: 'seriesNum'
-          },
-          {
-            title: 'product name',
-            key: 'type'
-          },
-          {
-            title: 'contact name',
-            key: 'contactPerson'
-          },
-          {
-            title: 'telephone',
-            key: 'contactPhone'
-          },
-          {
-            title: 'address',
-            key: 'contactAddr'
-          },
-          {
-            title: 'state',
-            key: 'state'
-          }
-        ]
-      } else {
-        return []
-      }
-    },
-    rollOutColumns () {
-      if (this.curLang === 'cn') {
-        return [
-          {
-            title: '流水号',
-            key: 'seriesNum'
-          },
-          {
-            title: '币种',
-            key: 'type'
-          },
-          {
-            title: '地址',
-            key: 'rollOutAddr'
-          },
-          {
-            title: '提现数量',
-            key: 'rollOutCount'
-          },
-          {
-            title: '申请时间',
-            key: 'serveTime'
-          },
-          {
-            title: '当前状态',
-            key: 'state'
-          }
-        ]
-      } else if (this.curLang === 'en') {
-        return [
-          {
-            title: 'order id',
-            key: 'seriesNum'
-          },
-          {
-            title: 'coin',
-            key: 'type'
-          },
-          {
-            title: 'address',
-            key: 'rollOutAddr'
-          },
-          {
-            title: 'count',
-            key: 'rollOutCount'
-          },
-          {
-            title: 'time',
-            key: 'serveTime'
-          },
-          {
-            title: 'state',
-            key: 'state'
-          }
-        ]
-      } else {
-        return []
-      }
-    },
-    rollInColumns () {
-      if (this.curLang === 'cn') {
-        return [
-          {
-            title: '流水号',
-            key: 'seriesNum'
-          },
-          {
-            title: '币种',
-            key: 'type'
-          },
-          {
-            title: '你的地址',
-            key: 'rollInAddr'
-          },
-          {
-            title: '数量',
-            key: 'rollInCount'
-          },
-          {
-            title: '申请时间',
-            key: 'serveTime'
-          },
-          {
-            title: '当前状态',
-            key: 'state'
-          }
-        ]
-      } else if (this.curLang === 'en') {
-        return [
-          {
-            title: 'order id',
-            key: 'seriesNum'
-          },
-          {
-            title: 'coin',
-            key: 'type'
-          },
-          {
-            title: 'your address',
-            key: 'rollInAddr'
-          },
-          {
-            title: 'count',
-            key: 'rollInCount'
-          },
-          {
-            title: 'time',
-            key: 'serveTime'
-          },
-          {
-            title: 'state',
-            key: 'state'
-          }
-        ]
-      } else {
-        return []
-      }
-    },
-    myAssets () {
-      if (!this.myTotalAssets) {
-        return [
-          {
-            label: 'ETH',
-            value: 0,
-            lock: 0
-          },
-          {
-            label: 'EOS',
-            value: 0,
-            lock: 0
-          },
-          {
-            label: 'BAMBOO',
-            value: 0,
-            lock: 0
-          }
-        ]
-      } else {
-        return [
-          {
-            label: 'ETH',
-            value: this.myTotalAssets[AssetsModel.eth] || 0,
-            lock: this.myTotalAssets[AssetsModel.ethLock] || 0
-          },
-          {
-            label: 'EOS',
-            value: this.myTotalAssets[AssetsModel.eos] || 0,
-            lock: this.myTotalAssets[AssetsModel.eosLock] || 0
-          },
-          {
-            label: 'BAMBOO',
-            value: this.myTotalAssets[AssetsModel.bamboo] || 0,
-            lock: this.myTotalAssets[AssetsModel.bambooLock] || 0
-          }
-        ]
-      }
-    },
-    rollOutTableData () {
-      if (!this.rollOutData) return []
-      const self = this
-      return this.rollOutData.filter(d => {
-        return d.type === self.assetsRollOutType.toLowerCase() 
-      })
-    },
-    rollInTableData () {
-      if (!this.rollInData) return []
-      const self = this
-      return this.rollInData.filter(d => {
-        return d.type === self.assetsRollInType.toLowerCase() 
-      })
-    }
-  }
+	}
 }
 </script>
