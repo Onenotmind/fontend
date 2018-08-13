@@ -78,10 +78,6 @@ export default {
 		}
 	},
 	props:{
-		leftProductModal: {
-			type: Boolean,
-			default: false
-		}
 	},
 	computed: {
 		...mapState({
