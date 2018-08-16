@@ -356,7 +356,7 @@ export default {
     nextProductsAttrList: function () {
       return this.nextProducts.sort((a, b) => {
         return b.time - a.time
-      }).slice(0, 5)
+      }).slice(0, 10)
     },
     adsProducts: function () {
       if (this.curProductsList && this.curProductsList.length > 0) {

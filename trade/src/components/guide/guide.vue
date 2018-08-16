@@ -282,7 +282,6 @@
             <p>{{ $t("feedback_p_1") }}</p><br>
             <p>{{ $t("feedback_p_2") }}</p><br>
             <p>{{ $t("feedback_p_3") }}</p><br>
-            <p>{{ $t("feedback_p_4") }}</p><br>
             <p>{{ $t("feedback_p_5") }}</p><br><br>
             <p>{{ $t("feedback_p_6") }}</p><br>
           </Row>

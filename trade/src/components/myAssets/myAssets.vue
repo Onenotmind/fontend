@@ -196,7 +196,7 @@
               <span class="rollout-card-word">{{ $t("trade_password") }}：</span>
             </Col>
             <Col span="18">
-              <Input v-model="rollOutPass" placeholder="" style="width: 300px"></Input>
+              <Input v-model="rollOutPass" type="password" placeholder="" style="width: 300px"></Input>
             </Col>
           </Row>
         </Col>
@@ -449,7 +449,7 @@
             <span class="rollout-card-word">{{ $t("Old_login_password") }}：</span>
           </Col>
           <Col span="18" align="left">
-            <Input v-model="oldLoginPass" placeholder="" style="width: 300px"></Input>
+            <Input v-model="oldLoginPass" type="password" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
         </Col>
@@ -459,7 +459,7 @@
             <span class="rollout-card-word">{{ $t("New_login_password") }}：</span>
           </Col>
           <Col span="18" align="left">
-            <Input v-model="newLoginPass" placeholder="" style="width: 300px"></Input>
+            <Input v-model="newLoginPass" type="password" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
         </Col>
@@ -469,7 +469,7 @@
             <span class="rollout-card-word">{{ $t("Verify_code") }}：</span>
           </Col>
           <Col span="18" align="left">
-            <Input v-model="newLoginPassRepeat" placeholder="" style="width: 300px"></Input>
+            <Input v-model="newLoginPassRepeat" type="password" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
         </Col>
@@ -507,7 +507,7 @@
             <span class="rollout-card-word">{{ $t("New_trade_password") }}：</span>
           </Col>
           <Col span="18" align="left">
-            <Input v-model="newTradePass" placeholder="" style="width: 300px"></Input>
+            <Input v-model="newTradePass" type="password" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
         </Col>
@@ -517,7 +517,7 @@
             <span class="rollout-card-word">{{ $t("Verify_code") }}：</span>
           </Col>
           <Col span="18" align="left">
-            <Input v-model="newTradePassRepeat" placeholder="" style="width: 300px"></Input>
+            <Input v-model="newTradePassRepeat" type="password" placeholder="" style="width: 300px"></Input>
           </Col>
         </Row>
       </Col>

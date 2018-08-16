@@ -63,11 +63,10 @@
     "others": "others",
     "feedback": "Vote Feedback",
     "feedback_h3_1": "Product Vote Feedback",
-    "feedback_p_1": "When the user votes on the next candidate during the voting period, the system will record the number of votes. If product is voted as top five of the final result, the user will participate in the feedback plan",
+    "feedback_p_1": "When the user votes on the next candidate during the voting period, the system will record the number of votes. If product is voted as top ten of the final result, the user will participate in the feedback plan",
     "feedback_p_2": "The feeding plan means that when the user successfully votes for the next item, during the next period of the activity, all the users who spend the bamboo for out will be given a certain percentage of the votes to the user who selected the final item.",
     "feedback_p_3": "The number of bamboos returned to the user in the feedback plan is 70% of the total amount consumed by wuno's outing. The other bamboo quantities will be used for team operation and promotion.",
-    "feedback_p_4": "The proportion of these quantities allocated to each type of products is allocated for the proportion of all bamboo consumed in each type of voting period.",
-    "feedback_p_5": "The bamboo obtained from the top five commodities of each category is 40% 25% 15% 12% 8% of the total distribution of bamboo for this kind of goods. The number of bamboos finally obtained by the user is the number of bamboos obtained per product multiplied by the user's votes share.",
+    "feedback_p_5": "The bamboo obtained from the top ten commodities is 25% 20% 15% 10% 8% 7% 5% 4% 3% 3% of the total distribution of bamboo for this kind of goods. The number of bamboos finally obtained by the user is the number of bamboos obtained per product multiplied by the user's votes share.",
     "feedback_p_6": "【Notice】The voting bamboo for product's property is not counted in this feedback plan.This is, Voting on the product's peoperty will not get back of bamboo."
   },
   "cn": {
@@ -134,11 +133,10 @@
     "others": "其他",
     "feedback": "反哺计划",
     "feedback_h3_1": "商品投票 【反哺计划】",
-    "feedback_p_1": "当用户在商品投票期间对下一期候选商品进行投票，系统将会记录用户的投票数量及对应商品，当用户票选的商品为最终结果的前五名，则用户将会参与【反哺计划】。",
+    "feedback_p_1": "当用户在商品投票期间对下一期候选商品进行投票，系统将会记录用户的投票数量及对应商品，当用户票选的商品为最终结果的前十名，则用户将会参与【反哺计划】。",
     "feedback_p_2": "反哺计划指的是 当用户成功票选出下期商品后，下期商品活动期间，所有用户花在【外出】的竹子将会按照一定的比例回馈给票选出最终商品的用户。",
     "feedback_p_3": "【反哺计划】中回馈给用户的竹子数量为此期间所有呜喏外出所消耗竹子总数量的70%，其他的竹子数量将用于团队运营及推广。",
-    "feedback_p_4": "这些数量分配到每一类商品的比例为每类投票阶段所消耗的所有竹子的比例来分配。",
-    "feedback_p_5": "每一类的前五名商品获得的竹子为该类商品总分配竹子的 40% 25% 15% 12% 8%，用户最终得到的竹子数量为每个商品得到的竹子数量乘以用户的票数与该商品总票数的占比。",
+    "feedback_p_5": "前十名商品获得的竹子为该类商品总分配竹子的 25% 20% 15% 10% 8% 7% 5% 4% 3% 3%，用户最终得到的竹子数量为每个商品得到的竹子数量乘以用户的票数与该商品总票数的占比。",
     "feedback_p_6": "【特别提醒】对商品属性的投票竹子不计入【反哺计划】中，即对商品属性投票不会回馈竹子。"
   }
 }
